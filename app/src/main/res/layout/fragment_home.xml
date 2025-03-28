@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,96 +17,83 @@
             android:layout_marginTop="40dp" />
 
         <LinearLayout
+            android:id="@+id/menu_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:gravity="center">
-
             <LinearLayout
-                android:id="@+id/menu_view"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <ImageButton
+                    android:id="@+id/btn_chatbot"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/img_chatbot"
+                    android:contentDescription="button_chatbot"/>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/btn_chatbot"
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/img_chatbot"
-                        android:contentDescription="button_chatbot"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Chatbot"
-                        android:textStyle="bold"
-                        android:textColor="@color/hijau2"
-                        android:textSize="14sp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/btn_history"
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/img_history"
-                        android:contentDescription="button_history"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="History"
-                        android:textStyle="bold"
-                        android:textColor="@color/hijau2"
-                        android:textSize="14sp"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/btn_menu3"
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/img_chatbot"
-                        android:contentDescription="button_menu3"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Menu 3"
-                        android:textColor="@color/hijau2"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:gravity="center" />
-                </LinearLayout>
+                    android:text="@string/chatbot"
+                    android:textStyle="bold"
+                    android:textColor="@color/hijau2"
+                    android:textSize="14sp"
+                    android:gravity="center" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
+                <ImageButton
+                    android:id="@+id/btn_history"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/img_history"
+                    android:contentDescription="button_history"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/history"
+                    android:textStyle="bold"
+                    android:textColor="@color/hijau2"
+                    android:textSize="14sp"
+                    android:gravity="center" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
+                <ImageButton
+                    android:id="@+id/btn_menu3"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/img_chatbot"
+                    android:contentDescription="button_menu3"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Menu 3"
+                    android:textColor="@color/hijau2"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:gravity="center" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

@@ -18,14 +18,15 @@
             android:id="@+id/logoImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:contentDescription="@string/logo_lokatani"
             android:src="@drawable/logo_white"
             android:layout_marginTop="30dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lokatani"
-            android:textSize="32dp"
+            android:text="@string/lokatani"
+            android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="@color/white"/>
 
@@ -45,10 +46,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Get Started"
+                    android:text="@string/get_started"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:textSize="40dp"
+                    android:textSize="40sp"
                     android:layout_marginVertical="32dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -58,7 +59,7 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     app:startIconDrawable="@drawable/outline_person_24">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -75,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     app:startIconDrawable="@drawable/outline_email_24">
 
@@ -93,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     app:endIconMode="password_toggle"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     app:startIconDrawable="@drawable/baseline_lock_outline_24">
@@ -113,7 +114,7 @@
                     android:layout_height="wrap_content"
                     style="button"
                     android:backgroundTint="#0C451A"
-                    android:text="Sign Up"
+                    android:text="@string/sign_up"
                     android:textColor="@color/white" />
 
                 <com.google.android.material.button.MaterialButton
@@ -121,7 +122,7 @@
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Already Have an Account?"
+                    android:text="@string/already_have_an_account"
                     android:textSize="14sp" />
 
             </LinearLayout>

@@ -18,15 +18,16 @@
             android:id="@+id/logoImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:contentDescription="@string/logo_lokatani"
             android:src="@drawable/logo_white"
             android:layout_marginTop="40dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lokatani"
+            android:text="@string/lokatani"
             android:textColor="@color/white"
-            android:textSize="32dp"
+            android:textSize="32sp"
             android:textStyle="bold"/>
 
         <com.google.android.material.card.MaterialCardView
@@ -46,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="32dp"
-                    android:text="Welcome"
+                    android:text="@string/welcome"
                     android:textColor="@color/black"
                     android:textSize="40sp"
                     android:textStyle="bold" />
@@ -58,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     app:hintTextColor="#326229"
                     app:startIconDrawable="@drawable/outline_email_24">
 
@@ -78,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     app:hintTextColor="#326229"
                     app:endIconMode="password_toggle"
                     app:startIconDrawable="@drawable/baseline_lock_outline_24">
@@ -99,7 +100,7 @@
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#0C451A"
-                    android:text="Sign in"
+                    android:text="@string/sign_in"
                     android:textColor="@color/white"/>
 
                 <com.google.android.material.button.MaterialButton
@@ -107,7 +108,7 @@
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Don't have an account?"
+                    android:text="@string/don_t_have_an_account"
                     android:textSize="14sp" />
 
             </LinearLayout>
