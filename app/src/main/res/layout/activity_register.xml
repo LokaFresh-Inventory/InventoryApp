@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_color"
     android:fillViewport="true"
     tools:context=".ui.register.RegisterActivity">
@@ -11,24 +11,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/logoImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:layout_marginTop="30dp"
             android:contentDescription="@string/logo_lokatani"
-            android:src="@drawable/logo_white"
-            android:layout_marginTop="30dp"/>
+            android:src="@drawable/logo_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lokatani"
+            android:textColor="@color/white"
             android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -46,17 +46,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="32dp"
                     android:text="@string/get_started"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:textSize="40sp"
-                    android:layout_marginVertical="32dp"/>
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_name"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
                     android:hint="@string/name"
@@ -67,17 +67,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="10"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textPersonName" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_email"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
                     android:hint="@string/email"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     app:startIconDrawable="@drawable/outline_email_24">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -90,13 +90,13 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_password"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginBottom="16dp"
                     android:hint="@string/password"
                     app:endIconMode="password_toggle"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     app:startIconDrawable="@drawable/baseline_lock_outline_24">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -109,13 +109,13 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_register"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small"
+                    style="button"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
-                    style="button"
                     android:backgroundTint="#0C451A"
                     android:text="@string/sign_up"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_login"
