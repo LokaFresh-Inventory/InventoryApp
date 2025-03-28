@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.LokaFreshInventory" parent="Theme.Material3.Light.NoActionBar"></style>
+    <style name="Theme.LokaFreshInventory" parent="Theme.Material3.Light.NoActionBar" />
 
     <style name="TopCornerChange" parent="ShapeAppearance.Material3.MediumComponent">
         <item name="cornerFamily">rounded</item>

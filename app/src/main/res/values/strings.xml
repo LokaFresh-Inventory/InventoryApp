@@ -2,16 +2,15 @@
     <string name="app_name">LokaFresh Inventory</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="sign_up">Don’t have account yet?</string>
+    <string name="sign_up">Sign Up</string>
     <string name="logo_lokatani">Logo Lokatani</string>
     <string name="lokatani">Lokatani</string>
     <string name="welcome">Welcome</string>
     <string name="sign_in">Sign in</string>
-    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="don_t_have_an_account">Don’t have account yet?</string>
     <string name="get_started">Get Started</string>
     <string name="already_have_an_account">Already Have an Account?</string>
     <string name="chatbot">Chatbot</string>
@@ -20,4 +19,6 @@
     <string name="button_history">button_history</string>
     <string name="button_data">button_data</string>
     <string name="data">Data</string>
+    <string name="analysis">Analysis</string>
+    <string name="graph_image_placeholder">Graph Image Placeholder</string>
 </resources>
