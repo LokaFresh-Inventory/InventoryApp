@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="hijau1">#338855</color>
     <color name="hijau2">#0D2215</color>
+    <color name = "theme_green">#326229</color>
+    <color name="dark_green">#0C451A</color>
 </resources>

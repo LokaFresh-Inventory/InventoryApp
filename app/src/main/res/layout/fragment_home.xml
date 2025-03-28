@@ -1,99 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageslide"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@drawable/ic_notifications_black_24dp"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="40dp"
+            android:src="@drawable/graph_placeholder" />
 
         <LinearLayout
             android:id="@+id/menu_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_chatbot"
-                    android:layout_width="60dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/img_chatbot"
-                    android:contentDescription="button_chatbot"/>
+                    style="@style/Widget.Material3.Button.IconButton.Filled"
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/theme_green"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/baseline_chat_24"
+                    app:iconSize="40dp"
+                    android:contentDescription="@string/button_chatbot"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/chatbot"
-                    android:textStyle="bold"
-                    android:textColor="@color/hijau2"
+                    android:textColor="@color/dark_green"
                     android:textSize="14sp"
-                    android:gravity="center" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_history"
-                    android:layout_width="60dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/img_history"
-                    android:contentDescription="button_history"/>
+                    style="@style/Widget.Material3.Button.IconButton.Filled"
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/theme_green"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/baseline_history_24"
+                    app:iconSize="40dp"
+                    android:contentDescription="@string/button_history"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/history"
-                    android:textStyle="bold"
-                    android:textColor="@color/hijau2"
+                    android:textColor="@color/dark_green"
                     android:textSize="14sp"
-                    android:gravity="center" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/btn_menu3"
-                    android:layout_width="60dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/img_chatbot"
-                    android:contentDescription="button_menu3"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_data"
+                    style="@style/Widget.Material3.Button.IconButton.Filled"
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/theme_green"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/baseline_table_chart_24"
+                    app:iconSize="40dp"
+                    android:contentDescription="@string/button_data"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Menu 3"
-                    android:textColor="@color/hijau2"
-                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:text="@string/data"
+                    android:textColor="@color/dark_green"
                     android:textSize="14sp"
-                    android:gravity="center" />
+                    android:textStyle="bold" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="16dp"
+                android:layout_weight="1"
+                android:layout_marginVertical="16dp"
+                android:layout_marginHorizontal="4dp"
+                android:backgroundTint="@color/theme_green">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOP PRODUCT"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="16dp"
+                android:layout_weight="1"
+                android:layout_marginVertical="16dp"
+                android:layout_marginHorizontal="4dp"
+                android:backgroundTint="@color/theme_green">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SALES THIS MONTH"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </LinearLayout>
 

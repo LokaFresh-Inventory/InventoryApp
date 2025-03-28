@@ -16,4 +16,8 @@
     <string name="already_have_an_account">Already Have an Account?</string>
     <string name="chatbot">Chatbot</string>
     <string name="history">History</string>
+    <string name="button_chatbot">button_chatbot</string>
+    <string name="button_history">button_history</string>
+    <string name="button_data">button_data</string>
+    <string name="data">Data</string>
 </resources>
