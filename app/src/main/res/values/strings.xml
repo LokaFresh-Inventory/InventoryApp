@@ -21,4 +21,10 @@
     <string name="data">Data</string>
     <string name="analysis">Analysis</string>
     <string name="graph_image_placeholder">Graph Image Placeholder</string>
+    <string name="nama">Nama</string>
+    <string name="berat">Berat</string>
+    <string name="tanggal_scan">Tanggal Scan</string>
+    <string name="nama_placeholder">KALE</string>
+    <string name="berat_placeholder">250G</string>
+    <string name="tanggal_placeholder">12/12/2012</string>
 </resources>

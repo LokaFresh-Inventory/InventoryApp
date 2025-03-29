@@ -1,11 +1,13 @@
 package com.lokatani.lokafreshinventory.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.lokatani.lokafreshinventory.databinding.FragmentHomeBinding
+import com.lokatani.lokafreshinventory.ui.history.HistoryActivity
 
 class HomeFragment : Fragment() {
 
@@ -19,6 +21,16 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.apply {
+            btnHistory.setOnClickListener {
+                startActivity(Intent(requireContext(), HistoryActivity::class.java))
+            }
+        }
     }
 
     override fun onDestroyView() {
