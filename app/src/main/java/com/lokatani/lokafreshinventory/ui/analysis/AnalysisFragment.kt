@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.lokatani.lokafreshinventory.databinding.FragmentNotificationsBinding
+import com.lokatani.lokafreshinventory.databinding.FragmentAnalysisBinding
 
 class AnalysisFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentAnalysisBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -20,7 +17,7 @@ class AnalysisFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        _binding = FragmentAnalysisBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root

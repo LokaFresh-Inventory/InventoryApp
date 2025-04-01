@@ -12,14 +12,8 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.lokatani.lokafreshinventory.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
         android:id="@+id/navigation_analysis"
         android:name="com.lokatani.lokafreshinventory.ui.analysis.AnalysisFragment"
         android:label="@string/analysis"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_analysis" />
 </navigation>
