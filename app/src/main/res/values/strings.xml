@@ -32,4 +32,5 @@
     <string name="camera_hint">Tekan Kamera jika prediksi sudah sesuai</string>
     <string name="interference_time">Interference Time</string>
     <string name="scan">Scan</string>
+    <string name="button_to_close">Button to Close</string>
 </resources>

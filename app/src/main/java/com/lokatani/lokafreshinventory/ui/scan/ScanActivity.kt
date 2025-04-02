@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
@@ -17,6 +18,9 @@ import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityScanBinding
 import com.lokatani.lokafreshinventory.helper.ImageClassifierHelper
 import org.tensorflow.lite.task.vision.classifier.Classifications
@@ -37,6 +41,25 @@ class ScanActivity : AppCompatActivity() {
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 100)
+        }
+
+        binding.btnPhoto.setOnClickListener {
+            val view = View.inflate(this, R.layout.take_photo_alert, null)
+            val resultDialog = MaterialAlertDialogBuilder(this)
+                .setView(view)
+                .setCancelable(false)
+
+            val dialog = resultDialog.show()
+
+            val closeButton = view.findViewById<MaterialButton>(R.id.btn_close)
+            closeButton.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            val buttonSave = view.findViewById<MaterialButton>(R.id.btn_save)
+            buttonSave.setOnClickListener {
+                TODO()
+            }
         }
     }
 
