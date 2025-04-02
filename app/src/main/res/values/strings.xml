@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">LokaFresh Inventory</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -22,9 +21,15 @@
     <string name="analysis">Analysis</string>
     <string name="graph_image_placeholder">Graph Image Placeholder</string>
     <string name="nama">Nama</string>
-    <string name="berat">Berat</string>
+    <string name="berat">Berat:</string>
     <string name="tanggal_scan">Tanggal Scan</string>
     <string name="nama_placeholder">KALE</string>
     <string name="berat_placeholder">250G</string>
     <string name="tanggal_placeholder">12/12/2012</string>
+    <string name="image_classifier_failed">Image classifier failed to initialize. See error logs for details</string>
+    <string name="button_to_photo">Button to Photo</string>
+    <string name="jenis_sayuran">Jenis Sayuran:</string>
+    <string name="camera_hint">Tekan Kamera jika prediksi sudah sesuai</string>
+    <string name="interference_time">Interference Time</string>
+    <string name="scan">Scan</string>
 </resources>

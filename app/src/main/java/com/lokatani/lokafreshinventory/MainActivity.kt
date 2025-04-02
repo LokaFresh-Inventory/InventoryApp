@@ -1,14 +1,16 @@
 package com.lokatani.lokafreshinventory
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lokatani.lokafreshinventory.databinding.ActivityMainBinding
-import androidx.core.view.get
+import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,5 +40,10 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.fabScan.setOnClickListener {
+            val intent = Intent(this@MainActivity, ScanActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
