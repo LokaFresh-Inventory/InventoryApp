@@ -21,7 +21,7 @@
     <string name="analysis">Analysis</string>
     <string name="graph_image_placeholder">Graph Image Placeholder</string>
     <string name="weight">Weight:</string>
-    <string name="scan_date">Date of Scan</string>
+    <string name="scan_date">Date of Scan:</string>
     <string name="nama_placeholder">KALE</string>
     <string name="berat_placeholder">250G</string>
     <string name="tanggal_placeholder">12/12/2012</string>
@@ -40,4 +40,10 @@
     <string name="total_weight">Total Weight:</string>
     <string name="average_weight_per_veggie_type">Average Weight per Veggie Type:</string>
     <string name="total_data">Total Data:</string>
+    <string name="guest">Guest</string>
+    <string name="warehouse_placeholder">Warehouse 1</string>
+    <string name="preferences">Preferences</string>
+    <string name="data_management">Data Management</string>
+    <string name="logout">Logout</string>
+    <string name="placeholder">Placeholder</string>
 </resources>
