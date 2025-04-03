@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">LokaFresh Inventory</string>
     <string name="title_home">Home</string>
-    <string name="name">Name</string>
+    <string name="name">Name:</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign Up</string>
@@ -20,17 +20,24 @@
     <string name="data">Data</string>
     <string name="analysis">Analysis</string>
     <string name="graph_image_placeholder">Graph Image Placeholder</string>
-    <string name="nama">Nama</string>
-    <string name="berat">Berat:</string>
-    <string name="tanggal_scan">Tanggal Scan</string>
+    <string name="weight">Weight:</string>
+    <string name="scan_date">Date of Scan</string>
     <string name="nama_placeholder">KALE</string>
     <string name="berat_placeholder">250G</string>
     <string name="tanggal_placeholder">12/12/2012</string>
     <string name="image_classifier_failed">Image classifier failed to initialize. See error logs for details</string>
     <string name="button_to_photo">Button to Photo</string>
-    <string name="jenis_sayuran">Jenis Sayuran:</string>
-    <string name="camera_hint">Tekan Kamera jika prediksi sudah sesuai</string>
-    <string name="interference_time">Interference Time</string>
+    <string name="vegetable_type">Veggie Type:</string>
+    <string name="camera_hint">Press Camera button if prediction is correct</string>
+    <string name="inference_time">Inference Time</string>
     <string name="scan">Scan</string>
     <string name="button_to_close">Button to Close</string>
+    <string name="settings">Settings</string>
+    <string name="scan_result">SCAN RESULT</string>
+    <string name="save_data">SAVE DATA?</string>
+    <string name="save">SAVE</string>
+    <string name="no_data">No Data</string>
+    <string name="total_weight">Total Weight:</string>
+    <string name="average_weight_per_veggie_type">Average Weight per Veggie Type:</string>
+    <string name="total_data">Total Data:</string>
 </resources>
