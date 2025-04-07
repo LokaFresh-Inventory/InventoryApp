@@ -1,0 +1,14 @@
+stride: 32
+task: detect
+batch: 1
+imgsz:
+  - 320
+  - 320
+names:
+  0: Bayam Merah
+  1: Kale
+args:
+  batch: 1
+  half: false
+  int8: false
+  nms: false

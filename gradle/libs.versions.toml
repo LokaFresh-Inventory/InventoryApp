@@ -15,8 +15,10 @@ navigationFragmentKtx = "2.8.9"
 navigationUiKtx = "2.8.9"
 activity = "1.10.1"
 playServicesTfliteGpu = "16.4.0"
+snakeyaml = "1.29"
+tensorflowLiteGpuDelegatePlugin = "0.4.0"
 tensorflowLiteMetadata = "0.2.0"
-tensorflowLiteGpu = "2.3.0"
+tensorflowLiteGpu = "2.12.0"
 tensorflowLiteTaskVision = "0.4.4"
 tensorflowLiteTaskVisionPlayServices = "0.4.2"
 
@@ -38,6 +40,8 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 play-services-tflite-gpu = { module = "com.google.android.gms:play-services-tflite-gpu", version.ref = "playServicesTfliteGpu" }
 play-services-tflite-support = { module = "com.google.android.gms:play-services-tflite-support", version.ref = "playServicesTfliteGpu" }
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
+tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteGpuDelegatePlugin" }
 tensorflow-lite-metadata = { group = "org.tensorflow", name = "tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }
 tensorflow-lite-gpu = { group = "org.tensorflow", name = "tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteTaskVision" }

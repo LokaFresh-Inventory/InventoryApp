@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,95 +7,44 @@
     android:layout_height="match_parent"
     tools:context=".ui.scan.ScanActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.camera.view.PreviewView
+        android:id="@+id/view_finder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#D9D9D9">
+        android:layout_marginTop="100dp" />
 
-        <TextView
-            android:id="@+id/tv_jenis_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/vegetable_type"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.lokatani.lokafreshinventory.customview.OverlayView
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp" />
 
-        <TextView
-            android:id="@+id/tv_jenis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nama_placeholder"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tv_jenis_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_jenis_title" />
+    <TextView
+        android:id="@+id/tv_interference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:paddingTop="32dp"
+        android:text="@string/inference_time"
+        android:textColor="@color/white"
+        app:layout_anchor="@id/view_finder"
+        app:layout_anchorGravity="top|end" />
 
-        <TextView
-            android:id="@+id/tv_berat_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/weight"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_jenis_title" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_photo"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="@color/hijau1"
+        android:contentDescription="@string/click_to_capture"
+        app:icon="@drawable/baseline_camera_24"
+        app:iconSize="40dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-        <TextView
-            android:id="@+id/tv_berat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/berat_placeholder"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/tv_berat_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_berat_title" />
+    <include
+        android:id="@+id/scan_info"
+        layout="@layout/camera_scan_info" />
 
-        <TextView
-            android:id="@+id/tv_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/camera_hint"
-            android:textColor="@color/hijau1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_jenis" />
-
-        <androidx.camera.view.PreviewView
-            android:id="@+id/view_finder"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_hint" />
-
-        <TextView
-            android:id="@+id/tv_interference"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/inference_time"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/view_finder" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_photo"
-            style="@style/Widget.Material3.Button.IconButton.Filled"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:backgroundTint="@color/hijau1"
-            android:contentDescription="@string/button_to_photo"
-            app:icon="@drawable/baseline_camera_24"
-            app:iconSize="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

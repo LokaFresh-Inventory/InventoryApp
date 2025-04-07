@@ -11,7 +11,7 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/button_to_close"
+        android:contentDescription="@string/close_the_dialog"
         app:icon="@drawable/baseline_close_24"
         app:iconSize="28dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,17 +49,19 @@
             android:padding="8dp">
 
             <TextView
+                android:id="@+id/tv_result_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/nama_placeholder"
+                android:text="@string/no_data"
                 android:textColor="@color/dark_green"
                 android:textSize="32sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_result_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/berat_placeholder"
+                android:text="@string/no_data"
                 android:textColor="@color/dark_green"
                 android:textSize="32sp"
                 android:textStyle="bold" />

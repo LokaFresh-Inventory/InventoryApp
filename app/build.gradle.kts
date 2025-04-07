@@ -15,6 +15,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags += ""
+            }
+        }
     }
 
     buildTypes {
@@ -36,6 +41,12 @@ android {
     buildFeatures {
         viewBinding = true
         mlModelBinding = true
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 }
 
@@ -65,6 +76,9 @@ dependencies {
     implementation(libs.tensorflow.lite.task.vision.play.services)
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+    implementation(libs.snakeyaml)
+
 
     // CameraX
     implementation(libs.androidx.camera.camera2)

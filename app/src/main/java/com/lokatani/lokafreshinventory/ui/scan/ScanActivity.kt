@@ -2,34 +2,51 @@ package com.lokatani.lokafreshinventory.ui.scan
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.AspectRatio.RATIO_4_3
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.CameraSelector.LENS_FACING_BACK
 import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888
+import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
-import androidx.camera.core.resolutionselector.AspectRatioStrategy
-import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityScanBinding
-import com.lokatani.lokafreshinventory.helper.ImageClassifierHelper
-import org.tensorflow.lite.task.vision.classifier.Classifications
+import com.lokatani.lokafreshinventory.helper.ObjectDetectorHelper
+import com.lokatani.lokafreshinventory.helper.detectors.ObjectDetection
+import java.util.Locale
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class ScanActivity : AppCompatActivity() {
+class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityScanBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-    private lateinit var imageClassifierHelper: ImageClassifierHelper
+    private lateinit var objectDetectorHelper: ObjectDetectorHelper
+    private lateinit var bitmapBuffer: Bitmap
+    private var preview: Preview? = null
+    private var imageAnalyzer: ImageAnalysis? = null
+    private var camera: Camera? = null
+    private var cameraProvider: ProcessCameraProvider? = null
+
+    private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +64,16 @@ class ScanActivity : AppCompatActivity() {
             val view = View.inflate(this, R.layout.take_photo_alert, null)
             val resultDialog = MaterialAlertDialogBuilder(this)
                 .setView(view)
-                .setCancelable(false)
 
             val dialog = resultDialog.show()
+            dialog.setCanceledOnTouchOutside(false)
 
+            val resultVegType = view.findViewById<TextView>(R.id.tv_result_type)
+            resultVegType.text = binding.scanInfo.tvJenis.text
+
+            val resultVegWeight = view.findViewById<TextView>(R.id.tv_result_weight)
+            val rawResultVegWeight = binding.scanInfo.tvBerat.text.toString().toFloatOrNull() ?: 0f
+            resultVegWeight.text = String.format(Locale.getDefault(), "%.2f gram", rawResultVegWeight)
             val closeButton = view.findViewById<MaterialButton>(R.id.btn_close)
             closeButton.setOnClickListener {
                 dialog.dismiss()
@@ -66,87 +89,124 @@ class ScanActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
         hideSystemUI()
-        startCamera()
-    }
 
-    private fun startCamera() {
-        imageClassifierHelper = ImageClassifierHelper(
-            context = this,
-            classifierListener = object : ImageClassifierHelper.ClassifierListener {
-                override fun onError(error: String) {
-                    runOnUiThread {
-                        Toast.makeText(this@ScanActivity, error, Toast.LENGTH_SHORT).show()
-                        Log.e(TAG, "Classification error: $error")
-                    }
-                }
-
-                override fun onResult(result: List<Classifications>?, inferenceTime: Long) {
-                    runOnUiThread {
-                        result?.let { classifications ->
-                            if (classifications.isNotEmpty() && classifications[0].categories.isNotEmpty()) {
-                                // Get sorted categories (sort happens in the helper now)
-                                val topCategory = classifications[0].categories[0]
-
-                                Log.d(
-                                    TAG,
-                                    "Top result: ${topCategory.label} (${topCategory.score})"
-                                )
-                                binding.apply {
-                                    tvJenis.text = "Vegetable: ${topCategory.label}"
-                                    // You would need to implement weight detection separately
-                                    tvBerat.text = "Weight: Calculating..."
-                                    tvInterference.text = "$inferenceTime ms"
-                                }
-                            } else {
-                                binding.apply {
-                                    tvJenis.text = "Not Detected"
-                                    tvBerat.text = "Not Detected"
-                                    tvInterference.text = "$inferenceTime ms"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        objectDetectorHelper = ObjectDetectorHelper(
+            context = this@ScanActivity,
+            objectDetectorListener = this
         )
 
+        objectDetectorHelper.threshold = 0.4f
+        objectDetectorHelper.maxResults = 2
+        objectDetectorHelper.numThreads = 2
+        objectDetectorHelper.currentDelegate = 1
+        objectDetectorHelper.currentModel = 4
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
+
+        binding.viewFinder.post {
+            setupCamera()
+        }
+    }
+
+    private fun setupCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        cameraProviderFuture.addListener(
+            {
+                cameraProvider = cameraProviderFuture.get()
+                bindCameraUseCases()
+            }, ContextCompat.getMainExecutor(this)
+        )
+    }
 
-        cameraProviderFuture.addListener({
-            val resolutionSelector = ResolutionSelector.Builder()
-                .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
-                .build()
-            val imageAnalyzer = ImageAnalysis.Builder()
-                .setResolutionSelector(resolutionSelector)
-                .setTargetRotation(binding.viewFinder.display.rotation)
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                .build()
-            imageAnalyzer.setAnalyzer(Executors.newSingleThreadExecutor()) { image ->
-                imageClassifierHelper.classifyImage(image)
+    private fun bindCameraUseCases() {
+        val cameraProvider =
+            cameraProvider ?: throw IllegalStateException("Camera initialization failed")
+
+        val cameraSelector = CameraSelector.Builder().requireLensFacing(LENS_FACING_BACK).build()
+
+        preview = Preview.Builder()
+            .setTargetAspectRatio(RATIO_4_3)
+            .setTargetRotation(binding.viewFinder.display.rotation)
+            .build()
+
+        imageAnalyzer = ImageAnalysis.Builder()
+            .setTargetAspectRatio(RATIO_4_3)
+            .setTargetRotation(binding.viewFinder.display.rotation)
+            .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+            .setOutputImageFormat(OUTPUT_IMAGE_FORMAT_RGBA_8888)
+            .build()
+
+            .also {
+                it.setAnalyzer(cameraExecutor) { image ->
+                    if (!::bitmapBuffer.isInitialized) {
+                        bitmapBuffer = createBitmap(image.width, image.height)
+                    }
+
+                    detectObjects(image)
+                }
             }
 
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder().build().also {
-                it.surfaceProvider = binding.viewFinder.surfaceProvider
+        cameraProvider.unbindAll()
+
+        try {
+            camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
+
+            preview?.surfaceProvider = binding.viewFinder.surfaceProvider
+        } catch (e: Exception) {
+            Log.e(TAG, "Use case binding failed", e)
+        }
+    }
+
+    private fun detectObjects(image: ImageProxy) {
+        // Copy out RGB bits to the shared bitmap buffer
+        image.use {
+            bitmapBuffer.copyPixelsFromBuffer(image.planes[0].buffer)
+        }
+
+        val imageRotation = image.imageInfo.rotationDegrees
+        // Pass Bitmap and rotation to the object detector helper for processing and detection
+        objectDetectorHelper.detect(bitmapBuffer, imageRotation)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        imageAnalyzer?.targetRotation = binding.viewFinder.display.rotation
+    }
+
+    override fun onResults(
+        results: MutableList<ObjectDetection>?,
+        inferenceTime: Long,
+        imageHeight: Int,
+        imageWidth: Int
+    ) {
+        runOnUiThread {
+            binding.apply {
+                if (!results.isNullOrEmpty()) {
+                    scanInfo.tvJenis.text = results[0].category.label.toString()
+                    scanInfo.tvBerat.text = results[0].category.confidence.toString()
+                } else {
+                    scanInfo.tvJenis.text = getString(R.string.no_data)
+                    scanInfo.tvBerat.text = getString(R.string.no_data)
+                }
+
+                tvInterference.text = String.format(Locale.getDefault(), "%d ms", inferenceTime)
+                results?.let {
+                    overlay.setResults(
+                        it,
+                        imageHeight,
+                        imageWidth
+                    )
+                    overlay.invalidate()
+
+                }
             }
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    this,
-                    cameraSelector,
-                    preview,
-                    imageAnalyzer
-                )
-            } catch (exc: Exception) {
-                Toast.makeText(
-                    this@ScanActivity,
-                    "Failed to find camera",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e(TAG, "Start Camera: ${exc.message}")
-            }
-        }, ContextCompat.getMainExecutor(this))
+        }
+    }
+
+    override fun onError(error: String) {
+        runOnUiThread {
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun hideSystemUI() {
@@ -160,6 +220,12 @@ class ScanActivity : AppCompatActivity() {
             )
         }
         supportActionBar?.hide()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        cameraExecutor.shutdown()
     }
 
     companion object {

@@ -25,13 +25,11 @@
     <string name="nama_placeholder">KALE</string>
     <string name="berat_placeholder">250G</string>
     <string name="tanggal_placeholder">12/12/2012</string>
-    <string name="image_classifier_failed">Image classifier failed to initialize. See error logs for details</string>
-    <string name="button_to_photo">Button to Photo</string>
+    <string name="click_to_capture">Capture Photo</string>
     <string name="vegetable_type">Veggie Type:</string>
     <string name="camera_hint">Press Camera button if prediction is correct</string>
     <string name="inference_time">Inference Time</string>
     <string name="scan">Scan</string>
-    <string name="button_to_close">Button to Close</string>
     <string name="settings">Settings</string>
     <string name="scan_result">SCAN RESULT</string>
     <string name="save_data">SAVE DATA?</string>
@@ -46,4 +44,5 @@
     <string name="data_management">Data Management</string>
     <string name="logout">Logout</string>
     <string name="placeholder">Placeholder</string>
+    <string name="close_the_dialog">Close the Dialog</string>
 </resources>
