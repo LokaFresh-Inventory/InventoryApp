@@ -12,6 +12,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.Camera
@@ -32,21 +33,27 @@ import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityScanBinding
 import com.lokatani.lokafreshinventory.helper.ObjectDetectorHelper
 import com.lokatani.lokafreshinventory.helper.detectors.ObjectDetection
+import com.lokatani.lokafreshinventory.utils.ViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityScanBinding
-    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
     private lateinit var bitmapBuffer: Bitmap
     private var preview: Preview? = null
     private var imageAnalyzer: ImageAnalysis? = null
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
-
     private lateinit var cameraExecutor: ExecutorService
+
+    private lateinit var scanFactory: ViewModelFactory
+    private val scanViewModel: ScanViewModel by viewModels {
+        scanFactory
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +66,8 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         ) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 100)
         }
+
+        scanFactory = ViewModelFactory.getInstance(this)
 
         binding.btnPhoto.setOnClickListener {
             val view = View.inflate(this, R.layout.take_photo_alert, null)
@@ -73,15 +82,30 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 
             val resultVegWeight = view.findViewById<TextView>(R.id.tv_result_weight)
             val rawResultVegWeight = binding.scanInfo.tvBerat.text.toString().toFloatOrNull() ?: 0f
-            resultVegWeight.text = String.format(Locale.getDefault(), "%.2f gram", rawResultVegWeight)
+            resultVegWeight.text =
+                String.format(Locale.getDefault(), "%.2f gram", rawResultVegWeight)
             val closeButton = view.findViewById<MaterialButton>(R.id.btn_close)
             closeButton.setOnClickListener {
                 dialog.dismiss()
             }
 
             val buttonSave = view.findViewById<MaterialButton>(R.id.btn_save)
+
+            val currentDate = getCurrentDate()
             buttonSave.setOnClickListener {
-                TODO()
+                scanViewModel.insertResult(
+                    user = "Test User",
+                    vegResult = resultVegType.text.toString(),
+                    vegWeight = rawResultVegWeight,
+                    date = currentDate
+                )
+            }
+
+            scanViewModel.insertCompleted.observe(this) { completed ->
+                if (completed == true) {
+                    dialog.dismiss()
+                    scanViewModel.resetInsertStatus()
+                }
             }
         }
     }
@@ -201,6 +225,12 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                 }
             }
         }
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = Date()
+        return dateFormat.format(date)
     }
 
     override fun onError(error: String) {

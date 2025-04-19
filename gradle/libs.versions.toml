@@ -1,8 +1,8 @@
 [versions]
 agp = "8.9.1"
 cameraX = "1.4.2"
-kotlin = "1.9.24"
-coreKtx = "1.15.0"
+kotlin = "2.0.21"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -15,18 +15,23 @@ navigationFragmentKtx = "2.8.9"
 navigationUiKtx = "2.8.9"
 activity = "1.10.1"
 playServicesTfliteGpu = "16.4.0"
+roomKtx = "2.7.0"
 snakeyaml = "1.29"
 tensorflowLiteGpuDelegatePlugin = "0.4.0"
 tensorflowLiteMetadata = "0.2.0"
 tensorflowLiteGpu = "2.12.0"
 tensorflowLiteTaskVision = "0.4.4"
 tensorflowLiteTaskVisionPlayServices = "0.4.2"
+threetenabp = "1.4.8"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -47,6 +52,7 @@ tensorflow-lite-gpu = { group = "org.tensorflow", name = "tensorflow-lite-gpu", 
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteTaskVision" }
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVision" }
 tensorflow-lite-task-vision-play-services = { module = "org.tensorflow:tensorflow-lite-task-vision-play-services", version.ref = "tensorflowLiteTaskVisionPlayServices" }
+threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

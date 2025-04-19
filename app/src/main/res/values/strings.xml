@@ -45,4 +45,6 @@
     <string name="logout">Logout</string>
     <string name="placeholder">Placeholder</string>
     <string name="close_the_dialog">Close the Dialog</string>
+    <string name="no_history_detected">No History Detected</string>
+    <string name="vegetable">Vegetable:</string>
 </resources>
