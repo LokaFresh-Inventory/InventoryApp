@@ -21,10 +21,6 @@
     <string name="analysis">Analysis</string>
     <string name="graph_image_placeholder">Graph Image Placeholder</string>
     <string name="weight">Weight:</string>
-    <string name="scan_date">Date of Scan:</string>
-    <string name="nama_placeholder">KALE</string>
-    <string name="berat_placeholder">250G</string>
-    <string name="tanggal_placeholder">12/12/2012</string>
     <string name="click_to_capture">Capture Photo</string>
     <string name="vegetable_type">Veggie Type:</string>
     <string name="camera_hint">Press Camera button if prediction is correct</string>
@@ -46,5 +42,5 @@
     <string name="placeholder">Placeholder</string>
     <string name="close_the_dialog">Close the Dialog</string>
     <string name="no_history_detected">No History Detected</string>
-    <string name="vegetable">Vegetable:</string>
+    <string name="type">Type:</string>
 </resources>

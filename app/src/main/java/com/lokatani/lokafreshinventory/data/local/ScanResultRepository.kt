@@ -25,6 +25,12 @@ class ScanResultRepository private constructor(
         }
     }
 
+    suspend fun deleteScanResult(scanResult: ScanResult) {
+        withContext(Dispatchers.IO) {
+            scanResultDao.deleteScanResult((scanResult))
+        }
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: ScanResultRepository? = null

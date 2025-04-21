@@ -21,7 +21,9 @@ class HistoryActivity : AppCompatActivity() {
         factory
     }
 
-    private val historyAdapter = HistoryAdapter()
+    private val historyAdapter = HistoryAdapter { result ->
+        historyViewModel.deleteScanResult(result)
+    }
     private lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
