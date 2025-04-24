@@ -11,7 +11,6 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio.RATIO_4_3
@@ -34,6 +33,7 @@ import com.lokatani.lokafreshinventory.databinding.ActivityScanBinding
 import com.lokatani.lokafreshinventory.helper.ObjectDetectorHelper
 import com.lokatani.lokafreshinventory.helper.detectors.ObjectDetection
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
+import com.lokatani.lokafreshinventory.utils.showToast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -235,7 +235,7 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 
     override fun onError(error: String) {
         runOnUiThread {
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            showToast(error)
         }
     }
 

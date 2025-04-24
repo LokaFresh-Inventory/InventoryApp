@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550078383762",
+    "project_id": "try-lokatani",
+    "storage_bucket": "try-lokatani.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550078383762:android:4685f7fe39f7dde283484b",
+        "android_client_info": {
+          "package_name": "com.lokatani.lokafreshinventory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQc-gAhaNjYH6JkUXZfz3TEjLjARbFxtI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

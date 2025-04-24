@@ -105,6 +105,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     //Firebase
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
     //Retrofit (API Call)

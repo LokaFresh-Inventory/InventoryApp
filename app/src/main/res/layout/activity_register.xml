@@ -117,6 +117,14 @@
                     android:textColor="@color/white"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:indeterminateBehavior="cycle"
+                    android:visibility="gone" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_login"
                     style="@style/Widget.Material3.Button.TextButton"

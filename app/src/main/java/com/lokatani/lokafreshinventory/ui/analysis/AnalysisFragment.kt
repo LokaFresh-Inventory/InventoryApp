@@ -79,8 +79,10 @@ class AnalysisFragment : Fragment() {
                             val predictionFirst = predictionResult.kale ?: 0
                             val predictionSecond = predictionResult.bayamMerah ?: 0
                             val predictionSum = predictionFirst + predictionSecond
-                            tvResultFirst.text = getString(R.string.prediction_kale, predictionFirst)
-                            tvResultSecond.text = getString(R.string.prediction_bayam_merah, predictionSecond)
+                            tvResultFirst.text =
+                                getString(R.string.prediction_kale, predictionFirst)
+                            tvResultSecond.text =
+                                getString(R.string.prediction_bayam_merah, predictionSecond)
                             tvResultTotal.text = getString(R.string.prediction_total, predictionSum)
                         }
 
