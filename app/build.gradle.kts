@@ -1,12 +1,25 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.google.gms.google.services)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
     namespace = "com.lokatani.lokafreshinventory"
     compileSdk = 35
+
+    val localProperties = Properties()
+    val localPropertiesFile = File(rootProject.projectDir, "local.properties")
+    if (localPropertiesFile.exists()) {
+        FileInputStream(localPropertiesFile).use { fis ->
+            localProperties.load(fis)
+        }
+    }
 
     defaultConfig {
         applicationId = "com.lokatani.lokafreshinventory"
@@ -42,6 +55,7 @@ android {
     buildFeatures {
         viewBinding = true
         mlModelBinding = true
+        buildConfig = true
     }
     externalNativeBuild {
         cmake {
@@ -89,6 +103,14 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+
+    //Firebase
+    implementation(libs.firebase.auth)
+
+    //Retrofit (API Call)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
 
     //Lifecycle
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

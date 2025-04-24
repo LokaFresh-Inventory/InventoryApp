@@ -2,8 +2,9 @@ package com.lokatani.lokafreshinventory.ui.history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
 import com.lokatani.lokafreshinventory.databinding.HeaderRowBinding
 import com.lokatani.lokafreshinventory.databinding.HistoryRowWithImageBinding
@@ -14,7 +15,6 @@ class HistoryAdapter(private val onDeleteHold: (ScanResult) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items = mutableListOf<ListItem>()
-
     fun submitList(list: List<ListItem>) {
         items.clear()
         items.addAll(list)
@@ -54,14 +54,15 @@ class HistoryAdapter(private val onDeleteHold: (ScanResult) -> Unit) :
                 val result = (items[position] as ListItem.Content).result
                 holder.bind(result)
                 holder.itemView.setOnLongClickListener {
-                    AlertDialog.Builder(holder.itemView.context).apply {
+                    MaterialAlertDialogBuilder(holder.itemView.context).apply {
+                        setIcon(R.drawable.baseline_delete_outline_24)
                         setTitle("Delete History")
                         setMessage("Do you want to delete this item?")
                         setPositiveButton("Yes") { _, _ ->
                             onDeleteHold(result)
                         }
                         setNegativeButton("No", null)
-                        create().show()
+                        show()
                     }
                     true
                 }
@@ -94,6 +95,11 @@ class HistoryAdapter(private val onDeleteHold: (ScanResult) -> Unit) :
             binding.apply {
                 tvPredictionValue.text = vegType
                 tvWeightValue.text = vegWeight.toString()
+                if (vegType == "Kale") {
+                    ivVeg.setImageResource(R.drawable.kale)
+                } else {
+                    ivVeg.setImageResource(R.drawable.bayam_merah)
+                }
             }
         }
     }

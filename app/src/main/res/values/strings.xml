@@ -43,4 +43,14 @@
     <string name="close_the_dialog">Close the Dialog</string>
     <string name="no_history_detected">No History Detected</string>
     <string name="type">Type:</string>
+    <string name="prediction_total">Total: %1$d KG</string>
+    <string name="prediction_kale">%1$d KG</string>
+    <string name="prediction_bayam_merah">%1$d KG</string>
+    <string name="select_prediction_date">Select Prediction Date</string>
+    <string name="select_date">Select Date</string>
+    <string name="quantity_prediction">Quantity Prediction</string>
+    <string name="kale">Kale</string>
+    <string name="empty">-</string>
+    <string name="bayam_merah">Bayam Merah</string>
+    <string name="total">TOTAL: -</string>
 </resources>
