@@ -1,6 +1,11 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.LokaFreshInventory" parent="Theme.Material3.Light.NoActionBar" />
+    <style name="Theme.LokaFreshInventory" parent="Theme.Material3.Light.NoActionBar">
+
+        <item name="android:windowSplashScreenBackground">@color/theme_green</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_white</item>
+
+    </style>
 
     <style name="TopCornerChange" parent="ShapeAppearance.Material3.MediumComponent">
         <item name="cornerFamily">rounded</item>

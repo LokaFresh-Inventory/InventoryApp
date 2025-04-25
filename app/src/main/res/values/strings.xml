@@ -31,9 +31,6 @@
     <string name="save_data">SAVE DATA?</string>
     <string name="save">SAVE</string>
     <string name="no_data">No Data</string>
-    <string name="total_weight">Total Weight:</string>
-    <string name="average_weight_per_veggie_type">Average Weight per Veggie Type:</string>
-    <string name="total_data">Total Data:</string>
     <string name="guest">Guest</string>
     <string name="warehouse_placeholder">Warehouse 1</string>
     <string name="preferences">Preferences</string>
