@@ -49,5 +49,6 @@
     <string name="kale">Kale</string>
     <string name="empty">-</string>
     <string name="bayam_merah">Bayam Merah</string>
-    <string name="total">TOTAL: -</string>
+    <string name="total">---</string>
+    <string name="total_prediction">Total Prediction</string>
 </resources>
