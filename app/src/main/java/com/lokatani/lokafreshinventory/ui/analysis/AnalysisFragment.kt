@@ -5,10 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.Snackbar
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.remote.response.PredictResponse
@@ -42,6 +42,8 @@ class AnalysisFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        var formattedDate = ""
+
         binding.apply {
             btnPredictDate.setOnClickListener {
                 val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -52,7 +54,7 @@ class AnalysisFragment : Fragment() {
 
                 datePicker.addOnPositiveButtonClickListener { selection ->
                     val dateDashFormatter = SimpleDateFormat("dd-MM-yyy", Locale.getDefault())
-                    val formattedDate = dateDashFormatter.format(Date(selection))
+                    formattedDate = dateDashFormatter.format(Date(selection))
                     val selectedDate = Date(selection) // Convert Long to Date
                     btnPredictDate.text = DateUtils.formatDate(
                         SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedDate)
@@ -88,13 +90,12 @@ class AnalysisFragment : Fragment() {
 
                         is Result.Error -> {
                             view?.let {
-                                Snackbar.make(
-                                    requireActivity(),
-                                    it,
-                                    "Error Occured: ${result.error}",
-                                    Snackbar.LENGTH_SHORT
-                                ).setAction("Dismiss") {
-                                }.show()
+                                Log.d(TAG, "Error")
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Error Analysing Data",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
@@ -107,5 +108,9 @@ class AnalysisFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val TAG = "ANALYSIS"
     }
 }

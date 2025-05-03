@@ -35,16 +35,16 @@
                     android:textColor="@color/dark_green"
                     android:textSize="45sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
                     android:text="@string/total_prediction"
                     android:textColor="@color/dark_green"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
 
 
             </LinearLayout>
@@ -55,11 +55,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:strokeWidth="1dp"
             android:text="@string/select_prediction_date"
             android:textColor="@color/dark_green"
             android:textSize="16sp"
-            android:textStyle="" />
+            android:textStyle=""
+            app:strokeWidth="1dp" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -68,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/white"
             android:text="@string/select_date"
@@ -86,44 +87,45 @@
             android:textColor="@color/dark_green"
             android:textSize="16sp" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:trackCornerRadius="4dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginHorizontal="16dp"
             android:orientation="horizontal">
 
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progress_bar"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:indeterminate="true"
-                android:visibility="gone"
-                app:trackCornerRadius="4dp" />
-
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="180dp"
+                android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:layout_margin="10dp"
+                android:layout_weight="1"
                 app:cardBackgroundColor="@color/light_green"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tv_result_first_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="@string/kale"
                         android:textColor="@color/dark_green"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_result_first"
@@ -140,39 +142,42 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:gravity="center"
                         android:text="@string/empty"
                         android:textColor="@color/dark_green"
                         android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="wrap_content" />
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="180dp"
+                android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:layout_margin="10dp"
+                android:layout_weight="1"
                 app:cardBackgroundColor="@color/light_green"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tv_result_second_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="@string/bayam_merah"
                         android:textColor="@color/dark_green"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_result_second"
@@ -189,14 +194,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:gravity="center"
                         android:text="@string/empty"
                         android:textColor="@color/dark_green"
                         android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>         </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
