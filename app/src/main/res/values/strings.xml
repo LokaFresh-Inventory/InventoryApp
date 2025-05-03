@@ -51,4 +51,11 @@
     <string name="bayam_merah">Bayam Merah</string>
     <string name="total">---</string>
     <string name="total_prediction">Total Prediction</string>
+    <string name="error_occured">Error Occurred</string>
+    <string name="bot_message">Bot Message</string>
+    <string name="user_message">User Message</string>
+    <string name="chats">Chats</string>
+    <string name="ask">Ask</string>
+    <string name="send_chat">Send Chat</string>
+    <string name="time_placeholder">00:00</string>
 </resources>

@@ -6,7 +6,7 @@ import com.lokatani.lokafreshinventory.data.remote.PredictRepository
 import com.lokatani.lokafreshinventory.di.PredictInjection
 
 class PredictViewModelFactory private constructor(
-    private val predictRepository: PredictRepository
+    private val predictRepository: PredictRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")

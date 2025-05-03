@@ -120,4 +120,5 @@ dependencies {
 
     //Utilities
     implementation(libs.threetenabp)
+    implementation(libs.core) // Markwon (Markdown Library)
 }

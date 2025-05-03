@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
 import com.lokatani.lokafreshinventory.databinding.ActivityHistoryBinding
@@ -76,7 +77,7 @@ class HistoryActivity : AppCompatActivity() {
                         binding.progressBar.visibility = View.GONE
                         Snackbar.make(
                             binding.root,
-                            "Error Occured: ${result.error}",
+                            getString(R.string.error_occured) + result.error,
                             Snackbar.LENGTH_SHORT
                         ).setAction("Dismiss") {
                         }.show()

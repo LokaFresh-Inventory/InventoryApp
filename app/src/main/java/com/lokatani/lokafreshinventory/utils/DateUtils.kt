@@ -5,7 +5,9 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.ChronoUnit
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -21,6 +23,15 @@ object DateUtils {
         }
 
         return outputFormat.format(date!!)
+    }
+
+    fun timeStamp(): String {
+
+        val timeStamp = Timestamp(System.currentTimeMillis())
+        val sdf = SimpleDateFormat("HH:mm")
+        val time = sdf.format(Date(timeStamp.time))
+
+        return time.toString()
     }
 
     fun formatLocalDateToRelativeTime(

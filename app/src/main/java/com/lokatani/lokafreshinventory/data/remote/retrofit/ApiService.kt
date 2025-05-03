@@ -1,13 +1,22 @@
 package com.lokatani.lokafreshinventory.data.remote.retrofit
 
 import com.lokatani.lokafreshinventory.data.remote.request.PredictRequest
+import com.lokatani.lokafreshinventory.data.remote.response.ChatbotResponse
 import com.lokatani.lokafreshinventory.data.remote.response.PredictResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Query
 
-interface ApiService {
+interface PredictApiService {
     @POST("predict")
     suspend fun predict(
         @Body predictRequest: PredictRequest
     ): PredictResponse
+}
+
+interface ChatbotApiService {
+    @POST("webhook/get-prompt")
+    suspend fun sendChat(
+        @Query("prompt") prompt: String
+    ): List<ChatbotResponse>
 }

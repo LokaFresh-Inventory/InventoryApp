@@ -5,11 +5,11 @@ import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.remote.request.PredictRequest
 import com.lokatani.lokafreshinventory.data.remote.response.DetailItem
 import com.lokatani.lokafreshinventory.data.remote.response.PredictResponse
-import com.lokatani.lokafreshinventory.data.remote.retrofit.ApiService
+import com.lokatani.lokafreshinventory.data.remote.retrofit.PredictApiService
 import retrofit2.HttpException
 
 class PredictRepository(
-    private val apiService: ApiService
+    private val apiService: PredictApiService
 ) {
     suspend fun predict(
         tanggal: String
@@ -29,7 +29,7 @@ class PredictRepository(
 
     companion object {
         fun getInstance(
-            apiService: ApiService
+            apiService: PredictApiService
         ): PredictRepository = PredictRepository(apiService)
     }
 }

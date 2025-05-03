@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.lokatani.lokafreshinventory.databinding.FragmentHomeBinding
+import com.lokatani.lokafreshinventory.ui.chatbot.ChatbotActivity
 import com.lokatani.lokafreshinventory.ui.history.HistoryActivity
 
 class HomeFragment : Fragment() {
@@ -27,6 +28,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+            btnChatbot.setOnClickListener {
+                startActivity(Intent(requireContext(), ChatbotActivity::class.java))
+            }
             btnHistory.setOnClickListener {
                 startActivity(Intent(requireContext(), HistoryActivity::class.java))
             }

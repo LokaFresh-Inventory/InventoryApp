@@ -42,8 +42,6 @@ class AnalysisFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        var formattedDate = ""
-
         binding.apply {
             btnPredictDate.setOnClickListener {
                 val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -54,7 +52,7 @@ class AnalysisFragment : Fragment() {
 
                 datePicker.addOnPositiveButtonClickListener { selection ->
                     val dateDashFormatter = SimpleDateFormat("dd-MM-yyy", Locale.getDefault())
-                    formattedDate = dateDashFormatter.format(Date(selection))
+                    val formattedDate = dateDashFormatter.format(Date(selection))
                     val selectedDate = Date(selection) // Convert Long to Date
                     btnPredictDate.text = DateUtils.formatDate(
                         SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedDate)

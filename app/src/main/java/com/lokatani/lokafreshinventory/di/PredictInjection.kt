@@ -5,7 +5,7 @@ import com.lokatani.lokafreshinventory.data.remote.retrofit.ApiConfig
 
 object PredictInjection {
     fun provideRepository(): PredictRepository {
-        val apiService = ApiConfig.getApiService()
+        val apiService = ApiConfig.getPredictApiService()
         return PredictRepository.getInstance(apiService)
     }
 }
