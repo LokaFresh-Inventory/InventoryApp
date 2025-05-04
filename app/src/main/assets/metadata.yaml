@@ -5,11 +5,13 @@ imgsz:
   - 320
   - 320
 names:
-  0: Bayam Merah
-  1: Kale
-  2: Timbangan
+  0: bayam merah
+  1: kale
+  2: timbangan
 args:
   batch: 1
+  fraction: 1.0
   half: false
   int8: false
   nms: false
+channels: 3

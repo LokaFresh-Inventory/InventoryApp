@@ -34,7 +34,7 @@
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_lokatani_lokafreshinventory_yolo_ImageProcessing_argb2yolo(
+Java_com_ultralytics_yolo_ImageProcessing_argb2yolo(
         JNIEnv *env,
         jobject thiz,
         jintArray srcArray,

@@ -2,10 +2,10 @@ package com.lokatani.lokafreshinventory.helper.detectors
 
 import android.content.Context
 import android.graphics.RectF
-import com.lokatani.lokafreshinventory.yolo.ImageProcessing
-import com.lokatani.lokafreshinventory.yolo.models.LocalYoloModel
-import com.lokatani.lokafreshinventory.yolo.predict.detect.DetectedObject
-import com.lokatani.lokafreshinventory.yolo.predict.detect.TfliteDetector
+import com.ultralytics.yolo.ImageProcessing
+import com.ultralytics.yolo.models.LocalYoloModel
+import com.ultralytics.yolo.predict.detect.DetectedObject
+import com.ultralytics.yolo.predict.detect.TfliteDetector
 import org.tensorflow.lite.support.image.TensorImage
 
 
@@ -28,7 +28,7 @@ class YoloDetector(
 
         // val modelPath = "YOLO11n-catsdogs_float32.tflite"
         // val metadataPath = "metadata-catsdogs.yaml"
-        val modelPath = "barahleti.tflite"
+        val modelPath = "barahleti_v3_320.tflite"
         val metadataPath = "metadata.yaml"
 
         val config = LocalYoloModel(

@@ -4,12 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -112,7 +109,6 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 
     public override fun onResume() {
         super.onResume()
-        hideSystemUI()
 
         objectDetectorHelper = ObjectDetectorHelper(
             context = this@ScanActivity,
@@ -163,7 +159,11 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             .also {
                 it.setAnalyzer(cameraExecutor) { image ->
                     if (!::bitmapBuffer.isInitialized) {
-                        bitmapBuffer = createBitmap(image.width, image.height)
+                        bitmapBuffer = Bitmap.createBitmap(
+                            image.width,
+                            image.height,
+                            Bitmap.Config.ARGB_8888
+                        )
                     }
 
                     detectObjects(image)
@@ -237,19 +237,6 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         runOnUiThread {
             showToast(error)
         }
-    }
-
-    private fun hideSystemUI() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
-        supportActionBar?.hide()
     }
 
     override fun onDestroy() {
