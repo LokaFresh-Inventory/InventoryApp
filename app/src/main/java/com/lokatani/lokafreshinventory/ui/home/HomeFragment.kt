@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.lokatani.lokafreshinventory.databinding.FragmentHomeBinding
 import com.lokatani.lokafreshinventory.ui.chatbot.ChatbotActivity
+import com.lokatani.lokafreshinventory.ui.data.DataActivity
 import com.lokatani.lokafreshinventory.ui.history.HistoryActivity
 
 class HomeFragment : Fragment() {
@@ -33,6 +34,10 @@ class HomeFragment : Fragment() {
             }
             btnHistory.setOnClickListener {
                 startActivity(Intent(requireContext(), HistoryActivity::class.java))
+            }
+
+            btnData.setOnClickListener {
+                startActivity(Intent(requireContext(), DataActivity::class.java))
             }
         }
     }

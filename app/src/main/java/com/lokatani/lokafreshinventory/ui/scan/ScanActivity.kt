@@ -21,6 +21,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
@@ -40,7 +41,6 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.max
-import androidx.core.graphics.createBitmap
 
 class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityScanBinding
