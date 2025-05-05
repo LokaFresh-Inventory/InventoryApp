@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="28dp"
                     android:text="@string/total_prediction"
                     android:textColor="@color/dark_green"
                     android:textSize="20sp"

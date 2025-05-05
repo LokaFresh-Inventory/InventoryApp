@@ -121,4 +121,5 @@ dependencies {
     //Utilities
     implementation(libs.threetenabp)
     implementation(libs.core) // Markwon (Markdown Library)
+    implementation(libs.text.recognition)
 }

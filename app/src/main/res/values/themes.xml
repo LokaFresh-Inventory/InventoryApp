@@ -1,9 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.LokaFreshInventory" parent="Theme.Material3.Light.NoActionBar">
 
-        <item name="android:windowSplashScreenBackground">@color/theme_green</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo_white</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/theme_green</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/logo_white</item>
 
     </style>
 

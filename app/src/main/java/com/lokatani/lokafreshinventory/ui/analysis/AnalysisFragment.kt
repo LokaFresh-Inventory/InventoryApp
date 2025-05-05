@@ -83,7 +83,7 @@ class AnalysisFragment : Fragment() {
                                 getString(R.string.prediction_kale, predictionFirst)
                             tvResultSecond.text =
                                 getString(R.string.prediction_bayam_merah, predictionSecond)
-                            tvResultTotal.text = getString(R.string.prediction_total, predictionSum)
+                            tvResultTotal.text = getString(R.string.kg, predictionSum)
                         }
 
                         is Result.Error -> {

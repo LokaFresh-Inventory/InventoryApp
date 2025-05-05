@@ -1,5 +1,6 @@
 package com.lokatani.lokafreshinventory.data.remote.retrofit
 
+import com.lokatani.lokafreshinventory.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,7 +15,7 @@ object ApiConfig {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("http://34.143.173.201:8601/") // Predict
+            .baseUrl(BuildConfig.MODEL_API_ENDPOINT) // Predict
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -29,7 +30,7 @@ object ApiConfig {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("http://34.143.173.201:8602/") // Chatbot
+            .baseUrl(BuildConfig.CHATBOT_API_ENDPOINT) // Chatbot
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

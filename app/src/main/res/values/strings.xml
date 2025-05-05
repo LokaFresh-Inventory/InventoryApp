@@ -40,7 +40,6 @@
     <string name="close_the_dialog">Close the Dialog</string>
     <string name="no_history_detected">No History Detected</string>
     <string name="type">Type:</string>
-    <string name="prediction_total">Total: %1$d KG</string>
     <string name="prediction_kale">%1$d KG</string>
     <string name="prediction_bayam_merah">%1$d KG</string>
     <string name="select_prediction_date">Select Prediction Date</string>
@@ -58,4 +57,6 @@
     <string name="ask">Ask</string>
     <string name="send_chat">Send Chat</string>
     <string name="time_placeholder">00:00</string>
+    <string name="gram">%1$s gram</string>
+    <string name="kg">%1$d KG</string>
 </resources>

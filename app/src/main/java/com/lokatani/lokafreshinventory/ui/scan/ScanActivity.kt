@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.CameraSelector.LENS_FACING_BACK
@@ -22,20 +21,26 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.createBitmap
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityScanBinding
 import com.lokatani.lokafreshinventory.helper.ObjectDetectorHelper
 import com.lokatani.lokafreshinventory.helper.detectors.ObjectDetection
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
 import com.lokatani.lokafreshinventory.utils.showToast
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.max
+import androidx.core.graphics.createBitmap
 
 class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityScanBinding
@@ -51,6 +56,9 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     private val scanViewModel: ScanViewModel by viewModels {
         scanFactory
     }
+
+    private var scaleFactor: Float = 1f
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,12 +153,10 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         val cameraSelector = CameraSelector.Builder().requireLensFacing(LENS_FACING_BACK).build()
 
         preview = Preview.Builder()
-            .setTargetAspectRatio(RATIO_4_3)
             .setTargetRotation(binding.viewFinder.display.rotation)
             .build()
 
         imageAnalyzer = ImageAnalysis.Builder()
-            .setTargetAspectRatio(RATIO_4_3)
             .setTargetRotation(binding.viewFinder.display.rotation)
             .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
             .setOutputImageFormat(OUTPUT_IMAGE_FORMAT_RGBA_8888)
@@ -159,11 +165,7 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             .also {
                 it.setAnalyzer(cameraExecutor) { image ->
                     if (!::bitmapBuffer.isInitialized) {
-                        bitmapBuffer = Bitmap.createBitmap(
-                            image.width,
-                            image.height,
-                            Bitmap.Config.ARGB_8888
-                        )
+                        bitmapBuffer = createBitmap(image.width, image.height)
                     }
 
                     detectObjects(image)
@@ -206,25 +208,132 @@ class ScanActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         runOnUiThread {
             binding.apply {
                 if (!results.isNullOrEmpty()) {
-                    scanInfo.tvJenis.text = results[0].category.label.toString()
-                    scanInfo.tvBerat.text = results[0].category.confidence.toString()
+                    // Filter sayur dan timbangan
+                    val sayurList = results.filter {
+                        it.category.label == "bayam merah" || it.category.label == "kale"
+                    }
+                    val timbangan = results.find {
+                        it.category.label == "timbangan"
+                    }
+
+                    // Ambil sayur dengan confidence tertinggi
+                    val bestSayur = sayurList.maxByOrNull { it.category.confidence }
+
+                    scanInfo.tvJenis.text =
+                        bestSayur?.category?.label ?: getString(R.string.no_data)
+
+                    // OCR: Ambil bounding box dari timbangan (nanti digunakan untuk crop bitmap)
+                    timbangan?.boundingBox?.let { box ->
+                        Log.d(TAG, "Bounding box: $box")
+
+                        try {
+                            bitmapBuffer.let { buffer -> // Use safe call here
+                                Log.d(TAG, "bitmapBuffer width ${buffer.width} x ${buffer.height}")
+
+                                // First, rotate the original bitmap by 90 degrees
+                                val matrix = android.graphics.Matrix()
+                                matrix.postRotate(90f)
+                                val rotatedBuffer = Bitmap.createBitmap(
+                                    buffer,
+                                    0,
+                                    0,
+                                    buffer.width,
+                                    buffer.height,
+                                    matrix,
+                                    true
+                                )
+
+                                // Now calculate scaling factor based on the rotated bitmap dimensions
+                                // Note that width and height are flipped due to rotation
+                                scaleFactor = max(
+                                    rotatedBuffer.width.toFloat() * 1f / imageHeight,
+                                    rotatedBuffer.height.toFloat() * 1f / imageWidth
+                                )
+
+                                val left = (box.left * scaleFactor).toInt()
+                                val top = (box.top * scaleFactor).toInt()
+                                val right = (box.right * scaleFactor).toInt()
+                                val bottom = (box.bottom * scaleFactor).toInt()
+                                Log.d(
+                                    TAG,
+                                    "Left : $left, Right: $right, Top: $top, Bottom: $bottom"
+                                )
+
+                                // Ensure the calculated coordinates and dimensions are valid
+                                val croppedWidth = right - left
+                                val croppedHeight = bottom - top
+
+                                if (left >= 0 && top >= 0 && croppedWidth > 0 && croppedHeight > 0 &&
+                                    right <= rotatedBuffer.width && bottom <= rotatedBuffer.height
+                                ) {
+
+                                    val timbanganBitmap = Bitmap.createBitmap(
+                                        rotatedBuffer,
+                                        left,
+                                        top,
+                                        croppedWidth,
+                                        croppedHeight
+                                    )
+
+                                    val file = File(getExternalFilesDir(null), "timbangan_crop.jpg")
+                                    val out = FileOutputStream(file)
+                                    timbanganBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                                    out.flush()
+                                    out.close()
+                                    Log.d(TAG, "Saved cropped image to: ${file.absolutePath}")
+                                    processOCR(timbanganBitmap)
+                                } else {
+                                    Log.e(
+                                        TAG, "Error: Calculated crop region is out of bounds. " +
+                                                "Left: $left, Top: $top, Right: $right, Bottom: $bottom, " +
+                                                "Buffer Width: ${rotatedBuffer.width}, Buffer Height: ${rotatedBuffer.height}"
+                                    )
+                                    binding.scanInfo.tvBerat.text = getString(R.string.no_data)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error cropping bitmap: ${e.message}")
+                            binding.scanInfo.tvBerat.text = getString(R.string.no_data)
+                        }
+                    }
+
+
+                    // Render ke overlay
+                    overlay.setResults(results, imageHeight, imageWidth)
+                    overlay.invalidate()
                 } else {
                     scanInfo.tvJenis.text = getString(R.string.no_data)
                     scanInfo.tvBerat.text = getString(R.string.no_data)
                 }
 
                 tvInterference.text = String.format(Locale.getDefault(), "%d ms", inferenceTime)
-                results?.let {
-                    overlay.setResults(
-                        it,
-                        imageHeight,
-                        imageWidth
-                    )
-                    overlay.invalidate()
-
-                }
             }
         }
+    }
+
+    private fun processOCR(bitmap: Bitmap) {
+        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        val image = InputImage.fromBitmap(bitmap, 0)
+
+        recognizer.process(image)
+            .addOnSuccessListener { visionText ->
+                val detectedText = visionText.text
+                Log.d(TAG, "Detected text: $detectedText")
+
+                // Ambil hanya angka/berat jika memungkinkan
+                val weightMatch = Regex("""\d+(\.\d+)?""").find(detectedText)
+                val weight = weightMatch?.value ?: getString(R.string.no_data)
+
+                runOnUiThread {
+                    binding.scanInfo.tvBerat.text = getString(R.string.gram, weight)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "OCR failed: ${e.message}")
+                runOnUiThread {
+                    binding.scanInfo.tvBerat.text = getString(R.string.no_data)
+                }
+            }
     }
 
     private fun getCurrentDate(): String {

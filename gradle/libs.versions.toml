@@ -28,6 +28,7 @@ tensorflowLiteMetadata = "0.4.4"
 tensorflowLiteGpu = "2.12.0"
 tensorflowLiteTaskVision = "0.4.4"
 tensorflowLiteTaskVisionPlayServices = "0.4.2"
+textRecognition = "16.0.1"
 threetenabp = "1.4.8"
 googleGmsGoogleServices = "4.4.2"
 
@@ -67,6 +68,7 @@ tensorflow-lite-gpu = { group = "org.tensorflow", name = "tensorflow-lite-gpu", 
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteTaskVision" }
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVision" }
 tensorflow-lite-task-vision-play-services = { module = "org.tensorflow:tensorflow-lite-task-vision-play-services", version.ref = "tensorflowLiteTaskVisionPlayServices" }
+text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "textRecognition" }
 threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 
 [plugins]
