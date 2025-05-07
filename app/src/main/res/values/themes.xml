@@ -7,7 +7,8 @@
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">
             @drawable/logo_white
         </item>
-
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/dark_green</item>
     </style>
 
     <style name="TopCornerChange" parent="ShapeAppearance.Material3.MediumComponent">
