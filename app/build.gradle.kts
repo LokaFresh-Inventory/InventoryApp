@@ -29,11 +29,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        externalNativeBuild {
-            cmake {
-                cppFlags += ""
-            }
-        }
     }
 
     buildTypes {
@@ -57,10 +52,14 @@ android {
         mlModelBinding = true
         buildConfig = true
     }
-    externalNativeBuild {
-        cmake {
-            path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1"
+
+    // Add this configuration to resolve dependency conflicts
+    configurations.all {
+        resolutionStrategy {
+            // Force specific Guava version that works with both Firebase and CameraX
+            force("com.google.guava:guava:31.1-android")
+            // Force a specific version of ListenableFuture
+            force("com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava")
         }
     }
 }
@@ -79,35 +78,39 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.core.splashscreen)
 
+    // Firebase dependencies
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     // TensorFlow Lite
+    implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.support)
-    implementation(libs.tensorflow.lite.task.vision)
-    implementation(libs.play.services.tflite.support)
-    implementation(libs.play.services.tflite.gpu)
-    implementation(libs.tensorflow.lite.task.vision.play.services)
     implementation(libs.tensorflow.lite.metadata)
-    implementation(libs.tensorflow.lite.gpu)
+
     implementation(libs.tensorflow.lite.gpu.delegate.plugin)
-    implementation(libs.snakeyaml)
+    implementation(libs.tensorflow.lite.gpu.api)
+    implementation(libs.tensorflow.lite.api)
+    implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.tensorflow.lite.select.tf.ops)
 
     // CameraX
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
 
+    // Explicitly add Guava for Android
+    implementation(libs.guava)
+
     //Local Persistence
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
-
-    //Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
 
     //Retrofit (API Call)
     implementation(libs.retrofit)

@@ -36,4 +36,19 @@ object ApiConfig {
             .build()
             .create(ChatbotApiService::class.java)
     }
+
+    fun getOCRApiService(): OcrApiService {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.MODEL_API_ENDPOINT) // OCR
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(OcrApiService::class.java)
+    }
 }

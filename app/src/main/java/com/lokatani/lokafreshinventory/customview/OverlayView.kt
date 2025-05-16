@@ -1,21 +1,6 @@
-/*
- * Copyright 2022 The TensorFlow Authors. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.lokatani.lokafreshinventory.customview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -26,27 +11,30 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.lokatani.lokafreshinventory.R
-import com.lokatani.lokafreshinventory.helper.detectors.ObjectDetection
-import java.util.LinkedList
-import java.util.Locale
-import kotlin.math.max
 
 class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
-    private var results: List<ObjectDetection> = LinkedList<ObjectDetection>()
+    private var results = listOf<BoundingBox>()
     private var boxPaint = Paint()
     private var textBackgroundPaint = Paint()
     private var textPaint = Paint()
 
-    private var scaleFactor: Float = 1f
-
     private var bounds = Rect()
+
+    // Keep track of actual preview dimensions vs view dimensions
+    private var previewWidth = 0
+    private var previewHeight = 0
+    private var scaleX = 1.0f
+    private var scaleY = 1.0f
+    private var offsetX = 0.0f
+    private var offsetY = 0.0f
 
     init {
         initPaints()
     }
 
     fun clear() {
+        results = listOf()
         textPaint.reset()
         textBackgroundPaint.reset()
         boxPaint.reset()
@@ -68,53 +56,80 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         boxPaint.style = Paint.Style.STROKE
     }
 
-    override fun draw(canvas: Canvas) {
-        super.draw(canvas)
+    fun setPreviewSize(width: Int, height: Int) {
+        previewWidth = width
+        previewHeight = height
+        updateScaleAndOffset()
+    }
 
-        for (result in results) {
-            val boundingBox = result.boundingBox
+    private fun updateScaleAndOffset() {
+        if (previewWidth <= 0 || previewHeight <= 0 || width <= 0 || height <= 0) return
 
-            val top = boundingBox.top * scaleFactor
-            val bottom = boundingBox.bottom * scaleFactor
-            val left = boundingBox.left * scaleFactor
-            val right = boundingBox.right * scaleFactor
+        // Calculate aspect ratios
+        val viewAspectRatio = width.toFloat() / height.toFloat()
+        val previewAspectRatio = previewWidth.toFloat() / previewHeight.toFloat()
 
-            // Draw bounding box around detected objects
-            val drawableRect = RectF(left, top, right, bottom)
-            canvas.drawRect(drawableRect, boxPaint)
-
-            // Create text to display alongside detected objects
-            val drawableText =
-                result.category.label + " " +
-                        String.format(Locale.getDefault(), "%.2f", result.category.confidence)
-
-            // Draw rect behind display text
-            textBackgroundPaint.getTextBounds(drawableText, 0, drawableText.length, bounds)
-            val textWidth = bounds.width()
-            val textHeight = bounds.height()
-            canvas.drawRect(
-                left,
-                top,
-                left + textWidth + BOUNDING_RECT_TEXT_PADDING,
-                top + textHeight + BOUNDING_RECT_TEXT_PADDING,
-                textBackgroundPaint
-            )
-
-            // Draw text for detected object
-            canvas.drawText(drawableText, left, top + bounds.height(), textPaint)
+        // Calculate scale factors and offsets based on aspect ratios
+        if (viewAspectRatio > previewAspectRatio) {
+            // View is wider than preview
+            scaleY = height.toFloat() / previewHeight.toFloat()
+            scaleX = scaleY
+            offsetX = (width - previewWidth * scaleX) / 2.0f
+            offsetY = 0.0f
+        } else {
+            // View is taller than preview
+            scaleX = width.toFloat() / previewWidth.toFloat()
+            scaleY = scaleX
+            offsetY = (height - previewHeight * scaleY) / 2.0f
+            offsetX = 0.0f
         }
     }
 
-    fun setResults(
-        detectionResults: MutableList<ObjectDetection>,
-        imageHeight: Int,
-        imageWidth: Int,
-    ) {
-        results = detectionResults
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        updateScaleAndOffset()
+    }
 
-        // PreviewView is in FILL_START mode. So we need to scale up the bounding box to match with
-        // the size that the captured images will be displayed.
-        scaleFactor = max(width * 1f / imageWidth, height * 1f / imageHeight)
+    @SuppressLint("DefaultLocale")
+    override fun draw(canvas: Canvas) {
+        super.draw(canvas)
+
+        results.forEach {
+            // Map normalized coordinates (0-1) to view coordinates with proper scaling and offset
+            val left = it.x1 * previewWidth * scaleX + offsetX
+            val top = it.y1 * previewHeight * scaleY + offsetY
+            val right = it.x2 * previewWidth * scaleX + offsetX
+            val bottom = it.y2 * previewHeight * scaleY + offsetY
+
+            // Create rectangle for drawing
+            val rect = RectF(left, top, right, bottom)
+            canvas.drawRect(rect, boxPaint)
+
+            // Draw text label
+            val drawableText = "${it.clsName}: ${String.format("%.2f", it.cnf)}"
+            textBackgroundPaint.getTextBounds(drawableText, 0, drawableText.length, bounds)
+            val textWidth = bounds.width()
+            val textHeight = bounds.height()
+
+            canvas.drawRect(
+                left,
+                top - textHeight - BOUNDING_RECT_TEXT_PADDING,
+                left + textWidth + BOUNDING_RECT_TEXT_PADDING,
+                top,
+                textBackgroundPaint
+            )
+            canvas.drawText(
+                drawableText,
+                left + BOUNDING_RECT_TEXT_PADDING / 2,
+                top - BOUNDING_RECT_TEXT_PADDING / 2,
+                textPaint
+            )
+        }
+    }
+
+    fun setResults(boundingBoxes: List<BoundingBox>) {
+        results = boundingBoxes
+        invalidate()
     }
 
     companion object {

@@ -25,17 +25,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
             app:cardBackgroundColor="@color/white"
-            app:cardUseCompatPadding="true">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
                 android:baselineAligned="false"
+                android:gravity="center"
+                android:orientation="horizontal"
                 android:padding="10dp">
 
                 <LinearLayout
@@ -53,9 +52,9 @@
                         android:backgroundTint="@color/white"
                         android:contentDescription="@string/button_chatbot"
                         app:cornerRadius="8dp"
-                        app:iconTint="@color/dark_green"
                         app:icon="@drawable/baseline_chat_24"
-                        app:iconSize="40dp" />
+                        app:iconSize="40dp"
+                        app:iconTint="@color/dark_green" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -82,9 +81,9 @@
                         android:backgroundTint="@color/white"
                         android:contentDescription="@string/button_history"
                         app:cornerRadius="8dp"
-                        app:iconTint="@color/dark_green"
                         app:icon="@drawable/baseline_history_24"
-                        app:iconSize="40dp" />
+                        app:iconSize="40dp"
+                        app:iconTint="@color/dark_green" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -111,9 +110,9 @@
                         android:backgroundTint="@color/white"
                         android:contentDescription="@string/button_data"
                         app:cornerRadius="8dp"
-                        app:iconTint="@color/dark_green"
                         app:icon="@drawable/baseline_table_chart_24"
-                        app:iconSize="40dp" />
+                        app:iconSize="40dp"
+                        app:iconTint="@color/dark_green" />
 
                     <TextView
                         android:layout_width="wrap_content"

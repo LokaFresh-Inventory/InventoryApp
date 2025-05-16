@@ -2,13 +2,7 @@ package com.lokatani.lokafreshinventory.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class PredictHitResponse(
-
-    @field:SerializedName("detail")
-    val detail: List<DetailItem?>? = null
-)
-
-data class DetailItem(
+data class ApiHitResponse(
 
     @field:SerializedName("msg")
     val msg: String? = null,

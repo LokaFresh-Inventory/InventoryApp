@@ -1,39 +1,30 @@
 package com.lokatani.lokafreshinventory.ui.scan
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lokatani.lokafreshinventory.data.local.ScanResultRepository
-import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
+import com.lokatani.lokafreshinventory.data.Result
+import com.lokatani.lokafreshinventory.data.remote.OcrRepository
+import com.lokatani.lokafreshinventory.data.remote.response.OcrResponse
 import kotlinx.coroutines.launch
 
 class ScanViewModel(
-    private val scanResultRepository: ScanResultRepository
+    private val ocrRepository: OcrRepository
 ) : ViewModel() {
-    private val _insertCompleted = MutableLiveData<Boolean>()
-    val insertCompleted: LiveData<Boolean> get() = _insertCompleted
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
-    fun insertResult(
-        user: String,
-        vegResult: String,
-        vegWeight: Float,
-        date: String
-    ) {
-        val result = ScanResult(
-            user = user,
-            vegResult = vegResult,
-            vegWeight = vegWeight,
-            date = date
-        )
+    private val _ocrResult = MutableLiveData<Result<OcrResponse>>(null)
+    val ocrResult: LiveData<Result<OcrResponse>> get() = _ocrResult
 
+    fun recognizeText(bitmap: Bitmap) {
+        _isLoading.value = true
         viewModelScope.launch {
-            scanResultRepository.insertScanResult(result)
-            _insertCompleted.value = true
+            val result = ocrRepository.recognizeText(bitmap)
+            _isLoading.value = false
+            _ocrResult.value = result
         }
-    }
-
-    fun resetInsertStatus() {
-        _insertCompleted.value = false
     }
 }
