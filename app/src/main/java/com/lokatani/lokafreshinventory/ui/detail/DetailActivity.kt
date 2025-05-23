@@ -97,7 +97,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_IMAGE = "extra_image"
         const val EXTRA_RESULT = "extra_result"
         const val EXTRA_WEIGHT = "extra_weight"
     }

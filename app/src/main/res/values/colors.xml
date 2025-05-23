@@ -10,4 +10,9 @@
     <color name="light_green">#C7D9B5</color>
     <color name="pale_green">#F1F8E9</color>
     <color name="gray">#808080</color>
+
+    <color name="cell_background_color">#ffffff</color>
+    <color name="header_line_color">@android:color/holo_red_light</color>
+
+    <color name="table_view_default_text_color">#0a0a0a</color>
 </resources>

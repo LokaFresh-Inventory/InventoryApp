@@ -74,6 +74,11 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="16dp"
         android:layout_marginStart="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:hint="@string/ask"
+        app:boxStrokeColor="@color/theme_green"
+        app:cursorColor="@color/theme_green"
+        app:hintTextColor="@color/theme_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_send"
         app:layout_constraintStart_toStartOf="parent">
@@ -82,8 +87,10 @@
             android:id="@+id/ed_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ask"
-            android:inputType="text" />
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:minLines="1"
+            android:textSize="14sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,11 +99,11 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:contentDescription="@string/send_chat"
         android:enabled="false"
         app:icon="@drawable/baseline_send_24"
         app:iconSize="28dp"
+        app:iconTint="@color/button_color_state"
         app:layout_constraintBottom_toBottomOf="@+id/til_chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/til_chat"

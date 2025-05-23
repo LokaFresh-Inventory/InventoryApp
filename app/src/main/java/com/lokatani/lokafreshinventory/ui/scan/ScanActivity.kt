@@ -22,9 +22,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.customview.BoundingBox
 import com.lokatani.lokafreshinventory.data.Result
@@ -55,7 +52,6 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
     private val isFrontCamera = false
 
     private var detector: Detector? = null
-    private lateinit var textRecognizer: TextRecognizer
 
     private var vegResult: String? = null
     private var vegWeight: String? = null
@@ -77,7 +73,6 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
-        textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
         // Initialize the detector on the cameraExecutor
         cameraExecutor.execute {
@@ -225,7 +220,6 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
         super.onStop()
         cameraExecutor.shutdown()
         detector?.close()
-        textRecognizer.close()
     }
 
     override fun onResume() {

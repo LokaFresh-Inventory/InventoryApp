@@ -63,4 +63,6 @@
     <string name="gpu">GPU</string>
     <string name="proccessing_ocr">Processing OCR</string>
     <string name="ms">%1$dms</string>
+    <string name="sort_data">Sort Data</string>
+    <string name="no">No</string>
 </resources>
