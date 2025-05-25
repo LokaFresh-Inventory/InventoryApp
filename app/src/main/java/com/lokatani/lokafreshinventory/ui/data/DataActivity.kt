@@ -5,26 +5,23 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.evrencoskun.tableview.TableView
 import com.lokatani.lokafreshinventory.BuildConfig
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.databinding.ActivityDataBinding
-import com.lokatani.lokafreshinventory.ui.history.HistoryViewModel
-import com.lokatani.lokafreshinventory.utils.ViewModelFactory
 import com.lokatani.lokafreshinventory.utils.download.AndroidDownloader
 import com.lokatani.lokafreshinventory.utils.showToast
 import com.lokatani.lokafreshinventory.utils.tableview.TableViewAdapter
 import com.lokatani.lokafreshinventory.utils.tableview.TableViewListener
 import com.lokatani.lokafreshinventory.utils.tableview.TableViewModel
+import kotlinx.coroutines.launch
 
 class DataActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDataBinding
     private lateinit var downloader: AndroidDownloader
 
-    private lateinit var factory: ViewModelFactory
-    private val viewModel: HistoryViewModel by viewModels {
-        factory
-    }
+    private val viewModel: DataViewModel by viewModels() // Factory no longer needed
 
     // Declare TableView and its adapter
     private lateinit var tableView: TableView
@@ -35,8 +32,6 @@ class DataActivity : AppCompatActivity() {
         binding = ActivityDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        factory = ViewModelFactory.getInstance(this)
-
         setSupportActionBar(binding.dataToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Data"
@@ -46,7 +41,11 @@ class DataActivity : AppCompatActivity() {
         tableView = binding.tableview
         setupTableView()
 
-        observeScanResults()
+        // Fetch and observe Firestore data
+        lifecycleScope.launch {
+            viewModel.fetchScanResults()
+        }
+        observeFirestoreScanResults()
     }
 
     private fun setupTableView() {
@@ -55,8 +54,8 @@ class DataActivity : AppCompatActivity() {
         tableView.tableViewListener = TableViewListener(this, tableView)
     }
 
-    private fun observeScanResults() {
-        viewModel.getAllResult().observe(this) { result ->
+    private fun observeFirestoreScanResults() {
+        viewModel.scanResults.observe(this) { result ->
             when (result) {
                 is Result.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -89,7 +88,6 @@ class DataActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun onResume() {
         super.onResume()

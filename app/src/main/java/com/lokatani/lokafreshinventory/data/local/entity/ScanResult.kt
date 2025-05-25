@@ -11,14 +11,17 @@ data class ScanResult(
     val id: Int = 0,
 
     @ColumnInfo
-    val user: String,
+    var firestoreId: String? = null,
 
     @ColumnInfo
-    val vegResult: String,
+    val user: String = "",
 
     @ColumnInfo
-    val vegWeight: Float,
+    val vegResult: String = "",
 
     @ColumnInfo
-    val date: String
+    val vegWeight: Int = 0,
+
+    @ColumnInfo
+    val date: String = ""
 )

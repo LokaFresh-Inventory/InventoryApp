@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityDetailBinding
 import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
@@ -16,6 +18,7 @@ import java.util.Locale
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var factory: ViewModelFactory
+    private var currentUser: String? = null
 
     private val detailViewModel: DetailViewModel by viewModels {
         factory
@@ -38,6 +41,8 @@ class DetailActivity : AppCompatActivity() {
         vegResult = intent.getStringExtra(EXTRA_RESULT)
         vegWeight = intent.getStringExtra(EXTRA_WEIGHT)
 
+        currentUser = Firebase.auth.currentUser?.email
+
         if (vegWeight == null) {
             vegWeight = "0"
         }
@@ -59,9 +64,9 @@ class DetailActivity : AppCompatActivity() {
 
             buttonSave.setOnClickListener {
                 detailViewModel.insertResult(
-                    user = "Dummy User",
+                    user = currentUser ?: "No User",
                     vegResult = vegResult.toString(),
-                    vegWeight = vegWeight.toString().toFloat(),
+                    vegWeight = vegWeight.toString().toInt(),
                     date = currentDate
                 )
                 val intent = Intent(this@DetailActivity, ScanActivity::class.java)

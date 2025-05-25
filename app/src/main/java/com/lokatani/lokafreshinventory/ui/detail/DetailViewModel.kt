@@ -17,7 +17,7 @@ class DetailViewModel(
     fun insertResult(
         user: String,
         vegResult: String,
-        vegWeight: Float,
+        vegWeight: Int,
         date: String
     ) {
         val result = ScanResult(
