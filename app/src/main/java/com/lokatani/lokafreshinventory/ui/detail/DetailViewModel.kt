@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lokatani.lokafreshinventory.data.local.ScanResultRepository
+import com.lokatani.lokafreshinventory.data.ScanResultRepository
 import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
 import kotlinx.coroutines.launch
 

@@ -125,4 +125,5 @@ dependencies {
     implementation(libs.threetenabp)
     implementation(libs.core) // Markwon (Markdown Library)
     implementation(libs.tableview) // Tableview
+    implementation(libs.mpandroidchart)
 }

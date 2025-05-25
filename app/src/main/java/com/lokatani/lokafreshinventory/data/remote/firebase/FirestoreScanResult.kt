@@ -1,4 +1,6 @@
-package com.lokatani.lokafreshinventory.data.local.entity
+package com.lokatani.lokafreshinventory.data.remote.firebase
+
+import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
 
 data class FirestoreScanResult(
     val user: String = "",

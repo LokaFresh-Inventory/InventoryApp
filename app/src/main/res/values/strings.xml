@@ -65,4 +65,6 @@
     <string name="ms">%1$dms</string>
     <string name="sort_data">Sort Data</string>
     <string name="no">No</string>
+    <string name="backup_data">Backup Data</string>
+    <string name="no_chart_data_avalaible">No Chart Data Avalaible</string>
 </resources>

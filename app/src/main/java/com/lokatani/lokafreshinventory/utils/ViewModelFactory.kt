@@ -3,7 +3,7 @@ package com.lokatani.lokafreshinventory.utils
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.lokatani.lokafreshinventory.data.local.ScanResultRepository
+import com.lokatani.lokafreshinventory.data.ScanResultRepository
 import com.lokatani.lokafreshinventory.di.ScanResultInjection
 import com.lokatani.lokafreshinventory.ui.detail.DetailViewModel
 import com.lokatani.lokafreshinventory.ui.history.HistoryViewModel

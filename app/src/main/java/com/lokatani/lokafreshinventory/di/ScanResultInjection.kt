@@ -2,7 +2,7 @@ package com.lokatani.lokafreshinventory.di
 
 import android.content.Context
 import com.google.firebase.firestore.FirebaseFirestore
-import com.lokatani.lokafreshinventory.data.local.ScanResultRepository
+import com.lokatani.lokafreshinventory.data.ScanResultRepository
 import com.lokatani.lokafreshinventory.data.local.room.ScanResultDatabase
 
 object ScanResultInjection {
