@@ -99,9 +99,10 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
                 if (scaleBitmap != null) {
                     scanViewModel.recognizeText(scaleBitmap!!)
                 } else {
+                    // If no scale detected or bitmap is null, proceed with 0 weight
                     detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
                     detailIntent.putExtra(DetailActivity.EXTRA_RESULT, vegResult)
-                    detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0f)
+                    detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0f) // Pass 0f as Float
                     startActivity(detailIntent)
                 }
             }
@@ -123,7 +124,7 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
             cameraProvider ?: throw IllegalStateException("Camera initialization failed.")
 
         val rotation =
-            binding.viewFinder.display.rotation // Access display after binding is likely complete
+            binding.viewFinder.display.rotation
 
         val cameraSelector =
             CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
@@ -224,7 +225,11 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
 
     override fun onResume() {
         super.onResume()
-        if (!allPermissionsGranted()) {
+        // Reinitialize camera if permissions are granted and camera provider is null
+        // This handles cases where app comes from background and camera was unbinded onPause
+        if (allPermissionsGranted() && cameraProvider == null) {
+            setupCamera()
+        } else if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
         }
     }
@@ -244,9 +249,38 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
                     is Result.Success -> {
                         Log.d(TAG, "OCR Success")
                         val ocrResult = result.data
-                        val firstResult = ocrResult.texts?.firstOrNull()
-                        vegWeight = firstResult
-                        Log.d(TAG, "vegWeight: $vegWeight")
+
+                        // --- MODIFIED OCR RESULT PROCESSING ---
+                        val rawTexts = ocrResult.texts
+                        var extractedWeight: Int? = null
+
+                        if (!rawTexts.isNullOrEmpty()) {
+                            // 1. Concatenate all texts into a single string
+                            val combinedText = rawTexts.joinToString("") { it!!.trim() }
+                            Log.d(TAG, "Combined OCR text: $combinedText")
+
+                            // 2. Use a regex to find numbers (integers or decimals)
+                            val numberRegex = "-?\\d+(\\.\\d+)?".toRegex()
+                            val foundNumbers = numberRegex.findAll(combinedText)
+                                .map { it.value } // Extract the matched string
+                                .toList()
+
+                            Log.d(TAG, "Found numbers from OCR: $foundNumbers")
+
+                            // 3. Select the most plausible number.
+                            val potentialWeights = foundNumbers.mapNotNull { it.toIntOrNull() }
+
+                            extractedWeight = potentialWeights.firstOrNull()
+
+                            if (extractedWeight == null && foundNumbers.isNotEmpty()) {
+                                // Fallback: If no direct float, try parsing again,
+                                Log.w(TAG, "Could not parse any number as a Float directly. Found: $foundNumbers")
+                                extractedWeight = foundNumbers.lastOrNull()?.toIntOrNull()
+                            }
+                        }
+
+                        vegWeight = extractedWeight?.toString() ?: "0"
+                        Log.d(TAG, "Final vegWeight (String): $vegWeight")
 
                         detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
                         detailIntent.putExtra(DetailActivity.EXTRA_RESULT, vegResult)
@@ -258,7 +292,7 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
                         showToast("OCR Failed")
                         detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
                         detailIntent.putExtra(DetailActivity.EXTRA_RESULT, vegResult)
-                        detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0f)
+                        detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0f) // Pass 0f as Float
                         startActivity(detailIntent)
                     }
                 }
@@ -311,10 +345,15 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
 
         // Update vegetable result
         val newVegResult = highestConfVegetable?.clsName
+        vegResult = newVegResult // Ensure vegResult is updated for DetailActivity
 
         // Process weight scale OCR if we found a scale and have a bitmap to process
         if (scaleBox != null && lastProcessedBitmap != null) {
             makeOCRBitmap(scaleBox, lastProcessedBitmap!!)
+        } else {
+            // If no scale is detected, clear scaleBitmap and set vegWeight to null/default
+            scaleBitmap = null
+            vegWeight = null // Important: Clear previous weight if no scale is found
         }
 
         // Update UI with current values
@@ -327,35 +366,41 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
                 val width = bitmap.width
                 val height = bitmap.height
 
+                // Ensure crop coordinates are within bitmap bounds
                 val x1 = (scaleBox.x1 * width).toInt().coerceIn(0, width - 1)
                 val y1 = (scaleBox.y1 * height).toInt().coerceIn(0, height - 1)
-                val x2 = (scaleBox.x2 * width).toInt().coerceIn(0, width - 1)
-                val y2 = (scaleBox.y2 * height).toInt().coerceIn(0, height - 1)
+                val x2 = (scaleBox.x2 * width).toInt().coerceIn(x1, width) // x2 must be >= x1
+                val y2 = (scaleBox.y2 * height).toInt().coerceIn(y1, height) // y2 must be >= y1
 
                 Log.d("Bitmap Size", "Bitmap height: $height, width: $width")
-                Log.d("OCR Result", "y1: $y1, y2: $y2, x1: $x1, x2: $x2")
+                Log.d("OCR Region", "y1: $y1, y2: $y2, x1: $x1, x2: $x2")
 
-                // Create a bitmap for the region of interest
                 val roiWidth = x2 - x1
                 val roiHeight = y2 - y1
 
-                scaleBitmap = Bitmap.createBitmap(
-                    bitmap,
-                    x1,
-                    y1,
-                    roiWidth,
-                    roiHeight
-                )
+                if (roiWidth > 0 && roiHeight > 0) { // Only create bitmap if dimensions are positive
+                    scaleBitmap = Bitmap.createBitmap(
+                        bitmap,
+                        x1,
+                        y1,
+                        roiWidth,
+                        roiHeight
+                    )
+                } else {
+                    Log.w(TAG, "ROI has zero or negative dimensions, cannot create bitmap.")
+                    scaleBitmap = null // Ensure it's null if invalid
+                }
 
             } catch (e: Exception) {
-                Log.e(TAG, "Error processing scale OCR", e)
+                Log.e(TAG, "Error processing scale OCR or creating bitmap", e)
+                scaleBitmap = null // Nullify in case of error
             }
         }
     }
 
     private fun updateUIInfo(vegetable: String?) {
         binding.scanInfo.tvJenis.text = vegetable ?: "No Data"
-        vegResult = vegetable
+        // vegResult is already updated in processDetections, no need to reassign here
     }
 
     companion object {
