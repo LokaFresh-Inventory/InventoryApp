@@ -274,7 +274,10 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
 
                             if (extractedWeight == null && foundNumbers.isNotEmpty()) {
                                 // Fallback: If no direct float, try parsing again,
-                                Log.w(TAG, "Could not parse any number as a Float directly. Found: $foundNumbers")
+                                Log.w(
+                                    TAG,
+                                    "Could not parse any number as a Float directly. Found: $foundNumbers"
+                                )
                                 extractedWeight = foundNumbers.lastOrNull()?.toIntOrNull()
                             }
                         }

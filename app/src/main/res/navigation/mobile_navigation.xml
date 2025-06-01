@@ -12,8 +12,19 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.lokatani.lokafreshinventory.ui.history.HistoryCloudFragment"
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history_cloud" />
+
+    <fragment
         android:id="@+id/navigation_analysis"
         android:name="com.lokatani.lokafreshinventory.ui.analysis.AnalysisFragment"
         android:label="@string/analysis"
         tools:layout="@layout/fragment_analysis" />
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.lokatani.lokafreshinventory.ui.settings.SettingsFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

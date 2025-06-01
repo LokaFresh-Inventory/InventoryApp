@@ -1,45 +1,66 @@
-package com.lokatani.lokafreshinventory.ui.data
+package com.lokatani.lokafreshinventory.ui.history
 
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.viewModels
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.evrencoskun.tableview.TableView
 import com.lokatani.lokafreshinventory.BuildConfig
 import com.lokatani.lokafreshinventory.data.Result
-import com.lokatani.lokafreshinventory.databinding.ActivityDataBinding
+import com.lokatani.lokafreshinventory.databinding.FragmentHistoryCloudBinding
+import com.lokatani.lokafreshinventory.utils.ViewModelFactory
 import com.lokatani.lokafreshinventory.utils.download.AndroidDownloader
-import com.lokatani.lokafreshinventory.utils.showToast
 import com.lokatani.lokafreshinventory.utils.tableview.TableViewAdapter
 import com.lokatani.lokafreshinventory.utils.tableview.TableViewListener
 import com.lokatani.lokafreshinventory.utils.tableview.TableViewModel
 import kotlinx.coroutines.launch
 
-class DataActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityDataBinding
-    private lateinit var downloader: AndroidDownloader
+class HistoryCloudFragment : Fragment() {
 
-    private val viewModel: DataViewModel by viewModels() // Factory no longer needed
+    private var _binding: FragmentHistoryCloudBinding? = null
+    private val binding get() = _binding!!
 
-    // Declare TableView and its adapter
+    private lateinit var factory: ViewModelFactory
+    private val viewModel: HistoryViewModel by viewModels {
+        factory
+    }
+
     private lateinit var tableView: TableView
     private lateinit var tableViewAdapter: TableViewAdapter
+    private lateinit var downloader: AndroidDownloader
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityDataBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentHistoryCloudBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        setSupportActionBar(binding.dataToolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Data"
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        downloader = AndroidDownloader(this)
+        factory = ViewModelFactory.getInstance(requireContext())
+
+        (activity as AppCompatActivity).setSupportActionBar(binding.dataToolbar)
+        (activity as AppCompatActivity).supportActionBar?.title = "History Data"
+
+        downloader = AndroidDownloader(requireContext())
 
         tableView = binding.tableview
         setupTableView()
+
+        binding.apply {
+            fabExport.setOnClickListener {
+                downloader.downloadFile(BuildConfig.EXPORT_DATA_API)
+                Toast.makeText(requireContext(), "Downloading", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // Fetch and observe Firestore data
         lifecycleScope.launch {
@@ -51,11 +72,11 @@ class DataActivity : AppCompatActivity() {
     private fun setupTableView() {
         tableViewAdapter = TableViewAdapter()
         tableView.setAdapter(tableViewAdapter)
-        tableView.tableViewListener = TableViewListener(this, tableView)
+        tableView.tableViewListener = TableViewListener(requireContext(), tableView)
     }
 
     private fun observeFirestoreScanResults() {
-        viewModel.scanResults.observe(this) { result ->
+        viewModel.scanResults.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -75,7 +96,11 @@ class DataActivity : AppCompatActivity() {
                         )
                         tableView.invalidate()
                     } else {
-                        showToast("No scan results to display.")
+                        Toast.makeText(
+                            requireContext(),
+                            "No scan results to display",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         tableView.visibility = View.GONE
                         binding.tvEmptyTable.visibility = View.VISIBLE
                     }
@@ -83,31 +108,13 @@ class DataActivity : AppCompatActivity() {
 
                 is Result.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    showToast("Error loading data: ${result.error}")
+                    Toast.makeText(
+                        requireContext(),
+                        "Error loading data: ${result.error}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        binding.apply {
-            fabExport.setOnClickListener {
-                downloader.downloadFile(BuildConfig.EXPORT_DATA_API)
-                showToast("Downloading")
-            }
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressedDispatcher.onBackPressed()
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
         }
     }
 }

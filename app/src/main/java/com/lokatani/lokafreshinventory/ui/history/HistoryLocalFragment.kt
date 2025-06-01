@@ -2,21 +2,25 @@ package com.lokatani.lokafreshinventory.ui.history
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
-import com.lokatani.lokafreshinventory.databinding.ActivityHistoryBinding
+import com.lokatani.lokafreshinventory.databinding.FragmentHistoryLocalBinding
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
-import com.lokatani.lokafreshinventory.utils.showToast
 
-class HistoryActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityHistoryBinding
+
+class HistoryLocalFragment : Fragment() {
+
+    private var _binding: FragmentHistoryLocalBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var factory: ViewModelFactory
     private val historyViewModel: HistoryViewModel by viewModels {
@@ -28,14 +32,20 @@ class HistoryActivity : AppCompatActivity() {
     }
     private lateinit var gridLayoutManager: GridLayoutManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityHistoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentHistoryLocalBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         factory =
-            ViewModelFactory.getInstance(this) // Ensure this correctly provides your repository
-        gridLayoutManager = GridLayoutManager(this, getSpanCount())
+            ViewModelFactory.getInstance(requireContext()) // Ensure this correctly provides your repository
+        gridLayoutManager = GridLayoutManager(requireContext(), getSpanCount())
 
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
@@ -47,11 +57,6 @@ class HistoryActivity : AppCompatActivity() {
             }
         }
 
-        setSupportActionBar(binding.historyToolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Input History"
-
-        // Set up the RecyclerView
         binding.rvResultList.apply {
             layoutManager = gridLayoutManager
             setHasFixedSize(true)
@@ -60,11 +65,15 @@ class HistoryActivity : AppCompatActivity() {
 
         binding.btnFirestore.setOnClickListener {
             // Show a temporary message indicating sync started
-            showToast("Starting data backup to Firestore...")
+            Toast.makeText(
+                requireContext(),
+                "Starting data backup to Firestore...",
+                Toast.LENGTH_SHORT
+            ).show()
 
             historyViewModel.syncDataToFirestore()
 
-            historyViewModel.syncStatus.observe(this) { result ->
+            historyViewModel.syncStatus.observe(viewLifecycleOwner) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> {
@@ -73,23 +82,31 @@ class HistoryActivity : AppCompatActivity() {
 
                         is Result.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            showToast("Data Backup Success")
+                            Toast.makeText(
+                                requireContext(),
+                                "Data Backup Success",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         is Result.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            showToast("Data Backup Failed")
+                            Toast.makeText(
+                                requireContext(),
+                                "Data Backup Failed",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
             }
         }
+
+        observeFetchLocalData()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        historyViewModel.getAllResult().observe(this) { result ->
+    private fun observeFetchLocalData() {
+        historyViewModel.getAllResult().observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
                     is Result.Loading -> {
@@ -125,17 +142,6 @@ class HistoryActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressedDispatcher.onBackPressed() // Handle back button
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

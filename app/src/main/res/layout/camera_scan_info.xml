@@ -12,6 +12,7 @@
         android:layout_margin="16dp"
         android:text="@string/vegetable_type"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,30 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_data"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/tv_jenis_title"
         app:layout_constraintStart_toStartOf="@+id/tv_jenis_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_jenis_title" />
-
-    <TextView
-        android:id="@+id/tv_berat_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/weight"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_jenis_title" />
-
-    <TextView
-        android:id="@+id/tv_berat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_data"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/tv_berat_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_berat_title" />
 
     <TextView
         android:id="@+id/tv_hint"

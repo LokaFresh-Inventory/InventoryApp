@@ -7,8 +7,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
 import com.lokatani.lokafreshinventory.databinding.HeaderRowBinding
-import com.lokatani.lokafreshinventory.databinding.HistoryRowWithImageBinding
-import com.lokatani.lokafreshinventory.ui.history.HistoryActivity.ListItem
+import com.lokatani.lokafreshinventory.databinding.HistoryRowBinding
+import com.lokatani.lokafreshinventory.ui.history.HistoryLocalFragment.ListItem
 import com.lokatani.lokafreshinventory.utils.DateUtils
 
 class HistoryAdapter(private val onDeleteHold: (ScanResult) -> Unit) :
@@ -32,7 +32,7 @@ class HistoryAdapter(private val onDeleteHold: (ScanResult) -> Unit) :
             }
 
             TYPE_CONTENT -> {
-                val binding = HistoryRowWithImageBinding.inflate(
+                val binding = HistoryRowBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -87,7 +87,7 @@ class HistoryAdapter(private val onDeleteHold: (ScanResult) -> Unit) :
         }
     }
 
-    class ContentViewHolder(private val binding: HistoryRowWithImageBinding) :
+    class ContentViewHolder(private val binding: HistoryRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(result: ScanResult) {
             val vegType = result.vegResult

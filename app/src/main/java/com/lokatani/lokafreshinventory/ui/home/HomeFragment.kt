@@ -10,20 +10,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.remote.firebase.MonthlyVegData
 import com.lokatani.lokafreshinventory.databinding.FragmentHomeBinding
 import com.lokatani.lokafreshinventory.ui.chatbot.ChatbotActivity
-import com.lokatani.lokafreshinventory.ui.data.DataActivity
-import com.lokatani.lokafreshinventory.ui.history.HistoryActivity
 import com.lokatani.lokafreshinventory.ui.history.HistoryViewModel
+import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -44,12 +43,8 @@ class HomeFragment : Fragment() {
 
     // Define a list of colors to use for different lines
     private val chartColors = arrayOf(
-        Color.GREEN,
-        Color.BLUE,
         Color.RED,
-        Color.MAGENTA,
-        Color.CYAN,
-        Color.YELLOW,
+        Color.GREEN
     )
     private var colorIndex = 0 // To cycle through colors
 
@@ -68,14 +63,24 @@ class HomeFragment : Fragment() {
         factory = ViewModelFactory.getInstance(requireContext())
 
         binding.apply {
+
+            layoutItemKale.tvItemName.text = getString(R.string.kale)
+            layoutItemKale.tvItemValue.text = "77.000 gram"
+            layoutItemKale.ivItemImage.setImageResource(R.drawable.kale_landscape)
+
+            layoutItemBayamMerah.tvItemName.text = getString(R.string.bayam_merah)
+            layoutItemBayamMerah.tvItemValue.text = "79.600 gram"
+            layoutItemBayamMerah.ivItemImage.setImageResource(R.drawable.bayam_merah_landscape)
+
+            layoutItemLastInput.tvItemName.text = "Last Input"
+            layoutItemLastInput.tvItemValue.text = "Kale: 7.500 gram (Today)"
+            layoutItemLastInput.ivItemImage.setImageResource(R.drawable.stopwatch)
+
             btnChatbot.setOnClickListener {
                 startActivity(Intent(requireContext(), ChatbotActivity::class.java))
             }
-            btnHistory.setOnClickListener {
-                startActivity(Intent(requireContext(), HistoryActivity::class.java))
-            }
-            btnData.setOnClickListener {
-                startActivity(Intent(requireContext(), DataActivity::class.java))
+            btnScan.setOnClickListener {
+                startActivity(Intent(requireContext(), ScanActivity::class.java))
             }
         }
 
@@ -134,7 +139,7 @@ class HomeFragment : Fragment() {
     private fun setupLineChart(data: Map<String, Map<String, Int>>) {
         val lineChart: LineChart = binding.monthlyLineChart
 
-        val months = data.keys.sorted() // Get sorted months (e.g., "2025-01", "2025-02")
+        val months = data.keys.sorted()
         val xLabels = ArrayList<String>()
 
         // Prepare x-axis labels
@@ -196,15 +201,7 @@ class HomeFragment : Fragment() {
         lineChart.axisLeft.textSize = 10f
         lineChart.axisRight.isEnabled = false
 
-        // Customize Legend
-        lineChart.legend.isEnabled = true
-        lineChart.legend.textColor = Color.BLACK
-        lineChart.legend.textSize = 12f
-        lineChart.legend.formSize = 10f
-        lineChart.legend.setDrawInside(false) // Position legend outside chart area
-        lineChart.legend.verticalAlignment =
-            Legend.LegendVerticalAlignment.TOP // Position legend on top of chart
-        lineChart.legend.xEntrySpace = 20f // Space between legend entries
+        lineChart.legend.isEnabled = false
 
         // Other chart customizations
         lineChart.description.isEnabled = false

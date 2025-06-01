@@ -98,7 +98,7 @@
                     style="button"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#0C451A"
+                    android:backgroundTint="@color/theme_green"
                     android:text="@string/sign_in"
                     android:textColor="@color/white"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />

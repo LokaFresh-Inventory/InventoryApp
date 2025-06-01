@@ -26,19 +26,10 @@
             android:name=".ui.detail.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.data.DataActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.chatbot.ChatbotActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.scan.ScanActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.history.HistoryActivity"
             android:exported="false" />
         <activity
             android:name=".ui.register.RegisterActivity"

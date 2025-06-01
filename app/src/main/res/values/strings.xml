@@ -10,16 +10,11 @@
     <string name="welcome">Welcome</string>
     <string name="sign_in">Sign in</string>
     <string name="don_t_have_an_account">Don’t have account yet?</string>
-    <string name="get_started">Get Started</string>
     <string name="already_have_an_account">Already Have an Account?</string>
-    <string name="chatbot">Chatbot</string>
     <string name="history">History</string>
     <string name="button_chatbot">button_chatbot</string>
-    <string name="button_history">button_history</string>
-    <string name="button_data">button_data</string>
     <string name="data">Data</string>
     <string name="analysis">Analysis</string>
-    <string name="graph_image_placeholder">Graph Image Placeholder</string>
     <string name="weight">Weight:</string>
     <string name="click_to_capture">Capture Photo</string>
     <string name="vegetable_type">Veggie Type:</string>
@@ -33,7 +28,6 @@
     <string name="guest">Guest</string>
     <string name="warehouse_placeholder">Warehouse 1</string>
     <string name="preferences">Preferences</string>
-    <string name="data_management">Data Management</string>
     <string name="logout">Logout</string>
     <string name="placeholder">Placeholder</string>
     <string name="no_history_detected">No History Detected</string>
@@ -67,4 +61,12 @@
     <string name="no">No</string>
     <string name="backup_data">Backup Data</string>
     <string name="no_chart_data_avalaible">No Chart Data Avalaible</string>
+    <string name="summary">Summary</string>
+    <string name="ask_ai">Ask Ai</string>
+    <string name="scan_vegetable">Scan Vegetable</string>
+    <string name="profile">Profile</string>
+    <string name="create_account">Create Account</string>
+    <string name="monthly_data_entry">Monthly Data Entry</string>
+    <string name="bayam_merah_weight">Bayam Merah Weight</string>
+    <string name="kale_weight">Kale Weight</string>
 </resources>

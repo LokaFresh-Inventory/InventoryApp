@@ -1,213 +1,239 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
     tools:context=".ui.analysis.AnalysisFragment">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="top">
 
-        <com.google.android.material.card.MaterialCardView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/myToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:cardBackgroundColor="@color/light_green"
-            app:cardCornerRadius="12dp"
-            app:strokeWidth="1dp">
+            android:background="@color/theme_green"
+            app:titleCentered="true"
+            app:titleTextColor="@color/white">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:orientation="vertical">
+        </com.google.android.material.appbar.MaterialToolbar>
 
-                <TextView
-                    android:id="@+id/tv_result_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="16dp"
-                    android:text="@string/total"
-                    android:textColor="@color/dark_green"
-                    android:textSize="45sp"
-                    android:textStyle="bold" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="28dp"
-                    android:text="@string/total_prediction"
-                    android:textColor="@color/dark_green"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/select_prediction_date"
-            android:textColor="@color/dark_green"
-            android:textSize="16sp"
-            android:gravity="start" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_predict_date"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/white"
-            android:text="@string/select_date"
-            android:textColor="@color/dark_green"
-            android:textSize="16sp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
-            app:strokeWidth="1dp" />
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/quantity_prediction"
-            android:textColor="@color/dark_green"
-            android:textSize="16sp"
-            android:gravity="start" />
-
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:trackCornerRadius="4dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="16dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 app:cardBackgroundColor="@color/light_green"
+                app:cardCornerRadius="12dp"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_result_first_title"
+                        android:id="@+id/tv_result_total"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/kale"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp"
+                        android:text="@string/total"
                         android:textColor="@color/dark_green"
-                        android:textSize="18sp"
+                        android:textSize="45sp"
                         android:textStyle="bold" />
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/iv_result_first"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/kale"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                        app:strokeColor="@color/light_green"
-                        app:strokeWidth="1dp" />
 
                     <TextView
-                        android:id="@+id/tv_result_first"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:text="@string/empty"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="28dp"
+                        android:text="@string/total_prediction"
                         android:textColor="@color/dark_green"
-                        android:textSize="28sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
+
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <Space
-                android:layout_width="12dp"
-                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="start"
+                android:text="@string/select_prediction_date"
+                android:textColor="@color/dark_green"
+                android:textSize="16sp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="@color/light_green"
-                app:strokeWidth="1dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_predict_date"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/white"
+                android:text="@string/select_date"
+                android:textColor="@color/dark_green"
+                android:textSize="16sp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:strokeWidth="1dp" />
 
-                    <TextView
-                        android:id="@+id/tv_result_second_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="start"
+                android:text="@string/quantity_prediction"
+                android:textColor="@color/dark_green"
+                android:textSize="16sp" />
+
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:trackCornerRadius="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/light_green"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/bayam_merah"
-                        android:textColor="@color/dark_green"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/iv_result_second"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/bayam_merah"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                        app:strokeColor="@color/light_green"
-                        app:strokeWidth="1dp" />
+                        <TextView
+                            android:id="@+id/tv_result_first_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/kale"
+                            android:textColor="@color/dark_green"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tv_result_second"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_result_first"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/kale"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                            app:strokeColor="@color/light_green"
+                            app:strokeWidth="1dp" />
+
+                        <TextView
+                            android:id="@+id/tv_result_first"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:text="@string/empty"
+                            android:textColor="@color/dark_green"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <Space
+                    android:layout_width="12dp"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/light_green"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/empty"
-                        android:textColor="@color/dark_green"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-            </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:id="@+id/tv_result_second_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/bayam_merah"
+                            android:textColor="@color/dark_green"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_result_second"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/bayam_merah"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                            app:strokeColor="@color/light_green"
+                            app:strokeWidth="1dp" />
+
+                        <TextView
+                            android:id="@+id/tv_result_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:text="@string/empty"
+                            android:textColor="@color/dark_green"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
 
-</ScrollView>
+    </ScrollView>
+
+</LinearLayout>

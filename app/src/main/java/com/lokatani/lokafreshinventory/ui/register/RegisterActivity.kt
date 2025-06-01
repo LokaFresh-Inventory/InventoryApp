@@ -33,6 +33,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.apply {
             btnLogin.setOnClickListener {
                 val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 startActivity(intent)
             }
 
@@ -57,7 +58,6 @@ class RegisterActivity : AppCompatActivity() {
                                 progressBar.visibility = View.GONE
                                 Log.e(TAG, "Register: Failed")
                                 showToast("Register Failed")
-                                updateUI(null)
                             }
                         }
                 }
