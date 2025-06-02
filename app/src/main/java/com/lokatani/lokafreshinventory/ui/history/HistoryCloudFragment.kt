@@ -45,7 +45,7 @@ class HistoryCloudFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        factory = ViewModelFactory.getInstance(requireContext())
+        factory = ViewModelFactory.getInstance()
 
         (activity as AppCompatActivity).setSupportActionBar(binding.dataToolbar)
         (activity as AppCompatActivity).supportActionBar?.title = "History Data"

@@ -1,14 +1,9 @@
 package com.lokatani.lokafreshinventory.data
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import com.google.firebase.firestore.FirebaseFirestore
-import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
-import com.lokatani.lokafreshinventory.data.local.room.ScanResultDao
-import com.lokatani.lokafreshinventory.data.remote.firebase.FirestoreScanResult
 import com.lokatani.lokafreshinventory.data.remote.firebase.MonthlyVegData
+import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -21,54 +16,24 @@ import java.time.format.DateTimeParseException
 import java.util.Calendar
 import java.util.Locale
 
-class ScanResultRepository private constructor(
-    private val scanResultDao: ScanResultDao,
+class FirestoreRepository private constructor(
     private val firestore: FirebaseFirestore
 ) {
-    fun getAllResult(): LiveData<Result<List<ScanResult>>> = liveData {
-        emit(Result.Loading)
-        val localData: LiveData<Result<List<ScanResult>>> =
-            scanResultDao.getAllResult().map { Result.Success(it) }
-        emitSource(localData)
-    }
-
-    suspend fun insertScanResult(scanResult: ScanResult) {
-        withContext(Dispatchers.IO) {
-            scanResultDao.insertScanResult(scanResult)
-        }
-    }
-
-    suspend fun deleteScanResult(scanResult: ScanResult) {
-        withContext(Dispatchers.IO) {
-            scanResultDao.deleteScanResult((scanResult))
-        }
-    }
-
-    suspend fun syncLocalToFirestore(): Result<Unit> {
-        val newScanResults = scanResultDao.getAllResultWithoutFirestoreId()
-        if (newScanResults.isEmpty()) {
-            return Result.Success(Unit) // Nothing to sync
-        }
-
-        for (scanResult in newScanResults) {
+    // Function to insert a new scan result into Firestore
+    suspend fun insertScanResult(scanResult: ScanResult): Result<Unit> { // Return Result<Unit> for success/failure indication
+        return withContext(Dispatchers.IO) {
             try {
-                // Convert the Room ScanResult to the Firestore-specific DTO
-                val firestoreScanResult = FirestoreScanResult.Companion.fromScanResult(scanResult)
-
-                // Add the DTO to Firestore
-                val documentRef =
-                    firestore.collection("db-scan-lokatani").add(firestoreScanResult).await()
-
-                // Update the local Room entry with the Firestore ID
-                scanResult.firestoreId = documentRef.id
-                scanResultDao.updateScanResult(scanResult)
-
+                // "db-scan-lokatani" is the collection name you are using in getMonthlyVegWeightDataFromFirestore
+                firestore.collection("db-scan-lokatani")
+                    .add(scanResult) // Firestore will auto-generate a document ID
+                    .await() // Wait for the operation to complete
+                Log.d("FirestoreData", "DocumentSnapshot added successfully")
+                Result.Success(Unit) // Indicate success
             } catch (e: Exception) {
-                Log.e("FirestoreSync", "Error adding scan result to Firestore: ${e.message}")
-                return Result.Error("Failed to sync some data: ${e.message}")
+                Log.e("FirestoreData", "Error adding document to Firestore", e)
+                Result.Error("Error adding scan result: ${e.message}") // Indicate failure
             }
         }
-        return Result.Success(Unit)
     }
 
     suspend fun getMonthlyVegWeightDataFromFirestore(): Result<List<MonthlyVegData>> {
@@ -164,13 +129,12 @@ class ScanResultRepository private constructor(
 
     companion object {
         @Volatile
-        private var INSTANCE: ScanResultRepository? = null
+        private var INSTANCE: FirestoreRepository? = null
         fun getInstance(
-            scanResultDao: ScanResultDao,
             firestore: FirebaseFirestore
-        ): ScanResultRepository =
+        ): FirestoreRepository =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: ScanResultRepository(scanResultDao, firestore)
+                INSTANCE ?: FirestoreRepository(firestore)
             }.also { INSTANCE = it }
     }
 }

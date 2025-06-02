@@ -32,7 +32,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        factory = ViewModelFactory.getInstance(this)
+        factory = ViewModelFactory.getInstance()
 
         setSupportActionBar(binding.toolbarDetail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -48,7 +48,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
         if (vegResult == null) {
-            vegResult = "No Item Detected"
+            vegResult = "No Item"
         }
     }
 

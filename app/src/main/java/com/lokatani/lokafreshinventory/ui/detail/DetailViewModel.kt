@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lokatani.lokafreshinventory.data.ScanResultRepository
-import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
+import com.lokatani.lokafreshinventory.data.FirestoreRepository
+import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    private val scanResultRepository: ScanResultRepository
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
     private val _insertCompleted = MutableLiveData<Boolean>()
     val insertCompleted: LiveData<Boolean> get() = _insertCompleted
@@ -28,7 +28,7 @@ class DetailViewModel(
         )
 
         viewModelScope.launch {
-            scanResultRepository.insertScanResult(result)
+            firestoreRepository.insertScanResult(result)
             _insertCompleted.value = true
         }
     }

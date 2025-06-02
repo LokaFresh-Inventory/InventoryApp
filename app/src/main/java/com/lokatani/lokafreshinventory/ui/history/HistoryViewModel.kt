@@ -7,39 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.lokatani.lokafreshinventory.data.FirestoreRepository
 import com.lokatani.lokafreshinventory.data.Result
-import com.lokatani.lokafreshinventory.data.ScanResultRepository
-import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
 import com.lokatani.lokafreshinventory.data.remote.firebase.MonthlyVegData
+import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class HistoryViewModel(
-    private val scanResultRepository: ScanResultRepository
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
-    fun getAllResult() = scanResultRepository.getAllResult()
-
-    fun deleteScanResult(scanResult: ScanResult) {
-        viewModelScope.launch {
-            scanResultRepository.deleteScanResult(scanResult)
-        }
-    }
-
-    val syncStatus = MutableLiveData<Result<Unit>>() // Or a more specific status
-    fun syncDataToFirestore() {
-        viewModelScope.launch {
-            syncStatus.value = Result.Loading // Indicate loading
-            val result = scanResultRepository.syncLocalToFirestore()
-            syncStatus.value = result // Update status
-        }
-    }
-
     val monthlyVegData = MutableLiveData<Result<List<MonthlyVegData>>>()
     fun fetchMonthlyVegData() {
         viewModelScope.launch {
             monthlyVegData.value = Result.Loading // Indicate loading
             val result =
-                scanResultRepository.getMonthlyVegWeightDataFromFirestore() // CALL THE FIRESTORE FUNCTION
+                firestoreRepository.getMonthlyVegWeightDataFromFirestore() // CALL THE FIRESTORE FUNCTION
             monthlyVegData.value = result // Update status
         }
     }

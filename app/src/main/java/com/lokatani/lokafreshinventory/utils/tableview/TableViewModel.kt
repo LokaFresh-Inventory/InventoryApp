@@ -1,6 +1,6 @@
 package com.lokatani.lokafreshinventory.utils.tableview
 
-import com.lokatani.lokafreshinventory.data.local.entity.ScanResult
+import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import com.lokatani.lokafreshinventory.utils.tableview.model.Cell
 import com.lokatani.lokafreshinventory.utils.tableview.model.ColumnHeader
 import com.lokatani.lokafreshinventory.utils.tableview.model.RowHeader

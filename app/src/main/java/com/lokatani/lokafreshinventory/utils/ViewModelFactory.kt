@@ -1,26 +1,25 @@
 package com.lokatani.lokafreshinventory.utils
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.lokatani.lokafreshinventory.data.ScanResultRepository
-import com.lokatani.lokafreshinventory.di.ScanResultInjection
+import com.lokatani.lokafreshinventory.data.FirestoreRepository
+import com.lokatani.lokafreshinventory.di.FirestoreInjection
 import com.lokatani.lokafreshinventory.ui.detail.DetailViewModel
 import com.lokatani.lokafreshinventory.ui.history.HistoryViewModel
 
 class ViewModelFactory private constructor(
-    private val scanResultRepository: ScanResultRepository
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                DetailViewModel(scanResultRepository) as T
+                DetailViewModel(firestoreRepository) as T
             }
 
             modelClass.isAssignableFrom(HistoryViewModel::class.java) -> {
-                HistoryViewModel(scanResultRepository) as T
+                HistoryViewModel(firestoreRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown viewmodel class: " + modelClass.name)
@@ -28,9 +27,9 @@ class ViewModelFactory private constructor(
     }
 
     companion object {
-        fun getInstance(context: Context): ViewModelFactory {
-            val scanResultRepository = ScanResultInjection.provideRepository(context)
-            return ViewModelFactory(scanResultRepository)
+        fun getInstance(): ViewModelFactory {
+            val firestoreRepository = FirestoreInjection.provideRepository()
+            return ViewModelFactory(firestoreRepository)
         }
     }
 }

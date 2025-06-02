@@ -60,7 +60,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        factory = ViewModelFactory.getInstance(requireContext())
+        factory = ViewModelFactory.getInstance()
 
         binding.apply {
 
