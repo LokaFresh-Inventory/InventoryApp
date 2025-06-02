@@ -18,7 +18,6 @@ import com.lokatani.lokafreshinventory.utils.showToast
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,54 +28,75 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         binding.apply {
-            edEmail.addTextChangedListener {
-                var email = edEmail.text.toString()
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            edEmail.addTextChangedListener { editable ->
+                val email = editable.toString()
+                if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     tilEmail.isErrorEnabled = true
-                    tilEmail.error = "Email invalid"
+                    tilEmail.error = "Invalid Email Format" // Use string resource
                 } else {
-                    tilEmail.error = null
                     tilEmail.isErrorEnabled = false
+                    tilEmail.error = null // Clear error
                 }
             }
 
             btnLogin.setOnClickListener {
-                val email = edEmail.text.toString()
-                val password = edPassword.text.toString()
+                val email = edEmail.text.toString().trim()
+                val password = edPassword.text.toString() // Passwords can have spaces
 
-                if (email.isEmpty() && password.isNotEmpty()) {
-                    showToast("Please fill your Email")
-                } else if (email.isNotEmpty() && password.isEmpty()) {
-                    showToast("Please insert your password")
-                } else if (email.isEmpty() && password.isEmpty()) {
-                    showToast("Please fill all fields")
-                } else {
-                    progressBar.visibility = View.VISIBLE
-                    signIn(email, password)
+                tilEmail.error = null
+                tilEmail.isErrorEnabled = false
+
+                var isValid = true
+                if (email.isEmpty()) {
+                    tilEmail.error = "Please fill your email" // Use string resource
+                    tilEmail.isErrorEnabled = true
+                    isValid = false
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    tilEmail.error = ""
+                    tilEmail.isErrorEnabled = true
+                    isValid = false
                 }
+
+                if (!isValid) {
+                    if (email.isEmpty() && password.isEmpty()) {
+                        showToast("Please fill all fields")
+                        if (tilEmail.editText != null) tilEmail.editText!!.requestFocus()
+                    } else if (email.isEmpty() && tilEmail.editText != null) {
+                        tilEmail.editText!!.requestFocus()
+                    } else if (password.isEmpty() && tilPassword.editText != null) {
+                        tilPassword.editText!!.requestFocus()
+                    }
+                    return@setOnClickListener
+                }
+
+                showLoading(true)
+                signIn(email, password)
             }
 
             btnRegister.setOnClickListener {
                 val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                 startActivity(intent)
             }
-
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressOverlayContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this@LoginActivity) { task ->
+                showLoading(false)
                 if (task.isSuccessful) {
-                    binding.progressBar.visibility = View.GONE
                     Log.d(TAG, "SignIn: Successful")
-                    showToast("Login Success")
+                    showToast("Login Successful")
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
-                    binding.progressBar.visibility = View.GONE
                     Log.e(TAG, "SignIn: Failure", task.exception)
-                    showToast("Authentication Failed")
+                    val errorMessage = task.exception?.message ?: "Authentication Failed"
+                    showToast(errorMessage)
                     updateUI(null)
                 }
             }
@@ -84,21 +104,17 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-            val loginIntent = Intent(this@LoginActivity, MainActivity::class.java)
-            loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(loginIntent)
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
     }
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
+        updateUI(currentUser)
     }
 
     companion object {

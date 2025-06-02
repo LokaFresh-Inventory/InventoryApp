@@ -9,7 +9,7 @@
     <string name="lokatani">Lokatani</string>
     <string name="welcome">Welcome</string>
     <string name="sign_in">Sign in</string>
-    <string name="don_t_have_an_account">Don’t have account yet?</string>
+    <string name="don_t_have_an_account">Don’t have an account yet?</string>
     <string name="already_have_an_account">Already Have an Account?</string>
     <string name="history">History</string>
     <string name="button_chatbot">button_chatbot</string>
@@ -59,7 +59,6 @@
     <string name="ms">%1$dms</string>
     <string name="sort_data">Sort Data</string>
     <string name="no">No</string>
-    <string name="backup_data">Backup Data</string>
     <string name="no_chart_data_avalaible">No Chart Data Avalaible</string>
     <string name="summary">Summary</string>
     <string name="ask_ai">Ask Ai</string>
@@ -69,4 +68,6 @@
     <string name="monthly_data_entry">Monthly Data Entry</string>
     <string name="bayam_merah_weight">Bayam Merah Weight</string>
     <string name="kale_weight">Kale Weight</string>
+    <string name="signing_in">Signing In</string>
+    <string name="registering_account">Registering Account</string>
 </resources>

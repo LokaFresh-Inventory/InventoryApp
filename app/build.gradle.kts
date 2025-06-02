@@ -104,11 +104,6 @@ dependencies {
     // Explicitly add Guava for Android
     implementation(libs.guava)
 
-    //Local Persistence
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-
     //Retrofit (API Call)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

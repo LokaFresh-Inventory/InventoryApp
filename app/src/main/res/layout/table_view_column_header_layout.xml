@@ -5,7 +5,6 @@
     android:id="@+id/column_header_container"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/cell_height"
-    android:background="@color/cell_background_color"
     android:orientation="vertical">
 
     <FrameLayout

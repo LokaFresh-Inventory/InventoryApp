@@ -45,24 +45,29 @@ class RegisterActivity : AppCompatActivity() {
                 if (name.isEmpty() || password.isEmpty()) {
                     showToast("Please fill all fields")
                 } else {
-                    progressBar.visibility = View.VISIBLE
+                    showLoading(true)
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this@RegisterActivity) { task ->
+                            showLoading(false)
                             if (task.isSuccessful) {
-                                progressBar.visibility = View.GONE
                                 Log.d(TAG, "Register: Successful")
                                 showToast("Register Success")
                                 val user = auth.currentUser
                                 updateUI(user)
                             } else {
-                                progressBar.visibility = View.GONE
-                                Log.e(TAG, "Register: Failed")
-                                showToast("Register Failed")
+                                Log.e(TAG, "Register: Failure", task.exception)
+                                val errorMessage =
+                                    task.exception?.message ?: "Authentication Failed"
+                                showToast(errorMessage)
                             }
                         }
                 }
             }
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressOverlayContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun updateUI(user: FirebaseUser?) {

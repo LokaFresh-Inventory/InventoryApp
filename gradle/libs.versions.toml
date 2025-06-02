@@ -23,7 +23,6 @@ activity = "1.10.1"
 playServicesTfliteGpu = "16.4.0"
 playServicesTfliteSupport = "16.4.0"
 retrofit = "2.11.0"
-roomKtx = "2.7.1"
 secretsGradlePlugin = "2.0.1"
 tableView = "v0.8.9.4"
 tensorflowLite = "2.16.1"
@@ -38,9 +37,6 @@ androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core = { module = "io.noties.markwon:core", version.ref = "core" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
