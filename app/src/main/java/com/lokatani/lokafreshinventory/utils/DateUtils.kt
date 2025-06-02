@@ -1,15 +1,9 @@
 package com.lokatani.lokafreshinventory.utils
 
-import org.threeten.bp.LocalDate
-import org.threeten.bp.ZoneId
-import org.threeten.bp.ZonedDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.temporal.ChronoUnit
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 object DateUtils {
     fun formatDate(dateString: String, locale: Locale = Locale.getDefault()): String {
@@ -32,24 +26,5 @@ object DateUtils {
         val time = sdf.format(Date(timeStamp.time))
 
         return time.toString()
-    }
-
-    fun formatLocalDateToRelativeTime(
-        dateString: String,
-        locale: Locale = Locale.getDefault()
-    ): String {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", locale)
-        val parsedDate = LocalDate.parse(dateString, dateFormatter)
-
-        val parsedDateTime = parsedDate.atStartOfDay(ZoneId.systemDefault())
-        val now = ZonedDateTime.now()
-        val duration = ChronoUnit.SECONDS.between(parsedDateTime, now)
-
-        return when {
-            duration < 60 -> "${duration}s ago"
-            duration < 3600 -> "${TimeUnit.SECONDS.toMinutes(duration)}m ago"
-            duration < 86400 -> "${TimeUnit.SECONDS.toHours(duration)}h ago"
-            else -> "${TimeUnit.SECONDS.toDays(duration)}d ago"
-        }
     }
 }

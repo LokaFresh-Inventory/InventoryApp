@@ -20,19 +20,15 @@ mpandroidchart = "v3.1.0"
 navigationFragmentKtx = "2.9.0"
 navigationUiKtx = "2.9.0"
 activity = "1.10.1"
+playServicesTfliteGpu = "16.4.0"
+playServicesTfliteSupport = "16.4.0"
 retrofit = "2.11.0"
 roomKtx = "2.7.1"
 secretsGradlePlugin = "2.0.1"
 tableView = "v0.8.9.4"
 tensorflowLite = "2.16.1"
-tensorflowLiteApi = "2.16.1"
 tensorflowLiteGpu = "2.16.1"
-tensorflowLiteGpuApi = "2.16.1"
-tensorflowLiteGpuDelegatePlugin = "0.4.0"
 tensorflowLiteMetadata = "0.4.4"
-tensorflowLiteSelectTfOps = "2.16.1"
-tensorflowLiteTaskVision = "0.4.4"
-threetenabp = "1.4.8"
 googleGmsGoogleServices = "4.4.2"
 firebaseFirestore = "25.1.4"
 
@@ -63,18 +59,14 @@ androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navi
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
+play-services-tflite-gpu = { module = "com.google.android.gms:play-services-tflite-gpu", version.ref = "playServicesTfliteGpu" }
+play-services-tflite-support = { module = "com.google.android.gms:play-services-tflite-support", version.ref = "playServicesTfliteSupport" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
 tableview = { module = "com.github.evrencoskun:TableView", version.ref = "tableView" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
-tensorflow-lite-api = { module = "org.tensorflow:tensorflow-lite-api", version.ref = "tensorflowLiteApi" }
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
-tensorflow-lite-gpu-api = { module = "org.tensorflow:tensorflow-lite-gpu-api", version.ref = "tensorflowLiteGpuApi" }
-tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteGpuDelegatePlugin" }
-tensorflow-lite-metadata = { group = "org.tensorflow", name = "tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }
-tensorflow-lite-select-tf-ops = { module = "org.tensorflow:tensorflow-lite-select-tf-ops", version.ref = "tensorflowLiteSelectTfOps" }
-tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteTaskVision" }
-threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
+tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 [plugins]

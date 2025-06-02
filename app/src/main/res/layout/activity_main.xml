@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@android:color/transparent"
+        app:elevation="3dp"
         app:itemIconTint="@color/dark_green"
         app:itemRippleColor="@color/pale_green"
         app:itemTextColor="@color/dark_green"
