@@ -52,4 +52,56 @@ class HistoryViewModel(
             _scanResults.value = Result.Error("Error fetching data from Firestore: ${e.message}")
         }
     }
+
+    private val _userListForFilter = MutableLiveData<List<String>>()
+    val userListForFilter: LiveData<List<String>> = _userListForFilter
+
+    private val _vegetableListForFilter = MutableLiveData<List<String>>()
+    val vegetableListForFilter: LiveData<List<String>> = _vegetableListForFilter
+
+    private val _currentFilterState = MutableLiveData<FilterState>()
+    val currentFilterState: LiveData<FilterState> = _currentFilterState
+
+    fun prepareFilterData(scanResults: List<ScanResult>) {
+        val users = scanResults
+            .map { it.user }
+            .filter { it.isNotBlank() }
+            .distinct()
+            .sorted()
+            .toMutableList()
+        _userListForFilter.value = users
+
+        val vegetables = scanResults
+            .map { it.vegResult }
+            .filter { it.isNotBlank() }
+            .distinct()
+            .sorted()
+            .toMutableList()
+        _vegetableListForFilter.value = vegetables
+    }
+
+    fun applyFilters(user: String?, vegetable: String?, allText: String) {
+        // Treat "All" or blank as no filter (null)
+        val userFilter = if (user.isNullOrBlank() || user == allText) null else user
+        val vegFilter = if (vegetable.isNullOrBlank() || vegetable == allText) null else vegetable
+
+        _currentFilterState.value = FilterState(user = userFilter, vegetable = vegFilter)
+    }
+
+    fun clearUserFilters(vegetable: String?, allText: String) {
+        val vegFilter = if (vegetable.isNullOrBlank() || vegetable == allText) null else vegetable
+        // Use the processed 'vegFilter' variable, not the raw 'vegetable' parameter
+        _currentFilterState.value = FilterState(user = null, vegetable = vegFilter)
+    }
+
+    fun clearVegetableFilters(user: String?, allText: String) {
+        val userFilter = if (user.isNullOrBlank() || user == allText) null else user
+        // Use the processed 'userFilter' variable, not the raw 'user' parameter
+        _currentFilterState.value = FilterState(user = userFilter, vegetable = null)
+    }
+
+    data class FilterState(
+        val user: String? = null,
+        val vegetable: String? = null
+    )
 }

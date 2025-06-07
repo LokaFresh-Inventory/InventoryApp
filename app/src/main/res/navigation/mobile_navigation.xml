@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.lokatani.lokafreshinventory.ui.history.HistoryCloudFragment"
+        android:name="com.lokatani.lokafreshinventory.ui.history.HistoryFragment"
         android:label="@string/history"
-        tools:layout="@layout/fragment_history_cloud" />
+        tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/navigation_analysis"

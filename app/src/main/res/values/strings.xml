@@ -70,4 +70,17 @@
     <string name="kale_weight">Kale Weight</string>
     <string name="signing_in">Signing In</string>
     <string name="registering_account">Registering Account</string>
+    <string name="clear_selection">Clear Selection</string>
+    <string name="export_notification_channel_name">File Exports</string>
+    <string name="export_notification_channel_description">Notifications for completed file exports</string>
+    <string name="export_complete_title">Export Complete</string>
+    <string name="export_complete_text">%1$s saved</string>
+    <string name="csv_export_failed">CSV export failed</string>
+    <string name="notification_permission_required_title">Permission Required</string>
+    <string name="notification_permission_required_message">To show a notification when export is complete, please grant notification permission in app settings.</string>
+    <string name="no_app_to_open_csv">No application found to open CSV files.</string>
+    <string name="filter">Filter</string>
+    <string name="filter_table">Filter Table</string>
+    <string name="user">User</string>
+    <string name="vegetable">Vegetable</string>
 </resources>
