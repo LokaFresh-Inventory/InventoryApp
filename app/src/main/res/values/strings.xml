@@ -83,4 +83,6 @@
     <string name="filter_table">Filter Table</string>
     <string name="user">User</string>
     <string name="vegetable">Vegetable</string>
+    <string name="weight_range">Weight Range</string>
+    <string name="weight_range_value">%1$dg - %2$dg</string>
 </resources>

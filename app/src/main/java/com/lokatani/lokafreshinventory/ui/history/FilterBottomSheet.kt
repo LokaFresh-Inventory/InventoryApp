@@ -8,6 +8,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.slider.RangeSlider
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.TableFilterSheetBinding
 
 class FilterBottomSheet : BottomSheetDialogFragment() {
@@ -15,8 +17,10 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
     private var _binding: TableFilterSheetBinding? = null
     private val binding get() = _binding!!
 
-
     private val historyViewModel: HistoryViewModel by activityViewModels()
+
+    private var minWeightFilter: Float? = null
+    private var maxWeightFilter: Float? = null
 
 
     override fun onCreateView(
@@ -32,7 +36,8 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupSpinnersWithData()
-        setupInstantFilterListeners() // New method for listeners
+        setupInstantFilterListeners()
+        setupRangeSlider()
         setupResetButton()
     }
 
@@ -55,6 +60,14 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
             val currentVegFilter = historyViewModel.currentFilterState.value?.vegetable
             binding.actvVegetable.setText(currentVegFilter ?: "All", false)
         }
+
+        val currentMin =
+            historyViewModel.currentFilterState.value?.minWeight ?: binding.sliderWeight.valueFrom
+        val currentMax =
+            historyViewModel.currentFilterState.value?.maxWeight ?: binding.sliderWeight.valueTo
+        binding.sliderWeight.values = listOf(currentMin, currentMax)
+        binding.tvWeightRange.text =
+            getString(R.string.weight_range_value, currentMin.toInt(), currentMax.toInt())
     }
 
     private fun setupInstantFilterListeners() {
@@ -68,13 +81,44 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
         binding.actvVegetable.onItemClickListener = itemClickListener
     }
 
+    private fun setupRangeSlider() {
+        binding.sliderWeight.addOnChangeListener { slider, value, fromUser ->
+            // Update the label TextView as the slider moves
+            val values = slider.values
+            binding.tvWeightRange.text =
+                getString(R.string.weight_range_value, values[0].toInt(), values[1].toInt())
+        }
+
+        // Add a listener to apply the filter only when the user finishes sliding
+        binding.sliderWeight.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: RangeSlider) {
+                // No action
+            }
+
+            override fun onStopTrackingTouch(slider: RangeSlider) {
+                // Trigger the filter update when the user lifts their finger
+                triggerFilterUpdate()
+            }
+        })
+    }
+
+
+    // Modify this to include weight values
     private fun triggerFilterUpdate() {
-        // This function reads the CURRENT state of both spinners and updates the ViewModel.
         val selectedUser = binding.actvUser.text.toString()
         val selectedVegetable = binding.actvVegetable.text.toString()
-        val allText = "All" // Should match the one used in the ViewModel
+        val weightValues = binding.sliderWeight.values
+        minWeightFilter = weightValues[0]
+        maxWeightFilter = weightValues[1]
+        val allText = "All"
 
-        historyViewModel.applyFilters(selectedUser, selectedVegetable, allText)
+        historyViewModel.applyFilters(
+            selectedUser,
+            selectedVegetable,
+            minWeightFilter,
+            maxWeightFilter,
+            allText
+        )
     }
 
     private fun setupResetButton() {
@@ -82,13 +126,23 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
         binding.apply {
             btnResetUser.setOnClickListener {
                 val selectedVegetable = binding.actvVegetable.text.toString()
-                historyViewModel.clearUserFilters(selectedVegetable, allText)
+                historyViewModel.clearUserFilters(
+                    selectedVegetable,
+                    allText,
+                    minWeightFilter,
+                    maxWeightFilter
+                )
                 actvUser.setText(allText, false)
             }
 
             btnResetVeg.setOnClickListener {
                 val selectedUser = binding.actvUser.text.toString()
-                historyViewModel.clearVegetableFilters(selectedUser, allText)
+                historyViewModel.clearVegetableFilters(
+                    selectedUser,
+                    allText,
+                    minWeightFilter,
+                    maxWeightFilter
+                )
                 actvVegetable.setText(allText, false)
             }
         }

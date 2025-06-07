@@ -19,8 +19,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,13 +33,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.evrencoskun.tableview.TableView
-import com.evrencoskun.tableview.filter.Filter
-import com.evrencoskun.tableview.filter.FilterChangedListener
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import com.lokatani.lokafreshinventory.databinding.FragmentHistoryBinding
-import com.lokatani.lokafreshinventory.ui.history.HistoryViewModel.FilterState
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
 import com.lokatani.lokafreshinventory.utils.generateCsvString
 import com.lokatani.lokafreshinventory.utils.tableview.TableViewAdapter
@@ -63,10 +58,8 @@ class HistoryFragment : Fragment() {
 
     private lateinit var tableView: TableView
     private lateinit var tableViewModel: TableViewModel
-    private lateinit var tableViewFilter: Filter
     private lateinit var tableViewAdapter: TableViewAdapter
     private var toBeExportedData: List<List<Cell>> = emptyList()
-    private lateinit var modalBottomSheet: FilterBottomSheet
 
     private lateinit var requestNotificationPermissionLauncher: ActivityResultLauncher<String>
 
@@ -74,9 +67,7 @@ class HistoryFragment : Fragment() {
     private var csvContentToSave: String? = null
     private var suggestedCsvFileName: String? = null
 
-
-    private var userSpinner: AutoCompleteTextView? = null
-    private var vegSpinner: AutoCompleteTextView? = null
+    private var scanResults: List<ScanResult> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -139,8 +130,6 @@ class HistoryFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.dataToolbar)
         (activity as AppCompatActivity).supportActionBar?.title = "History Data"
 
-        modalBottomSheet = FilterBottomSheet()
-
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -173,17 +162,12 @@ class HistoryFragment : Fragment() {
             viewModel.fetchScanResults()
         }
         observeFirestoreScanResults()
-
-        filterData()
-        observeFilterChanges()
     }
 
     private fun setupTableView() {
         tableViewAdapter = TableViewAdapter()
         tableView.setAdapter(tableViewAdapter)
         tableView.tableViewListener = TableViewListener(requireContext(), tableView)
-        tableViewFilter = Filter(tableView)
-        tableView.filterHandler?.addFilterChangedListener(filterChangedListener)
     }
 
     private fun observeFirestoreScanResults() {
@@ -191,151 +175,77 @@ class HistoryFragment : Fragment() {
             when (result) {
                 is Result.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
+                    binding.tableview.visibility = View.GONE
+                    binding.tvEmptyTable.visibility = View.GONE
                 }
 
                 is Result.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    val scanResults = result.data
-                    if (scanResults.isNotEmpty()) {
-                        tableViewModel = TableViewModel(scanResults)
-
-                        tableViewAdapter.setAllItems(
-                            tableViewModel.getColumnHeaderList(),
-                            tableViewModel.getRowHeaderList(),
-                            tableViewModel.getCellList()
-                        )
-                        tableView.invalidate()
-                        populateSpinners(scanResults)
-                        toBeExportedData =
-                            tableViewModel.getCellList().map { row -> ArrayList(row) }
-                        viewModel.prepareFilterData(scanResults)
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "No scan results to display",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        toBeExportedData = emptyList()
-                        populateSpinners(emptyList())
-                        tableView.visibility = View.GONE
-                        binding.tvEmptyTable.visibility = View.VISIBLE
-                    }
+                    scanResults = result.data
+                    viewModel.prepareFilterData(scanResults)
+                    applyAllFilters()
                 }
 
                 is Result.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    populateSpinners(emptyList())
-                    toBeExportedData = emptyList()
-                    Toast.makeText(
-                        requireContext(),
-                        "Error loading data: ${result.error}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    binding.tableview.visibility = View.GONE
+                    binding.tvEmptyTable.visibility = View.VISIBLE
+                    binding.tvEmptyTable.text = result.error // Show error message
+                    Toast.makeText(requireContext(), "Error: ${result.error}", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
-    }
 
-    private fun observeFilterChanges() {
         viewModel.currentFilterState.observe(viewLifecycleOwner) { filterState ->
-            applyTableFilters(filterState)
-        }
-    }
-
-    private fun applyTableFilters(filterState: FilterState) {
-        Log.d(
-            "HistoryFragment",
-            "Applying filters: User=${filterState.user}, Veg=${filterState.vegetable}"
-        )
-
-        // Column 0 is User, Column 1 is Vegetable
-        tableViewFilter.set(0, filterState.user ?: "")
-        tableViewFilter.set(1, filterState.vegetable ?: "")
-    }
-
-    private fun populateSpinners(scanResults: List<ScanResult>) {
-        val users = scanResults
-            .map { it.user }
-            .filter { it.isNotBlank() }
-            .distinct()
-            .sorted()
-            .toMutableList()
-        users.add(0, getString(R.string.clear_selection))
-
-        val vegetables = scanResults
-            .map { it.vegResult }
-            .filter { it.isNotBlank() }
-            .distinct()
-            .sorted()
-            .toMutableList()
-        vegetables.add(0, getString(R.string.clear_selection))
-
-        userSpinner?.let { actv ->
-            val userAdapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                users
-            )
-            actv.setAdapter(userAdapter)
-        }
-
-        vegSpinner?.let { actv ->
-            val vegetableAdapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                vegetables
-            )
-            actv.setAdapter(vegetableAdapter)
-        }
-    }
-
-    private fun filterData() {
-        val clearOptionText = getString(R.string.clear_selection)
-
-        userSpinner?.setOnItemClickListener { parent, view, position, id ->
-            val selectedItem = parent.getItemAtPosition(position).toString()
-            if (selectedItem == clearOptionText) {
-                userSpinner?.setText("", false)
-                tableViewFilter.set(0, "")
-                Toast.makeText(requireContext(), "User filter cleared", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "User: $selectedItem selected", Toast.LENGTH_SHORT)
-                    .show()
-                tableViewFilter.set(0, selectedItem)
-            }
-        }
-
-        vegSpinner?.setOnItemClickListener { parent, view, position, id ->
-            val selectedItem = parent.getItemAtPosition(position).toString()
-            if (selectedItem == clearOptionText) {
-                vegSpinner?.setText("", false)
-                tableViewFilter.set(1, "")
-                Toast.makeText(requireContext(), "Vegetable filter cleared", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                tableViewFilter.set(1, selectedItem)
-                Toast.makeText(
-                    requireContext(),
-                    "Vegetable: $selectedItem selected",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (scanResults.isNotEmpty()) {
+                applyAllFilters()
             }
         }
     }
 
-    private val filterChangedListener = object : FilterChangedListener<Cell>() {
-        override fun onFilterChanged(
-            filteredCellData: MutableList<MutableList<Cell>>,
-            filteredRowHeaderData: MutableList<Cell>
-        ) {
-            toBeExportedData = filteredCellData.map { row -> ArrayList(row) }
+    private fun applyAllFilters() {
+        // Get the current filter state from the ViewModel
+        val filterState = viewModel.currentFilterState.value ?: return
+
+        // Get the complete list of data
+        var filteredList = scanResults
+
+        // Apply User filter
+        filterState.user?.let { user ->
+            filteredList = filteredList.filter { it.user == user }
         }
 
-        override fun onFilterCleared(
-            originalCellData: MutableList<MutableList<Cell>>,
-            originalRowHeaderData: MutableList<Cell>
-        ) {
-            toBeExportedData = originalCellData.map { row -> ArrayList(row) }
+        // Apply Vegetable filter
+        filterState.vegetable?.let { vegetable ->
+            filteredList = filteredList.filter { it.vegResult == vegetable }
+        }
+
+        // Apply Weight filter
+        if (filterState.minWeight != null && filterState.maxWeight != null) {
+            filteredList = filteredList.filter {
+                val weight = it.vegWeight
+                weight >= filterState.minWeight && weight <= filterState.maxWeight
+            }
+        }
+
+        if (filteredList.isNotEmpty()) {
+            tableViewModel = TableViewModel(filteredList)
+            tableViewAdapter.setAllItems(
+                tableViewModel.getColumnHeaderList(),
+                tableViewModel.getRowHeaderList(),
+                tableViewModel.getCellList()
+            )
+
+            toBeExportedData = tableViewModel.getCellList().map { row -> ArrayList(row) }
+
+            binding.tableview.visibility = View.VISIBLE
+            binding.tvEmptyTable.visibility = View.GONE
+        } else {
+            tableViewAdapter.setAllItems(emptyList(), emptyList(), emptyList()) // Clear the table
+            binding.tableview.visibility = View.GONE
+            binding.tvEmptyTable.visibility = View.VISIBLE
+            toBeExportedData = emptyList()
         }
     }
 

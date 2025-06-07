@@ -59,7 +59,7 @@ class HistoryViewModel(
     private val _vegetableListForFilter = MutableLiveData<List<String>>()
     val vegetableListForFilter: LiveData<List<String>> = _vegetableListForFilter
 
-    private val _currentFilterState = MutableLiveData<FilterState>()
+    private val _currentFilterState = MutableLiveData(FilterState())
     val currentFilterState: LiveData<FilterState> = _currentFilterState
 
     fun prepareFilterData(scanResults: List<ScanResult>) {
@@ -80,28 +80,58 @@ class HistoryViewModel(
         _vegetableListForFilter.value = vegetables
     }
 
-    fun applyFilters(user: String?, vegetable: String?, allText: String) {
-        // Treat "All" or blank as no filter (null)
+    fun applyFilters(
+        user: String?,
+        vegetable: String?,
+        minWeight: Float?,
+        maxWeight: Float?,
+        allText: String
+    ) {
         val userFilter = if (user.isNullOrBlank() || user == allText) null else user
         val vegFilter = if (vegetable.isNullOrBlank() || vegetable == allText) null else vegetable
 
-        _currentFilterState.value = FilterState(user = userFilter, vegetable = vegFilter)
+        _currentFilterState.value = FilterState(
+            user = userFilter,
+            vegetable = vegFilter,
+            minWeight = minWeight,
+            maxWeight = maxWeight
+        )
     }
 
-    fun clearUserFilters(vegetable: String?, allText: String) {
+    fun clearUserFilters(
+        vegetable: String?,
+        allText: String,
+        minWeight: Float?,
+        maxWeight: Float?
+    ) {
         val vegFilter = if (vegetable.isNullOrBlank() || vegetable == allText) null else vegetable
-        // Use the processed 'vegFilter' variable, not the raw 'vegetable' parameter
-        _currentFilterState.value = FilterState(user = null, vegetable = vegFilter)
+        _currentFilterState.value = FilterState(
+            user = null,
+            vegetable = vegFilter,
+            minWeight = minWeight,
+            maxWeight = maxWeight
+        )
     }
 
-    fun clearVegetableFilters(user: String?, allText: String) {
+    fun clearVegetableFilters(
+        user: String?,
+        allText: String,
+        minWeight: Float?,
+        maxWeight: Float?
+    ) {
         val userFilter = if (user.isNullOrBlank() || user == allText) null else user
-        // Use the processed 'userFilter' variable, not the raw 'user' parameter
-        _currentFilterState.value = FilterState(user = userFilter, vegetable = null)
+        _currentFilterState.value = FilterState(
+            user = userFilter,
+            vegetable = null,
+            minWeight = minWeight,
+            maxWeight = maxWeight
+        )
     }
 
     data class FilterState(
         val user: String? = null,
-        val vegetable: String? = null
+        val vegetable: String? = null,
+        val minWeight: Float? = null,
+        val maxWeight: Float? = null
     )
 }
