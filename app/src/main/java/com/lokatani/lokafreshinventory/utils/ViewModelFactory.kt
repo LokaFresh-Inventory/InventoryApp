@@ -6,6 +6,7 @@ import com.lokatani.lokafreshinventory.data.FirestoreRepository
 import com.lokatani.lokafreshinventory.di.FirestoreInjection
 import com.lokatani.lokafreshinventory.ui.detail.DetailViewModel
 import com.lokatani.lokafreshinventory.ui.history.HistoryViewModel
+import com.lokatani.lokafreshinventory.ui.home.HomeViewModel
 
 class ViewModelFactory private constructor(
     private val firestoreRepository: FirestoreRepository
@@ -19,7 +20,11 @@ class ViewModelFactory private constructor(
             }
 
             modelClass.isAssignableFrom(HistoryViewModel::class.java) -> {
-                HistoryViewModel(firestoreRepository) as T
+                HistoryViewModel() as T
+            }
+
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(firestoreRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown viewmodel class: " + modelClass.name)

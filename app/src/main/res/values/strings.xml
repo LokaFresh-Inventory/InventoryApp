@@ -70,7 +70,6 @@
     <string name="kale_weight">Kale Weight</string>
     <string name="signing_in">Signing In</string>
     <string name="registering_account">Registering Account</string>
-    <string name="clear_selection">Clear Selection</string>
     <string name="export_notification_channel_name">File Exports</string>
     <string name="export_notification_channel_description">Notifications for completed file exports</string>
     <string name="export_complete_title">Export Complete</string>
@@ -85,4 +84,6 @@
     <string name="vegetable">Vegetable</string>
     <string name="weight_range">Weight Range</string>
     <string name="weight_range_value">%1$dg - %2$dg</string>
+    <string name="last_input">Last Input</string>
+    <string name="no_recent_input">No recent input</string>
 </resources>

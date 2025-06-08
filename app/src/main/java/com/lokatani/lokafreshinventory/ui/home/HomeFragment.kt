@@ -18,10 +18,9 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
-import com.lokatani.lokafreshinventory.data.remote.firebase.MonthlyVegData
+import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import com.lokatani.lokafreshinventory.databinding.FragmentHomeBinding
 import com.lokatani.lokafreshinventory.ui.chatbot.ChatbotActivity
-import com.lokatani.lokafreshinventory.ui.history.HistoryViewModel
 import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
 import java.time.YearMonth
@@ -29,15 +28,13 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
 
-// If you moved it, update the import.
-
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var factory: ViewModelFactory
-    private val historyViewModel: HistoryViewModel by viewModels {
+    private val historyViewModel: HomeViewModel by viewModels {
         factory
     }
 
@@ -46,7 +43,7 @@ class HomeFragment : Fragment() {
         Color.RED,
         Color.GREEN
     )
-    private var colorIndex = 0 // To cycle through colors
+    private var colorIndex = 0 // Start to cycle through list of colors
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,18 +60,9 @@ class HomeFragment : Fragment() {
         factory = ViewModelFactory.getInstance()
 
         binding.apply {
-
             layoutItemKale.tvItemName.text = getString(R.string.kale)
-            layoutItemKale.tvItemValue.text = "77.000 gram"
-            layoutItemKale.ivItemImage.setImageResource(R.drawable.kale_landscape)
-
             layoutItemBayamMerah.tvItemName.text = getString(R.string.bayam_merah)
-            layoutItemBayamMerah.tvItemValue.text = "79.600 gram"
-            layoutItemBayamMerah.ivItemImage.setImageResource(R.drawable.bayam_merah_landscape)
-
-            layoutItemLastInput.tvItemName.text = "Last Input"
-            layoutItemLastInput.tvItemValue.text = "Kale: 7.500 gram (Today)"
-            layoutItemLastInput.ivItemImage.setImageResource(R.drawable.stopwatch)
+            layoutItemLastInput.tvItemName.text = getString(R.string.last_input)
 
             btnChatbot.setOnClickListener {
                 startActivity(Intent(requireContext(), ChatbotActivity::class.java))
@@ -84,9 +72,9 @@ class HomeFragment : Fragment() {
             }
         }
 
-        historyViewModel.fetchMonthlyVegData()
+        historyViewModel.fetchDataForHomeScreen()
 
-        historyViewModel.monthlyVegData.observe(viewLifecycleOwner) { result ->
+        historyViewModel.homeUiState.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
                     binding.chartProgressBar.visibility = View.VISIBLE
@@ -97,11 +85,11 @@ class HomeFragment : Fragment() {
                 is Result.Success -> {
                     binding.chartProgressBar.visibility = View.GONE
                     val data = result.data
-                    if (data.isNotEmpty()) {
+                    updateSummaryCards(data.totalWeights, data.lastInput)
+                    if (data.monthlyChartData.isNotEmpty()) {
                         binding.monthlyLineChart.visibility = View.VISIBLE
                         binding.tvNoChartData.visibility = View.GONE
-                        val processedData = aggregateDataForChart(data)
-                        setupLineChart(processedData)
+                        setupLineChart(data.monthlyChartData)
                     } else {
                         binding.monthlyLineChart.visibility = View.GONE
                         binding.tvNoChartData.visibility = View.VISIBLE
@@ -122,18 +110,31 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun updateSummaryCards(totalWeights: Map<String, Int>, lastInput: ScanResult?) {
+        // Update Kale Card
+        val kaleTotalWeight = totalWeights["Kale"] ?: 0 // Default to 0 if not present
+        binding.layoutItemKale.tvItemValue.text = getString(R.string.gram, "$kaleTotalWeight")
+        binding.layoutItemKale.ivItemImage.setImageResource(R.drawable.kale_landscape)
+
+        // Update Bayam Merah Card
+        val bayamMerahTotalWeight = totalWeights["Bayam Merah"] ?: 0
+        binding.layoutItemBayamMerah.tvItemValue.text = getString(R.string.gram, "$bayamMerahTotalWeight")
+        binding.layoutItemBayamMerah.ivItemImage.setImageResource(R.drawable.bayam_merah_landscape)
+
+        // Update Last Input Card
+        if (lastInput != null) {
+            val date = lastInput.date
+            val lastInputText = "${lastInput.vegResult}: ${lastInput.vegWeight} gram ($date)"
+            binding.layoutItemLastInput.tvItemValue.text = lastInputText
+            binding.layoutItemLastInput.ivItemImage.setImageResource(R.drawable.stopwatch)
+        } else {
+            binding.layoutItemLastInput.tvItemValue.text = getString(R.string.no_recent_input)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun aggregateDataForChart(monthlyVegList: List<MonthlyVegData>): Map<String, Map<String, Int>> {
-        val aggregatedMap = mutableMapOf<String, MutableMap<String, Int>>()
-        monthlyVegList.forEach { monthlyVegData ->
-            aggregatedMap.getOrPut(monthlyVegData.yearMonth) { mutableMapOf() }
-                .put(monthlyVegData.vegType, monthlyVegData.totalWeight)
-        }
-        return aggregatedMap
     }
 
     private fun setupLineChart(data: Map<String, Map<String, Int>>) {
