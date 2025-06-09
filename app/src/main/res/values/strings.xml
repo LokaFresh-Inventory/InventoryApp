@@ -85,4 +85,6 @@
     <string name="weight_range_value">%1$dg - %2$dg</string>
     <string name="last_input">Last Input</string>
     <string name="no_recent_input">No recent input</string>
+    <string name="pick_date_to_filter">Pick Date to Filter</string>
+    <string name="range_item_value">%1$s - %2$s</string>
 </resources>

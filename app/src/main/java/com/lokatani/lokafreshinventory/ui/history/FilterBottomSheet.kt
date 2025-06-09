@@ -8,9 +8,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.slider.RangeSlider
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.TableFilterSheetBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FilterBottomSheet : BottomSheetDialogFragment() {
 
@@ -21,7 +25,9 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
 
     private var minWeightFilter: Float? = null
     private var maxWeightFilter: Float? = null
-
+    private var startDate: Long? = null
+    private var endDate: Long? = null
+    private val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +44,7 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
         setupSpinnersWithData()
         setupInstantFilterListeners()
         setupRangeSlider()
+        setupDatePicker()
         setupResetButton()
     }
 
@@ -71,9 +78,7 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setupInstantFilterListeners() {
-        // Create a single listener instance to be shared by both spinners.
         val itemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            // When any spinner item is clicked, trigger an update.
             triggerFilterUpdate()
         }
 
@@ -89,21 +94,18 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
                 getString(R.string.weight_range_value, values[0].toInt(), values[1].toInt())
         }
 
-        // Add a listener to apply the filter only when the user finishes sliding
         binding.sliderWeight.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {
                 // No action
             }
 
             override fun onStopTrackingTouch(slider: RangeSlider) {
-                // Trigger the filter update when the user lifts their finger
                 triggerFilterUpdate()
             }
         })
     }
 
 
-    // Modify this to include weight values
     private fun triggerFilterUpdate() {
         val selectedUser = binding.actvUser.text.toString()
         val selectedVegetable = binding.actvVegetable.text.toString()
@@ -117,12 +119,60 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
             selectedVegetable,
             minWeightFilter,
             maxWeightFilter,
+            startDate,
+            endDate,
             allText
         )
     }
 
+    private fun setupDatePicker() {
+        val initialStartDate = historyViewModel.currentFilterState.value?.startDateMillis
+        val initialEndDate = historyViewModel.currentFilterState.value?.endDateMillis
+        startDate = initialStartDate
+        endDate = initialEndDate
+        updateDateRangeText()
+
+        binding.etDate.setOnClickListener {
+            val datePickerBuilder = MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select Date Range")
+
+            if (startDate != null && endDate != null) {
+                datePickerBuilder.setSelection(androidx.core.util.Pair(startDate, endDate))
+            }
+
+            val datePicker = datePickerBuilder.build()
+
+            datePicker.addOnPositiveButtonClickListener { selection ->
+                startDate = selection.first
+                endDate = selection.second
+                updateDateRangeText()
+                triggerFilterUpdate()
+            }
+
+            datePicker.show(childFragmentManager, "DATE_PICKER")
+        }
+    }
+
+    private fun updateDateRangeText() {
+        if (startDate != null && endDate != null) {
+            binding.etDate.setText(
+                getString(
+                    R.string.range_item_value,
+                    simpleDateFormat.format(Date(startDate!!)),
+                    simpleDateFormat.format(
+                        Date(
+                            endDate!!
+                        )
+                    )
+                )
+            )
+        } else {
+            binding.etDate.setText("")
+        }
+    }
+
     private fun setupResetButton() {
-        val allText = "All" // Use the same default text
+        val allText = "All"
         binding.apply {
             btnResetUser.setOnClickListener {
                 val selectedVegetable = binding.actvVegetable.text.toString()

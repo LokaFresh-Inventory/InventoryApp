@@ -33,6 +33,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.evrencoskun.tableview.TableView
+import com.google.firebase.Timestamp
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
@@ -45,6 +46,7 @@ import com.lokatani.lokafreshinventory.utils.tableview.TableViewModel
 import com.lokatani.lokafreshinventory.utils.tableview.model.Cell
 import kotlinx.coroutines.launch
 import java.io.OutputStreamWriter
+import java.util.Calendar
 
 class HistoryFragment : Fragment() {
 
@@ -114,7 +116,7 @@ class HistoryFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Notification permission denied.",
+                        "Notification permission denied. Please grant notification permission to see export status.",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -148,6 +150,8 @@ class HistoryFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+        checkAndRequestNotificationPermission()
+
         tableView = binding.tableView
         setupTableView()
 
@@ -161,6 +165,20 @@ class HistoryFragment : Fragment() {
             viewModel.fetchScanResults()
         }
         observeFirestoreScanResults()
+    }
+
+    private fun checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permission = Manifest.permission.POST_NOTIFICATIONS
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d("HistoryFragment", "Requesting notification permission.")
+                requestNotificationPermissionLauncher.launch(permission)
+            }
+        }
     }
 
     private fun setupTableView() {
@@ -224,6 +242,29 @@ class HistoryFragment : Fragment() {
             filteredList = filteredList.filter {
                 val weight = it.vegWeight
                 weight >= filterState.minWeight && weight <= filterState.maxWeight
+            }
+        }
+
+        // Apply Date Filter
+        if (filterState.startDateMillis != null && filterState.endDateMillis != null) {
+            // The start of the selected day
+            val startCal =
+                Calendar.getInstance().apply { timeInMillis = filterState.startDateMillis }
+            startCal.set(Calendar.HOUR_OF_DAY, 0)
+            startCal.set(Calendar.MINUTE, 0)
+            startCal.set(Calendar.SECOND, 0)
+            val startTimestamp = Timestamp(startCal.time)
+
+            // The end of the selected day
+            val endCal = Calendar.getInstance().apply { timeInMillis = filterState.endDateMillis }
+            endCal.set(Calendar.HOUR_OF_DAY, 23)
+            endCal.set(Calendar.MINUTE, 59)
+            endCal.set(Calendar.SECOND, 59)
+            val endTimestamp = Timestamp(endCal.time)
+
+            filteredList = filteredList.filter { scanResult ->
+                val scanTimestamp = scanResult.date
+                scanTimestamp != null && scanTimestamp >= startTimestamp && scanTimestamp <= endTimestamp
             }
         }
 

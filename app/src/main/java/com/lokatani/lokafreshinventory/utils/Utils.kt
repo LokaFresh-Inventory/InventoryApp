@@ -2,10 +2,10 @@ package com.lokatani.lokafreshinventory.utils
 
 import android.content.Context
 import android.widget.Toast
+import com.google.firebase.Timestamp
 import com.lokatani.lokafreshinventory.utils.tableview.model.Cell
 import com.lokatani.lokafreshinventory.utils.tableview.model.ColumnHeader
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
@@ -25,26 +25,34 @@ fun escapeCsv(value: String?): String {
 
 fun generateCsvString(
     columnHeaders: List<ColumnHeader>,
-    filteredCellData: List<List<Cell>> // This is List<List<Cell>> from tableView.getFilteredList()
+    filteredCellData: List<List<Cell>>
 ): String {
     val csvBuilder = StringBuilder()
-    val csvDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
+    val csvDateFormatter = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale("in", "ID"))
 
-    // Append Header Row
-    csvBuilder.appendLine(columnHeaders.joinToString(",") { header ->
+    // 1. Append Header Row
+    val headerRow = columnHeaders.joinToString(",") { header ->
         escapeCsv(header.getData()?.toString())
-    })
+    }
+    csvBuilder.appendLine(headerRow)
 
-    // Append Data Rows
+    // 2. Append Data Rows
     for (rowCells in filteredCellData) {
-        csvBuilder.appendLine(rowCells.joinToString(",") { cell ->
+        val rowString = rowCells.joinToString(",") { cell ->
             val data = cell.getData()
+
             val stringValue = when (data) {
-                is LocalDate -> data.format(csvDateFormatter) // Format date for CSV
-                else -> data?.toString() // Default toString for others (String, Int, etc.)
+                is Timestamp -> {
+                    csvDateFormatter.format(data.toDate())
+                }
+
+                else -> {
+                    data?.toString() ?: ""
+                }
             }
             escapeCsv(stringValue)
-        })
+        }
+        csvBuilder.appendLine(rowString)
     }
     return csvBuilder.toString()
 }

@@ -68,6 +68,8 @@ class HistoryViewModel() : ViewModel() {
         vegetable: String?,
         minWeight: Float?,
         maxWeight: Float?,
+        startDate: Long?,
+        endDate: Long?,
         allText: String
     ) {
         val userFilter = if (user.isNullOrBlank() || user == allText) null else user
@@ -77,7 +79,9 @@ class HistoryViewModel() : ViewModel() {
             user = userFilter,
             vegetable = vegFilter,
             minWeight = minWeight,
-            maxWeight = maxWeight
+            maxWeight = maxWeight,
+            startDateMillis = startDate,
+            endDateMillis = endDate
         )
     }
 
@@ -115,6 +119,8 @@ class HistoryViewModel() : ViewModel() {
         val user: String? = null,
         val vegetable: String? = null,
         val minWeight: Float? = null,
-        val maxWeight: Float? = null
+        val maxWeight: Float? = null,
+        val startDateMillis: Long? = null,
+        val endDateMillis: Long? = null
     )
 }
