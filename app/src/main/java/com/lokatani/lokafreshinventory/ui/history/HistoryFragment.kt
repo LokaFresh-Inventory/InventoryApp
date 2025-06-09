@@ -139,7 +139,6 @@ class HistoryFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_filter -> {
-                        // JUST show the sheet. Do not try to access its views.
                         FilterBottomSheet().show(parentFragmentManager, FilterBottomSheet.TAG)
                         true
                     }
@@ -149,7 +148,7 @@ class HistoryFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        tableView = binding.tableview
+        tableView = binding.tableView
         setupTableView()
 
         binding.apply {
@@ -175,7 +174,7 @@ class HistoryFragment : Fragment() {
             when (result) {
                 is Result.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
-                    binding.tableview.visibility = View.GONE
+                    binding.tableView.visibility = View.GONE
                     binding.tvEmptyTable.visibility = View.GONE
                 }
 
@@ -188,9 +187,9 @@ class HistoryFragment : Fragment() {
 
                 is Result.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    binding.tableview.visibility = View.GONE
+                    binding.tableView.visibility = View.GONE
                     binding.tvEmptyTable.visibility = View.VISIBLE
-                    binding.tvEmptyTable.text = result.error // Show error message
+                    binding.tvEmptyTable.text = result.error
                     Toast.makeText(requireContext(), "Error: ${result.error}", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -205,7 +204,6 @@ class HistoryFragment : Fragment() {
     }
 
     private fun applyAllFilters() {
-        // Get the current filter state from the ViewModel
         val filterState = viewModel.currentFilterState.value ?: return
 
         // Get the complete list of data
@@ -239,11 +237,11 @@ class HistoryFragment : Fragment() {
 
             toBeExportedData = tableViewModel.getCellList().map { row -> ArrayList(row) }
 
-            binding.tableview.visibility = View.VISIBLE
+            binding.tableView.visibility = View.VISIBLE
             binding.tvEmptyTable.visibility = View.GONE
         } else {
             tableViewAdapter.setAllItems(emptyList(), emptyList(), emptyList()) // Clear the table
-            binding.tableview.visibility = View.GONE
+            binding.tableView.visibility = View.GONE
             binding.tvEmptyTable.visibility = View.VISIBLE
             toBeExportedData = emptyList()
         }
@@ -354,7 +352,7 @@ class HistoryFragment : Fragment() {
         val filteredCellDataToExport: List<List<Cell>> = toBeExportedData
 
         if (filteredCellDataToExport.isEmpty()) {
-            if (tableViewModel.getCellList().isEmpty()) { // Check if original was empty
+            if (tableViewModel.getCellList().isEmpty()) {
                 Toast.makeText(requireContext(), "No data available to export", Toast.LENGTH_SHORT)
                     .show()
             } else {

@@ -22,7 +22,7 @@ object DateUtils {
     fun timeStamp(): String {
 
         val timeStamp = Timestamp(System.currentTimeMillis())
-        val sdf = SimpleDateFormat("HH:mm")
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
         val time = sdf.format(Date(timeStamp.time))
 
         return time.toString()

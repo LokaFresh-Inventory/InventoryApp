@@ -23,6 +23,7 @@ import com.lokatani.lokafreshinventory.databinding.FragmentHomeBinding
 import com.lokatani.lokafreshinventory.ui.chatbot.ChatbotActivity
 import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
+import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -118,13 +119,18 @@ class HomeFragment : Fragment() {
 
         // Update Bayam Merah Card
         val bayamMerahTotalWeight = totalWeights["Bayam Merah"] ?: 0
-        binding.layoutItemBayamMerah.tvItemValue.text = getString(R.string.gram, "$bayamMerahTotalWeight")
+        binding.layoutItemBayamMerah.tvItemValue.text =
+            getString(R.string.gram, "$bayamMerahTotalWeight")
         binding.layoutItemBayamMerah.ivItemImage.setImageResource(R.drawable.bayam_merah_landscape)
 
         // Update Last Input Card
         if (lastInput != null) {
-            val date = lastInput.date
-            val lastInputText = "${lastInput.vegResult}: ${lastInput.vegWeight} gram ($date)"
+            // Format the Timestamp for display
+            val displayDate = lastInput.date?.let { timestamp ->
+                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(timestamp.toDate())
+            } ?: "Unknown Date"
+
+            val lastInputText = "${lastInput.vegResult}: ${lastInput.vegWeight} gram ($displayDate)"
             binding.layoutItemLastInput.tvItemValue.text = lastInputText
             binding.layoutItemLastInput.ivItemImage.setImageResource(R.drawable.stopwatch)
         } else {

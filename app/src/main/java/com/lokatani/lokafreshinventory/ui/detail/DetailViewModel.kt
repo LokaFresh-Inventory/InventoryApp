@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Timestamp
 import com.lokatani.lokafreshinventory.data.FirestoreRepository
 import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class DetailViewModel(
         user: String,
         vegResult: String,
         vegWeight: Int,
-        date: String
+        date: Timestamp
     ) {
         val result = ScanResult(
             user = user,

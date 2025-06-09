@@ -4,13 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
 import com.evrencoskun.tableview.sort.SortState
 import com.lokatani.lokafreshinventory.R
-import com.lokatani.lokafreshinventory.utils.tableview.holder.ColumnHeaderViewHolder // Import your ColumnHeaderViewHolder
+import com.lokatani.lokafreshinventory.utils.tableview.holder.CellViewHolder
+import com.lokatani.lokafreshinventory.utils.tableview.holder.ColumnHeaderViewHolder
+import com.lokatani.lokafreshinventory.utils.tableview.holder.RowHeaderViewHolder
 import com.lokatani.lokafreshinventory.utils.tableview.model.Cell
 import com.lokatani.lokafreshinventory.utils.tableview.model.ColumnHeader
 import com.lokatani.lokafreshinventory.utils.tableview.model.RowHeader
@@ -19,19 +19,6 @@ class TableViewAdapter : AbstractTableAdapter<ColumnHeader, RowHeader, Cell>() {
 
     companion object {
         private val LOG_TAG = TableViewAdapter::class.java.simpleName
-    }
-
-    // Single Cell ViewHolder for all text-based cells
-    class CellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
-        val cellContainer: LinearLayout = itemView.findViewById(R.id.cell_container)
-        val cellTextView: TextView = itemView.findViewById(R.id.cell_data)
-
-        fun setCell(cell: Cell?) {
-            cellTextView.text = cell?.getData().toString()
-            // It's necessary to remeasure itself for auto-sizing
-            cellContainer.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
-            cellTextView.requestLayout()
-        }
     }
 
     override fun onCreateCellViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
@@ -75,10 +62,6 @@ class TableViewAdapter : AbstractTableAdapter<ColumnHeader, RowHeader, Cell>() {
     ) {
         val columnHeaderViewHolder = holder as ColumnHeaderViewHolder
         columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel)
-    }
-
-    class RowHeaderViewHolder(itemView: View) : AbstractViewHolder(itemView) {
-        val rowHeaderTextView: TextView = itemView.findViewById(R.id.row_header_textview)
     }
 
     override fun onCreateRowHeaderViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {

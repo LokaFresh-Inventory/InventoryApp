@@ -28,7 +28,6 @@ fun generateCsvString(
     filteredCellData: List<List<Cell>> // This is List<List<Cell>> from tableView.getFilteredList()
 ): String {
     val csvBuilder = StringBuilder()
-    // Define the date formatter for CSV output (e.g., YYYY-MM-DD is good for compatibility)
     val csvDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
 
     // Append Header Row
@@ -42,7 +41,6 @@ fun generateCsvString(
             val data = cell.getData()
             val stringValue = when (data) {
                 is LocalDate -> data.format(csvDateFormatter) // Format date for CSV
-                // Add more custom formatting for other types if needed (e.g., numbers)
                 else -> data?.toString() // Default toString for others (String, Int, etc.)
             }
             escapeCsv(stringValue)

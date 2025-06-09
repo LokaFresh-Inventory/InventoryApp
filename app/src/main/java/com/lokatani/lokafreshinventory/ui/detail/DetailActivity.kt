@@ -5,15 +5,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityDetailBinding
 import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -55,19 +53,19 @@ class DetailActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val currentDate = getCurrentDate()
+        val currentTimestamp = Timestamp.now()
 
         binding.apply {
             tvVegType.text = vegResult
             tvVegWeight.text = getString(R.string.gram, vegWeight)
-            tvDate.text = currentDate
+            tvDate.text = currentTimestamp.toString()
 
             buttonSave.setOnClickListener {
                 detailViewModel.insertResult(
                     user = currentUser ?: "No User",
                     vegResult = vegResult.toString(),
                     vegWeight = vegWeight.toString().toInt(),
-                    date = currentDate
+                    date = currentTimestamp
                 )
                 val intent = Intent(this@DetailActivity, ScanActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -82,12 +80,6 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun getCurrentDate(): String {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val date = Date()
-        return dateFormat.format(date)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -1,6 +1,5 @@
 package com.lokatani.lokafreshinventory.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,12 +8,8 @@ import com.lokatani.lokafreshinventory.data.FirestoreRepository
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.remote.firebase.ScanResult
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Locale
 
 class HomeViewModel(
     private val firestoreRepository: FirestoreRepository
@@ -72,42 +67,26 @@ class HomeViewModel(
 
     private fun processForMonthlyChart(scans: List<ScanResult>): Map<String, Map<String, Int>> {
         val monthlyAggregations = mutableMapOf<YearMonth, MutableMap<String, Int>>()
-        val inputFormat1 = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val inputFormat2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
         for (scan in scans) {
             val vegType = scan.vegResult
             val vegWeight = scan.vegWeight
-            val dateString = scan.date
+            val timestamp = scan.date
 
-            if (vegType.isBlank() || dateString.isBlank()) continue
+            if (vegType.isBlank() || timestamp == null) continue
 
-            var yearMonth: YearMonth? = null
+            // Convert Timestamp to YearMonth
+            val calendar = Calendar.getInstance()
+            calendar.time = timestamp.toDate()
+            val yearMonth = YearMonth.of(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1
+            )
 
-            try {
-                val date = inputFormat1.parse(dateString)
-                if (date != null) {
-                    val calendar = Calendar.getInstance()
-                    calendar.time = date
-                    yearMonth =
-                        YearMonth.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1)
-                }
-            } catch (e: Exception) {
-                try {
-                    val localDateTime = LocalDateTime.parse(dateString, inputFormat2)
-                    yearMonth = YearMonth.from(localDateTime)
-                } catch (e: Exception) {
-                    Log.e("HomeViewModel", "Failed to parse date: $dateString", e)
-                }
-            }
-
-            if (yearMonth != null) {
-                monthlyAggregations
-                    .getOrPut(yearMonth) { mutableMapOf() }
-                    .merge(vegType, vegWeight, Int::plus)
-            }
+            monthlyAggregations
+                .getOrPut(yearMonth) { mutableMapOf() }
+                .merge(vegType, vegWeight, Int::plus)
         }
-
         return monthlyAggregations.mapKeys { it.key.toString() }
     }
 
