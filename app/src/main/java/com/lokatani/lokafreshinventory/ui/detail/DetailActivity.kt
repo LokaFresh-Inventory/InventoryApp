@@ -12,6 +12,8 @@ import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityDetailBinding
 import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -23,7 +25,10 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private var vegResult: String? = null
-    private var vegWeight: String? = null
+    private var vegWeight: Int = 0
+
+    private val displayDateFormatter =
+        SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +42,9 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setTitle(R.string.scan_result)
 
         vegResult = intent.getStringExtra(EXTRA_RESULT)
-        vegWeight = intent.getStringExtra(EXTRA_WEIGHT)
+        vegWeight = intent.getIntExtra(EXTRA_WEIGHT, 0)
 
         currentUser = Firebase.auth.currentUser?.email
-
-        if (vegWeight == null) {
-            vegWeight = "0"
-        }
 
         if (vegResult == null) {
             vegResult = "No Item"
@@ -57,14 +58,14 @@ class DetailActivity : AppCompatActivity() {
 
         binding.apply {
             tvVegType.text = vegResult
-            tvVegWeight.text = getString(R.string.gram, vegWeight)
-            tvDate.text = currentTimestamp.toString()
+            tvVegWeight.text = getString(R.string.gram, vegWeight.toString())
+            tvDate.text = displayDateFormatter.format(currentTimestamp.toDate())
 
             buttonSave.setOnClickListener {
                 detailViewModel.insertResult(
                     user = currentUser ?: "No User",
                     vegResult = vegResult.toString(),
-                    vegWeight = vegWeight.toString().toInt(),
+                    vegWeight = vegWeight,
                     date = currentTimestamp
                 )
                 val intent = Intent(this@DetailActivity, ScanActivity::class.java)

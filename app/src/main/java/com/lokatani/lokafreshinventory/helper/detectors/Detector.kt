@@ -3,6 +3,7 @@ package com.lokatani.lokafreshinventory.helper.detectors
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
+import androidx.core.graphics.scale
 import com.lokatani.lokafreshinventory.customview.BoundingBox
 import com.lokatani.lokafreshinventory.helper.MetaData
 import com.lokatani.lokafreshinventory.helper.MetaData.extractNamesFromLabelFile
@@ -119,7 +120,7 @@ class Detector(
 
         var inferenceTime = SystemClock.uptimeMillis()
 
-        val resizedBitmap = Bitmap.createScaledBitmap(frame, tensorWidth, tensorHeight, false)
+        val resizedBitmap = frame.scale(tensorWidth, tensorHeight, false)
 
         val tensorImage = TensorImage(INPUT_IMAGE_TYPE)
         tensorImage.load(resizedBitmap)

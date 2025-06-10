@@ -63,14 +63,25 @@
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
     <com.google.android.material.materialswitch.MaterialSwitch
-        android:id="@+id/switch_is_gpu"
+        android:id="@+id/switch_delegate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:textOff="@string/cpu"
-        android:textOn="@string/gpu"
+        android:checked="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scan_info" />
+
+    <TextView
+        android:id="@+id/tv_switch_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gpu"
+        android:textColor="@color/dark_green"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/switch_delegate"
+        app:layout_constraintStart_toStartOf="@id/switch_delegate"
+        app:layout_constraintTop_toBottomOf="@+id/switch_delegate" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/progress_card"
