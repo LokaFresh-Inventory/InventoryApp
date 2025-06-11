@@ -1,7 +1,8 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.LokaFreshInventory" parent="Theme.Material3Expressive.Light.NoActionBar">
-
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorSurface">@color/white</item>
     </style>
 
     <style name="TopCornerChange" parent="ShapeAppearance.Material3.MediumComponent">

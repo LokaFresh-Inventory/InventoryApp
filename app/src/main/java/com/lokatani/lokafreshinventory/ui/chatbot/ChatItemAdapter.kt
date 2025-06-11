@@ -1,9 +1,13 @@
 package com.lokatani.lokafreshinventory.ui.chatbot
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.lokatani.lokafreshinventory.R
@@ -16,17 +20,15 @@ class ChatItemAdapter : RecyclerView.Adapter<ChatItemAdapter.ChatViewHolder>() {
     var chatList = mutableListOf<Chat>()
 
     inner class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            itemView.setOnClickListener {
-                notifyItemChanged(adapterPosition)
-            }
-        }
+        val cvUserChat: MaterialCardView = itemView.findViewById(R.id.cv_user_chat)
+        val cvBotChat: MaterialCardView = itemView.findViewById(R.id.cv_bot_chat)
+        val tvUserChat: TextView = itemView.findViewById(R.id.tv_user_chat)
+        val tvBotChat: TextView = itemView.findViewById(R.id.tv_bot_chat)
+        val tvUserChatTime: TextView = itemView.findViewById(R.id.tv_user_chat_time)
+        val tvBotChatTime: TextView = itemView.findViewById(R.id.tv_bot_chat_time)
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ChatViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         return ChatViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.chat_item, parent, false)
         )
@@ -39,34 +41,62 @@ class ChatItemAdapter : RecyclerView.Adapter<ChatItemAdapter.ChatViewHolder>() {
         holder.itemView.apply {
             val displayMetrics = context.resources.displayMetrics
             val maxWidth = (displayMetrics.widthPixels * 0.75).toInt() // 75% of screen
-            val cvUserChat = findViewById<MaterialCardView>(R.id.cv_user_chat)
-            val cvBotChat = findViewById<MaterialCardView>(R.id.cv_bot_chat)
-            val tvUserChat = findViewById<TextView>(R.id.tv_user_chat)
-            val tvBotChat = findViewById<TextView>(R.id.tv_bot_chat)
-            val tvUserChatTime = findViewById<TextView>(R.id.tv_user_chat_time)
-            val tvBotChatTime = findViewById<TextView>(R.id.tv_bot_chat_time)
 
-            tvUserChat.maxWidth = maxWidth
-            tvBotChat.maxWidth = maxWidth
+            holder.tvUserChat.maxWidth = maxWidth
+            holder.tvBotChat.maxWidth = maxWidth
 
             val currentChat = chatList[position]
             val markwon = Markwon.create(context)
 
             when (currentChat.role) {
                 USER -> {
-                    cvUserChat.visibility = View.VISIBLE
-                    cvBotChat.visibility = View.GONE
-                    tvUserChat.text = currentChat.message
-                    tvUserChatTime.text = currentChat.time
-                    markwon.setMarkdown(tvUserChat, currentChat.message)
+                    holder.apply {
+                        cvUserChat.visibility = View.VISIBLE
+                        cvBotChat.visibility = View.GONE
+                        tvUserChat.text = currentChat.message
+                        tvUserChatTime.text = currentChat.time
+                        markwon.setMarkdown(tvUserChat, currentChat.message)
+
+                        tvUserChat.setOnLongClickListener {
+                            cvUserChat.isPressed = true
+                            val clipboard =
+                                holder.itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText("chat_message", currentChat.message)
+                            clipboard.setPrimaryClip(clip)
+                            Toast.makeText(
+                                holder.itemView.context,
+                                "Text copied",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            cvUserChat.isPressed = false
+                            true
+                        }
+                    }
                 }
 
                 BOT -> {
-                    cvBotChat.visibility = View.VISIBLE
-                    cvUserChat.visibility = View.GONE
-                    tvBotChat.text = currentChat.message
-                    tvBotChatTime.text = currentChat.time
-                    markwon.setMarkdown(tvBotChat, currentChat.message)
+                    holder.apply {
+                        cvBotChat.visibility = View.VISIBLE
+                        cvUserChat.visibility = View.GONE
+                        tvBotChat.text = currentChat.message
+                        tvBotChatTime.text = currentChat.time
+                        markwon.setMarkdown(tvBotChat, currentChat.message)
+
+                        tvBotChat.setOnLongClickListener {
+                            cvBotChat.isPressed = true
+                            val clipboard =
+                                holder.itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText("chat_message", currentChat.message)
+                            clipboard.setPrimaryClip(clip)
+                            Toast.makeText(
+                                holder.itemView.context,
+                                "Text copied",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            cvBotChat.isPressed = false
+                            true
+                        }
+                    }
                 }
             }
         }

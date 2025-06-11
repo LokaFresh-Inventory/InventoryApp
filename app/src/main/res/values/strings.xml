@@ -12,8 +12,6 @@
     <string name="don_t_have_an_account">Don’t have an account yet?</string>
     <string name="already_have_an_account">Already Have an Account?</string>
     <string name="history">History</string>
-    <string name="button_chatbot">button_chatbot</string>
-    <string name="data">Data</string>
     <string name="analysis">Analysis</string>
     <string name="weight">Weight:</string>
     <string name="click_to_capture">Capture Photo</string>
@@ -31,7 +29,6 @@
     <string name="logout">Logout</string>
     <string name="placeholder">Placeholder</string>
     <string name="no_history_detected">No History Detected</string>
-    <string name="type">Type:</string>
     <string name="prediction_kale">%1$d KG</string>
     <string name="prediction_bayam_merah">%1$d KG</string>
     <string name="select_prediction_date">Select Prediction Date</string>
@@ -86,4 +83,12 @@
     <string name="no_recent_input">No recent input</string>
     <string name="pick_date_to_filter">Pick Date to Filter</string>
     <string name="range_item_value">%1$s - %2$s</string>
+    <string name="loading_data">Loading Data…</string>
+    <string name="chatbot_opening">Ask me about anything related to LokaFresh Inventory Database . Click the Help Button (?) above for examples</string>
+    <string name="welcome_to_chatbot">Welcome to Chatbot</string>
+    <string name="chatbot_help_message">Here you can ask questions about your inventory in plain language. You can ask for summaries, totals, or data from specific users and dates</string>
+    <string name="example_tooltip">Below are some example of question you can ask:</string>
+    <string name="input_state_for_the_last_month">Bagaimana perkembangan input sayuran selama satu bulan terakhir?</string>
+    <string name="total_input_by_x_user">Berapa jumlah input Bayam Merah oleh user WH3 pada tanggal 1 Januari 2025?</string>
+    <string name="help">Help</string>
 </resources>

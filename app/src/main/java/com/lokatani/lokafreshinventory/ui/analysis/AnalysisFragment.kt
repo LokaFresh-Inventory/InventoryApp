@@ -3,12 +3,18 @@ package com.lokatani.lokafreshinventory.ui.analysis
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
@@ -45,6 +51,23 @@ class AnalysisFragment : Fragment() {
 
         (activity as AppCompatActivity).setSupportActionBar(binding.myToolbar)
         (activity as AppCompatActivity).supportActionBar?.title = "Prediction Analysis"
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.help_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_help -> {
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onResume() {

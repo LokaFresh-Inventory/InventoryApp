@@ -1,8 +1,6 @@
 package com.lokatani.lokafreshinventory.utils
 
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 object DateUtils {
@@ -17,14 +15,5 @@ object DateUtils {
         }
 
         return outputFormat.format(date!!)
-    }
-
-    fun timeStamp(): String {
-
-        val timeStamp = Timestamp(System.currentTimeMillis())
-        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val time = sdf.format(Date(timeStamp.time))
-
-        return time.toString()
     }
 }

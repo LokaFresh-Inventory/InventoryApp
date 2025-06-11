@@ -5,6 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@android:color/transparent"
     tools:context=".ui.chatbot.ChatbotActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,8 +30,8 @@
         android:id="@+id/cv_opening"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="6dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         app:cardBackgroundColor="@color/light_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
@@ -44,9 +46,19 @@
             android:maxWidth="240dp"
             android:paddingHorizontal="8dp"
             android:paddingTop="8dp"
-            android:paddingBottom="12dp"
-            android:text="Ask me about anything related to LokaFresh Inventory Database."
+            android:paddingBottom="24dp"
+            android:text="@string/chatbot_opening"
             android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_opening_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:padding="4dp"
+            android:text="@string/time_placeholder"
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -57,7 +69,8 @@
         android:contentDescription="@string/chats"
         app:layout_constraintBottom_toTopOf="@+id/progress_bar"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintVertical_bias="0"
+        tools:layout_editor_absoluteX="0dp" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_bar"
@@ -102,8 +115,8 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_margin="8dp"
+        android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
         android:hint="@string/ask"
         app:boxStrokeColor="@color/theme_green"
@@ -126,16 +139,21 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_send"
-        style="@style/Widget.Material3.Button.IconButton"
+        style="@style/Widget.Material3Expressive.Button.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/pale_green"
         android:contentDescription="@string/send_chat"
-        android:enabled="false"
+        android:visibility="gone"
         app:icon="@drawable/baseline_send_24"
-        app:iconSize="28dp"
-        app:iconTint="@color/button_color_state"
+        app:iconGravity="textStart"
+        app:iconSize="32dp"
+        app:iconTint="@color/dark_green"
         app:layout_constraintBottom_toBottomOf="@+id/til_chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/til_chat"
-        app:layout_constraintTop_toTopOf="@id/til_chat" />
+        app:layout_constraintTop_toTopOf="@id/til_chat"
+        app:layout_constraintVertical_bias="1"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

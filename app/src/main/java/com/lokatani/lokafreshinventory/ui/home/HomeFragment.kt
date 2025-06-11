@@ -23,6 +23,7 @@ import com.lokatani.lokafreshinventory.databinding.FragmentHomeBinding
 import com.lokatani.lokafreshinventory.ui.chatbot.ChatbotActivity
 import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -46,6 +47,8 @@ class HomeFragment : Fragment() {
     )
     private var colorIndex = 0 // Start to cycle through list of colors
 
+    private val numberFormatter = NumberFormat.getNumberInstance(Locale("in", "ID"))
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,6 +67,9 @@ class HomeFragment : Fragment() {
             layoutItemKale.tvItemName.text = getString(R.string.kale)
             layoutItemBayamMerah.tvItemName.text = getString(R.string.bayam_merah)
             layoutItemLastInput.tvItemName.text = getString(R.string.last_input)
+            layoutItemKale.ivItemImage.setImageResource(R.drawable.kale_landscape)
+            layoutItemBayamMerah.ivItemImage.setImageResource(R.drawable.bayam_merah_landscape)
+            layoutItemLastInput.ivItemImage.setImageResource(R.drawable.stopwatch)
 
             btnChatbot.setOnClickListener {
                 startActivity(Intent(requireContext(), ChatbotActivity::class.java))
@@ -113,26 +119,24 @@ class HomeFragment : Fragment() {
 
     private fun updateSummaryCards(totalWeights: Map<String, Int>, lastInput: ScanResult?) {
         // Update Kale Card
-        val kaleTotalWeight = totalWeights["Kale"] ?: 0 // Default to 0 if not present
-        binding.layoutItemKale.tvItemValue.text = getString(R.string.gram, "$kaleTotalWeight")
-        binding.layoutItemKale.ivItemImage.setImageResource(R.drawable.kale_landscape)
+        val kaleTotalWeight = numberFormatter.format(totalWeights["Kale"] ?: 0)
+        binding.layoutItemKale.tvItemValue.text = getString(R.string.gram, kaleTotalWeight)
 
         // Update Bayam Merah Card
-        val bayamMerahTotalWeight = totalWeights["Bayam Merah"] ?: 0
+        val bayamMerahTotalWeight = numberFormatter.format(totalWeights["Bayam Merah"] ?: 0)
         binding.layoutItemBayamMerah.tvItemValue.text =
-            getString(R.string.gram, "$bayamMerahTotalWeight")
-        binding.layoutItemBayamMerah.ivItemImage.setImageResource(R.drawable.bayam_merah_landscape)
+            getString(R.string.gram, bayamMerahTotalWeight)
 
         // Update Last Input Card
         if (lastInput != null) {
             // Format the Timestamp for display
             val displayDate = lastInput.date?.let { timestamp ->
-                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(timestamp.toDate())
+                SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(timestamp.toDate())
             } ?: "Unknown Date"
-
-            val lastInputText = "${lastInput.vegResult}: ${lastInput.vegWeight} gram ($displayDate)"
+            val lastInputVegetable = lastInput.vegResult
+            val lastInputWeight = numberFormatter.format(lastInput.vegWeight)
+            val lastInputText = "${lastInputVegetable}: $lastInputWeight gram ($displayDate)"
             binding.layoutItemLastInput.tvItemValue.text = lastInputText
-            binding.layoutItemLastInput.ivItemImage.setImageResource(R.drawable.stopwatch)
         } else {
             binding.layoutItemLastInput.tvItemValue.text = getString(R.string.no_recent_input)
         }

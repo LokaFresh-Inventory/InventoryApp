@@ -58,9 +58,6 @@ class ChatbotActivity : AppCompatActivity() {
                             View.inflate(this@ChatbotActivity, R.layout.chatbot_help, null)
 
                         val helpDialog = MaterialAlertDialogBuilder(this@ChatbotActivity)
-                            .setTitle("Welcome to Chatbot")
-                            .setIcon(R.drawable.outline_robot_24)
-                            .setMessage("Here you can prompt to get a summary of data you want from the database using human question")
                             .setView(helpDialogView)
                             .show()
 
@@ -92,10 +89,15 @@ class ChatbotActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        getCurrentHour()
         binding.apply {
             edChat.doAfterTextChanged { text ->
                 val prompt = text.toString().trim()
-                btnSend.isEnabled = prompt.isNotEmpty()
+                if (prompt.isNotEmpty()) {
+                    btnSend.visibility = View.VISIBLE
+                } else {
+                    btnSend.visibility = View.GONE
+                }
             }
 
             btnSend.setOnClickListener {
@@ -103,15 +105,23 @@ class ChatbotActivity : AppCompatActivity() {
                 val prompt = edChat.text.toString().trim()
                 sendChatPrompt(prompt)
             }
+
+            tvOpeningTime.text = getCurrentHour()
         }
     }
 
-    private fun sendChatPrompt(prompt: String) {
+    private fun getCurrentHour(): String {
         val timestamp = Timestamp.now()
-        val convertedTimestamp: String =
+        val currentHour: String =
             SimpleDateFormat("HH:mm", Locale.getDefault()).format(timestamp.toDate())
+
+        return currentHour
+    }
+
+    private fun sendChatPrompt(prompt: String) {
+        val currentHour = getCurrentHour()
         binding.apply {
-            adapter.insertChat(Chat(prompt, USER, convertedTimestamp))
+            adapter.insertChat(Chat(prompt, USER, currentHour))
             rvChatbot.scrollToPosition(adapter.itemCount - 1)
             edChat.setText("")
 
@@ -126,7 +136,7 @@ class ChatbotActivity : AppCompatActivity() {
                         is Result.Success -> {
                             showLoading(false)
                             val resultData = result.data.output.orEmpty()
-                            adapter.insertChat(Chat(resultData, BOT, convertedTimestamp))
+                            adapter.insertChat(Chat(resultData, BOT, currentHour))
                             rvChatbot.scrollToPosition(adapter.itemCount - 1)
                         }
 

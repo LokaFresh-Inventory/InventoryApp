@@ -27,7 +27,7 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@android:color/transparent"
         app:itemIconTint="@color/navbar_icon_color_state"
-        app:itemTextColor="@color/dark_green"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
 </LinearLayout>
