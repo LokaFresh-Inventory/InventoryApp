@@ -54,7 +54,7 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, users)
             binding.actvUser.setAdapter(userAdapter)
             val currentUserFilter = historyViewModel.currentFilterState.value?.user
-            binding.actvUser.setText(currentUserFilter ?: "All", false)
+            binding.actvUser.setText(currentUserFilter ?: getString(R.string.all), false)
         }
 
         historyViewModel.vegetableListForFilter.observe(viewLifecycleOwner) { vegetables ->
@@ -65,7 +65,7 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
             )
             binding.actvVegetable.setAdapter(vegAdapter)
             val currentVegFilter = historyViewModel.currentFilterState.value?.vegetable
-            binding.actvVegetable.setText(currentVegFilter ?: "All", false)
+            binding.actvVegetable.setText(currentVegFilter ?: getString(R.string.all), false)
         }
 
         val currentMin =
@@ -112,7 +112,7 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
         val weightValues = binding.sliderWeight.values
         minWeightFilter = weightValues[0]
         maxWeightFilter = weightValues[1]
-        val allText = "All"
+        val allText = getString(R.string.all)
 
         historyViewModel.applyFilters(
             selectedUser,
@@ -134,7 +134,7 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
 
         binding.etDate.setOnClickListener {
             val datePickerBuilder = MaterialDatePicker.Builder.dateRangePicker()
-                .setTitleText("Select Date Range")
+                .setTitleText(getString(R.string.select_date_range))
 
             if (startDate != null && endDate != null) {
                 datePickerBuilder.setSelection(androidx.core.util.Pair(startDate, endDate))
@@ -172,7 +172,7 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setupResetButton() {
-        val allText = "All"
+        val allText = getString(R.string.all)
         binding.apply {
             btnResetUser.setOnClickListener {
                 val selectedVegetable = binding.actvVegetable.text.toString()

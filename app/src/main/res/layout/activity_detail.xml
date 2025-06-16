@@ -63,6 +63,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
                             android:layout_marginBottom="4dp"
                             android:text="@string/vegetable_type"
                             android:textSize="24sp"
@@ -72,6 +73,7 @@
                             android:id="@+id/tv_veg_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
                             android:text="@string/no_data"
                             android:textSize="18sp" />
 

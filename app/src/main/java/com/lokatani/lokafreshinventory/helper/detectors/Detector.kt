@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
 import androidx.core.graphics.scale
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.customview.BoundingBox
 import com.lokatani.lokafreshinventory.helper.MetaData
 import com.lokatani.lokafreshinventory.helper.MetaData.extractNamesFromLabelFile
@@ -58,7 +59,7 @@ class Detector(
         labels.addAll(extractNamesFromMetadata(model))
         if (labels.isEmpty()) {
             if (labelPath == null) {
-                message("Model not contains metadata, provide LABELS_PATH in Constants.kt")
+                message(context.getString(R.string.model_not_contains_metadata_provide_labels_path_in_constants_kt))
                 labels.addAll(MetaData.TEMP_CLASSES)
             } else {
                 labels.addAll(extractNamesFromLabelFile(context, labelPath))

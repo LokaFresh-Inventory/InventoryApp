@@ -98,7 +98,10 @@ class HistoryFragment : Fragment() {
                         }
                     }
                 } else {
-                    Toast.makeText(requireContext(), "File saving cancelled", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.file_saving_cancelled), Toast.LENGTH_SHORT
+                    )
                         .show()
                     csvContentToSave = null
                     suggestedCsvFileName = null
@@ -110,13 +113,13 @@ class HistoryFragment : Fragment() {
                 if (isGranted) {
                     Toast.makeText(
                         requireContext(),
-                        "Notification permission granted. Future exports will notify.",
+                        getString(R.string.notification_permission_granted_future_exports_will_notify),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Notification permission denied. Please grant notification permission to see export status.",
+                        getString(R.string.notification_permission_denied_please_grant_notification_permission_to_see_export_status),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -130,7 +133,7 @@ class HistoryFragment : Fragment() {
         factory = ViewModelFactory.getInstance()
 
         (activity as AppCompatActivity).setSupportActionBar(binding.dataToolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "History Data"
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.history_data)
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -208,7 +211,10 @@ class HistoryFragment : Fragment() {
                     binding.tableView.visibility = View.GONE
                     binding.tvEmptyTable.visibility = View.VISIBLE
                     binding.tvEmptyTable.text = result.error
-                    Toast.makeText(requireContext(), "Error: ${result.error}", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.error_message, result.error), Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -340,7 +346,7 @@ class HistoryFragment : Fragment() {
                 )
                 Toast.makeText(
                     requireContext(),
-                    "Please grant notification permission to see export status.",
+                    getString(R.string.please_grant_notification_permission_to_see_export_status),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -348,7 +354,10 @@ class HistoryFragment : Fragment() {
             NotificationManagerCompat.from(requireContext())
                 .notify(EXPORT_NOTIFICATION_ID, builder.build())
         }
-        Toast.makeText(requireContext(), "Data exported. Check notification.", Toast.LENGTH_LONG)
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.data_exported_check_notification), Toast.LENGTH_LONG
+        )
             .show()
     }
 
@@ -377,7 +386,10 @@ class HistoryFragment : Fragment() {
 
     private fun exportFilteredDataToCsv() {
         if (!::tableViewModel.isInitialized) {
-            Toast.makeText(requireContext(), "Data has not been loaded yet.", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.data_has_not_been_loaded_yet), Toast.LENGTH_SHORT
+            )
                 .show()
             return
         }
@@ -385,7 +397,10 @@ class HistoryFragment : Fragment() {
         // 1. Get Column Headers
         val columnHeaders = tableViewModel.getColumnHeaderList()
         if (columnHeaders.isEmpty()) {
-            Toast.makeText(requireContext(), "No header data to export", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_header_data_to_export), Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -394,12 +409,15 @@ class HistoryFragment : Fragment() {
 
         if (filteredCellDataToExport.isEmpty()) {
             if (tableViewModel.getCellList().isEmpty()) {
-                Toast.makeText(requireContext(), "No data available to export", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.no_data_available_to_export), Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "No data matches the current filters to export",
+                    getString(R.string.no_data_matches_the_current_filters_to_export),
                     Toast.LENGTH_SHORT
                 ).show()
             }

@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.data.Result
 import com.lokatani.lokafreshinventory.data.remote.response.PredictResponse
@@ -50,7 +51,8 @@ class AnalysisFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as AppCompatActivity).setSupportActionBar(binding.myToolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "Prediction Analysis"
+        (activity as AppCompatActivity).supportActionBar?.title =
+            getString(R.string.prediction_analysis)
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -61,6 +63,9 @@ class AnalysisFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_help -> {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setView(R.layout.analysis_help)
+                            .show()
                         true
                     }
 
@@ -76,7 +81,7 @@ class AnalysisFragment : Fragment() {
         binding.apply {
             btnPredictDate.setOnClickListener {
                 val datePicker = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select Prediction Date")
+                    .setTitleText(getString(R.string.select_prediction_date))
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                     .build()
                 datePicker.show(childFragmentManager, "DATE_PICKER")
@@ -101,11 +106,11 @@ class AnalysisFragment : Fragment() {
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> {
-                            Log.d("PREDICTION", "Loading")
+                            Log.d("PREDICTION", getString(R.string.loading))
                         }
 
                         is Result.Success<*> -> {
-                            Log.d("PREDICTION", "Success")
+                            Log.d("PREDICTION", getString(R.string.success))
                             val predictionResult = result.data as PredictResponse
                             val predictionFirst = predictionResult.kale ?: 0
                             val predictionSecond = predictionResult.bayamMerah ?: 0
@@ -119,10 +124,10 @@ class AnalysisFragment : Fragment() {
 
                         is Result.Error -> {
                             view?.let {
-                                Log.d(TAG, "Error")
+                                Log.d(TAG, getString(R.string.error))
                                 Toast.makeText(
                                     requireContext(),
-                                    "Error Analysing Data",
+                                    getString(R.string.error_analysing_data),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }

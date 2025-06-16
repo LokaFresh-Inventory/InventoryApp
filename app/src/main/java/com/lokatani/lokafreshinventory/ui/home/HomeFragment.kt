@@ -109,7 +109,7 @@ class HomeFragment : Fragment() {
                     binding.tvNoChartData.visibility = View.VISIBLE
                     Toast.makeText(
                         activity,
-                        "Error loading chart data: ${result.error}",
+                        getString(R.string.error_loading_chart_data, result.error),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -119,11 +119,12 @@ class HomeFragment : Fragment() {
 
     private fun updateSummaryCards(totalWeights: Map<String, Int>, lastInput: ScanResult?) {
         // Update Kale Card
-        val kaleTotalWeight = numberFormatter.format(totalWeights["Kale"] ?: 0)
+        val kaleTotalWeight = numberFormatter.format(totalWeights[getString(R.string.kale)] ?: 0)
         binding.layoutItemKale.tvItemValue.text = getString(R.string.gram, kaleTotalWeight)
 
         // Update Bayam Merah Card
-        val bayamMerahTotalWeight = numberFormatter.format(totalWeights["Bayam Merah"] ?: 0)
+        val bayamMerahTotalWeight =
+            numberFormatter.format(totalWeights[getString(R.string.bayam_merah)] ?: 0)
         binding.layoutItemBayamMerah.tvItemValue.text =
             getString(R.string.gram, bayamMerahTotalWeight)
 
@@ -132,10 +133,15 @@ class HomeFragment : Fragment() {
             // Format the Timestamp for display
             val displayDate = lastInput.date?.let { timestamp ->
                 SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(timestamp.toDate())
-            } ?: "Unknown Date"
+            } ?: getString(R.string.unknown_date)
             val lastInputVegetable = lastInput.vegResult
             val lastInputWeight = numberFormatter.format(lastInput.vegWeight)
-            val lastInputText = "${lastInputVegetable}: $lastInputWeight gram ($displayDate)"
+            val lastInputText = getString(
+                R.string.last_input_data,
+                lastInputVegetable,
+                lastInputWeight,
+                displayDate
+            )
             binding.layoutItemLastInput.tvItemValue.text = lastInputText
         } else {
             binding.layoutItemLastInput.tvItemValue.text = getString(R.string.no_recent_input)
@@ -184,7 +190,7 @@ class HomeFragment : Fragment() {
                 entries.add(Entry(index.toFloat(), vegWeight.toFloat()))
             }
 
-            val currentDataSet = LineDataSet(entries, "$vegType Weight")
+            val currentDataSet = LineDataSet(entries, getString(R.string.veg_weight, vegType))
             currentDataSet.color = getNextChartColor() // Assign a color
             currentDataSet.valueTextColor = Color.BLACK
             currentDataSet.setDrawCircles(true)

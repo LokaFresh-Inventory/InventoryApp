@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.lokatani.lokafreshinventory.R
@@ -19,10 +22,13 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
+    private val languageItems = arrayOf("English", "Bahasa Indonesia")
+    private val languageTags = arrayOf("en", "id")
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,13 +41,66 @@ class SettingsFragment : Fragment() {
 
         binding.apply {
             btnLogout.setOnClickListener {
-                Firebase.auth.signOut()
-                Toast.makeText(requireContext(), "Account Logged Out", Toast.LENGTH_SHORT).show()
-                val logoutIntent = Intent(requireContext(), LoginActivity::class.java)
-                logoutIntent.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(logoutIntent)
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.logout)
+                    .setIcon(R.drawable.baseline_logout_24)
+                    .setMessage(getString(R.string.are_you_sure_to_logout))
+                    .setPositiveButton("YES") { _, _ ->
+                        Firebase.auth.signOut()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.account_logged_out), Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        val logoutIntent = Intent(requireContext(), LoginActivity::class.java)
+                        logoutIntent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(logoutIntent)
+                    }
+                    .setNegativeButton("NO", null) // Use null for simple dismissal
+                    .show()
+            }
+
+            btnChangeLanguage.setOnClickListener {
+                showChangeLanguageDialog()
             }
         }
+    }
+
+    private fun showChangeLanguageDialog() {
+        // Determine the currently selected language to set the radio button correctly
+        val currentLocale = AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag()
+        var checkedItem = languageTags.indexOf(currentLocale)
+        if (checkedItem == -1) {
+            checkedItem = 0
+        }
+
+        var selectedLanguageIndex = checkedItem
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.change_language))
+            .setIcon(R.drawable.baseline_language_24)
+            .setSingleChoiceItems(languageItems, checkedItem) { _, which ->
+                selectedLanguageIndex = which
+            }
+            .setPositiveButton(getString(R.string.apply)) { dialog, _ ->
+                val selectedLanguageTag = languageTags[selectedLanguageIndex]
+                updateLocale(selectedLanguageTag)
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun updateLocale(languageCode: String) {
+        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageCode)
+        AppCompatDelegate.setApplicationLocales(appLocale)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

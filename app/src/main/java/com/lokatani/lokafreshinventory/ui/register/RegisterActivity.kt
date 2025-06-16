@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.lokatani.lokafreshinventory.MainActivity
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityRegisterBinding
 import com.lokatani.lokafreshinventory.ui.login.LoginActivity
 import com.lokatani.lokafreshinventory.utils.showToast
@@ -43,7 +44,7 @@ class RegisterActivity : AppCompatActivity() {
                 val password = edPassword.text.toString()
 
                 if (name.isEmpty() || password.isEmpty()) {
-                    showToast("Please fill all fields")
+                    showToast(getString(R.string.please_fill_all_fields))
                 } else {
                     showLoading(true)
                     auth.createUserWithEmailAndPassword(email, password)
@@ -51,13 +52,14 @@ class RegisterActivity : AppCompatActivity() {
                             showLoading(false)
                             if (task.isSuccessful) {
                                 Log.d(TAG, "Register: Successful")
-                                showToast("Register Success")
+                                showToast(getString(R.string.register_success))
                                 val user = auth.currentUser
                                 updateUI(user)
                             } else {
                                 Log.e(TAG, "Register: Failure", task.exception)
                                 val errorMessage =
-                                    task.exception?.message ?: "Authentication Failed"
+                                    task.exception?.message
+                                        ?: getString(R.string.authentication_failed)
                                 showToast(errorMessage)
                             }
                         }

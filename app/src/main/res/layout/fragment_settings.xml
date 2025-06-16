@@ -101,6 +101,7 @@
                     android:layout_marginHorizontal="16dp" />
 
                 <com.lokatani.lokafreshinventory.customview.custombutton.ButtonWithTralingIcon
+                    android:id="@+id/btn_change_language"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:leadingIcon="@drawable/baseline_language_24"

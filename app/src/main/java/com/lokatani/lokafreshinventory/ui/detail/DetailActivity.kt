@@ -45,10 +45,6 @@ class DetailActivity : AppCompatActivity() {
         vegWeight = intent.getIntExtra(EXTRA_WEIGHT, 0)
 
         currentUser = Firebase.auth.currentUser?.email
-
-        if (vegResult == null) {
-            vegResult = "No Item"
-        }
     }
 
     override fun onResume() {
@@ -57,14 +53,14 @@ class DetailActivity : AppCompatActivity() {
         val currentTimestamp = Timestamp.now()
 
         binding.apply {
-            tvVegType.text = vegResult
+            tvVegType.text = vegResult ?: getString(R.string.no_data)
             tvVegWeight.text = getString(R.string.gram, vegWeight.toString())
             tvDate.text = displayDateFormatter.format(currentTimestamp.toDate())
 
             buttonSave.setOnClickListener {
                 detailViewModel.insertResult(
-                    user = currentUser ?: "No User",
-                    vegResult = vegResult.toString(),
+                    user = currentUser ?: getString(R.string.guest),
+                    vegResult = vegResult ?: getString(R.string.no_vegetable),
                     vegWeight = vegWeight,
                     date = currentTimestamp
                 )

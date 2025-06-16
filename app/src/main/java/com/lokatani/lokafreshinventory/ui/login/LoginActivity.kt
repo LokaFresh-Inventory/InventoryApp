@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.lokatani.lokafreshinventory.MainActivity
+import com.lokatani.lokafreshinventory.R
 import com.lokatani.lokafreshinventory.databinding.ActivityLoginBinding
 import com.lokatani.lokafreshinventory.ui.register.RegisterActivity
 import com.lokatani.lokafreshinventory.utils.showToast
@@ -32,23 +33,23 @@ class LoginActivity : AppCompatActivity() {
                 val email = editable.toString()
                 if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     tilEmail.isErrorEnabled = true
-                    tilEmail.error = "Invalid Email Format" // Use string resource
+                    tilEmail.error = getString(R.string.invalid_email_format)
                 } else {
                     tilEmail.isErrorEnabled = false
-                    tilEmail.error = null // Clear error
+                    tilEmail.error = null
                 }
             }
 
             btnLogin.setOnClickListener {
                 val email = edEmail.text.toString().trim()
-                val password = edPassword.text.toString() // Passwords can have spaces
+                val password = edPassword.text.toString()
 
                 tilEmail.error = null
                 tilEmail.isErrorEnabled = false
 
                 var isValid = true
                 if (email.isEmpty()) {
-                    tilEmail.error = "Please fill your email" // Use string resource
+                    tilEmail.error = getString(R.string.please_fill_your_email)
                     tilEmail.isErrorEnabled = true
                     isValid = false
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
 
                 if (!isValid) {
                     if (email.isEmpty() && password.isEmpty()) {
-                        showToast("Please fill all fields")
+                        showToast(getString(R.string.please_fill_all_fields))
                         if (tilEmail.editText != null) tilEmail.editText!!.requestFocus()
                     } else if (email.isEmpty() && tilEmail.editText != null) {
                         tilEmail.editText!!.requestFocus()
@@ -90,12 +91,13 @@ class LoginActivity : AppCompatActivity() {
                 showLoading(false)
                 if (task.isSuccessful) {
                     Log.d(TAG, "SignIn: Successful")
-                    showToast("Login Successful")
+                    showToast(getString(R.string.login_successful))
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
                     Log.e(TAG, "SignIn: Failure", task.exception)
-                    val errorMessage = task.exception?.message ?: "Authentication Failed"
+                    val errorMessage =
+                        task.exception?.message ?: getString(R.string.authentication_failed)
                     showToast(errorMessage)
                     updateUI(null)
                 }

@@ -42,7 +42,7 @@ class ChatbotActivity : AppCompatActivity() {
         factory = ChatbotViewModelFactory.getInstance()
 
         setSupportActionBar(binding.chatbotToolbar)
-        supportActionBar?.title = "Chatbot"
+        supportActionBar?.title = getString(R.string.chatbot)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val menuHost: MenuHost = this@ChatbotActivity
@@ -142,7 +142,8 @@ class ChatbotActivity : AppCompatActivity() {
 
                         is Result.Error -> {
                             showLoading(false)
-                            val errorText = "**Error**. Check your connection or try again"
+                            val errorText =
+                                getString(R.string.error_check_your_connection_or_try_again)
                             val markwon = Markwon.create(this@ChatbotActivity)
                             tvErrorChat.apply {
                                 visibility = View.VISIBLE

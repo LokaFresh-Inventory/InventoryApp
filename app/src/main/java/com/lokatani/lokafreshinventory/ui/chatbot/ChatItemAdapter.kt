@@ -61,11 +61,14 @@ class ChatItemAdapter : RecyclerView.Adapter<ChatItemAdapter.ChatViewHolder>() {
                             cvUserChat.isPressed = true
                             val clipboard =
                                 holder.itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clip = ClipData.newPlainText("chat_message", currentChat.message)
+                            val clip = ClipData.newPlainText(
+                                context.getString(R.string.chat_message),
+                                currentChat.message
+                            )
                             clipboard.setPrimaryClip(clip)
                             Toast.makeText(
                                 holder.itemView.context,
-                                "Text copied",
+                                context.getString(R.string.text_copied),
                                 Toast.LENGTH_SHORT
                             ).show()
                             cvUserChat.isPressed = false
@@ -86,11 +89,14 @@ class ChatItemAdapter : RecyclerView.Adapter<ChatItemAdapter.ChatViewHolder>() {
                             cvBotChat.isPressed = true
                             val clipboard =
                                 holder.itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clip = ClipData.newPlainText("chat_message", currentChat.message)
+                            val clip = ClipData.newPlainText(
+                                context.getString(R.string.chat_message),
+                                currentChat.message
+                            )
                             clipboard.setPrimaryClip(clip)
                             Toast.makeText(
                                 holder.itemView.context,
-                                "Text copied",
+                                context.getString(R.string.text_copied),
                                 Toast.LENGTH_SHORT
                             ).show()
                             cvBotChat.isPressed = false

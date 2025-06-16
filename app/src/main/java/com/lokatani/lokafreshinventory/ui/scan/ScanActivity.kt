@@ -277,7 +277,7 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
                     }
 
                     is Result.Error -> {
-                        showToast("OCR Failed")
+                        showToast(getString(R.string.ocr_failed))
                         detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
                         detailIntent.putExtra(DetailActivity.EXTRA_RESULT, vegResult)
                         detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0)
@@ -386,7 +386,7 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
     }
 
     private fun updateUIInfo(vegetable: String?) {
-        binding.scanInfo.tvJenis.text = vegetable ?: "No Data"
+        binding.scanInfo.tvJenis.text = vegetable ?: getString(R.string.no_data)
     }
 
     companion object {
