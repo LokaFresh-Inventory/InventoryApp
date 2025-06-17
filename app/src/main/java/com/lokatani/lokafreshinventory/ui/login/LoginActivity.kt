@@ -21,6 +21,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityLoginBinding
 
+    private var isEmailValid = false
+    private var isPassValid = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -29,46 +32,47 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         binding.apply {
+            btnLogin.isEnabled = isEmailValid && isPassValid
+
             edEmail.addTextChangedListener { editable ->
                 val email = editable.toString()
                 if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     tilEmail.isErrorEnabled = true
                     tilEmail.error = getString(R.string.invalid_email_format)
+                    isEmailValid = false
+                } else if (email.isEmpty()) {
+                    tilEmail.isErrorEnabled = true
+                    tilEmail.error = getString(R.string.please_fill_your_email)
+                    isEmailValid = false
                 } else {
                     tilEmail.isErrorEnabled = false
                     tilEmail.error = null
+                    isEmailValid = true
                 }
+                btnLogin.isEnabled = isEmailValid && isPassValid
+            }
+
+            edPassword.addTextChangedListener { editable ->
+                val password = editable.toString()
+                if (password.isNotEmpty() && password.length < 6) {
+                    tilPassword.isErrorEnabled = true
+                    tilPassword.error = getString(R.string.password_must_have_at_least_6_characters)
+                    isPassValid = false
+                } else if (password.isEmpty()) {
+                    tilPassword.isErrorEnabled = true
+                    tilPassword.error = getString(R.string.please_fill_your_password)
+                    isPassValid = false
+                } else {
+                    tilPassword.isErrorEnabled = false
+                    tilPassword.error = null
+                    isPassValid = true
+                }
+                btnLogin.isEnabled = isEmailValid && isPassValid
             }
 
             btnLogin.setOnClickListener {
                 val email = edEmail.text.toString().trim()
                 val password = edPassword.text.toString()
-
-                tilEmail.error = null
-                tilEmail.isErrorEnabled = false
-
-                var isValid = true
-                if (email.isEmpty()) {
-                    tilEmail.error = getString(R.string.please_fill_your_email)
-                    tilEmail.isErrorEnabled = true
-                    isValid = false
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    tilEmail.error = ""
-                    tilEmail.isErrorEnabled = true
-                    isValid = false
-                }
-
-                if (!isValid) {
-                    if (email.isEmpty() && password.isEmpty()) {
-                        showToast(getString(R.string.please_fill_all_fields))
-                        if (tilEmail.editText != null) tilEmail.editText!!.requestFocus()
-                    } else if (email.isEmpty() && tilEmail.editText != null) {
-                        tilEmail.editText!!.requestFocus()
-                    } else if (password.isEmpty() && tilPassword.editText != null) {
-                        tilPassword.editText!!.requestFocus()
-                    }
-                    return@setOnClickListener
-                }
 
                 showLoading(true)
                 signIn(email, password)

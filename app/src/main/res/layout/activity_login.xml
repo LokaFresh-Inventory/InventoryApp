@@ -54,7 +54,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="32dp"
+                        android:layout_marginVertical="24dp"
                         android:text="@string/welcome"
                         android:textColor="@color/black"
                         android:textSize="40sp"
@@ -66,7 +66,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="12dp"
                         android:hint="@string/email"
                         android:maxWidth="488dp"
                         android:minWidth="320dp"
@@ -89,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="24dp"
                         android:hint="@string/password"
                         android:maxWidth="488dp"
                         android:minWidth="320dp"
@@ -111,16 +111,17 @@
                         android:id="@+id/btn_login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/theme_green"
+                        android:backgroundTint="@color/button_state_color_state"
                         android:maxWidth="320dp"
                         android:minWidth="320dp"
                         android:text="@string/sign_in"
                         android:textColor="@color/white"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
+                        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Small" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -138,7 +139,7 @@
                             android:layout_gravity="center"
                             android:minWidth="0dp"
                             android:minHeight="0dp"
-                            android:paddingTop="8dp"
+                            android:paddingTop="4dp"
                             android:text="@string/sign_up"
                             android:textColor="@color/dark_green"
                             android:textSize="14sp"

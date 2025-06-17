@@ -2,13 +2,15 @@ package com.lokatani.lokafreshinventory.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.lokatani.lokafreshinventory.R
+import com.lokatani.lokafreshinventory.data.remote.firebase.User
 import com.lokatani.lokafreshinventory.databinding.ActivityDetailBinding
 import com.lokatani.lokafreshinventory.ui.scan.ScanActivity
 import com.lokatani.lokafreshinventory.utils.ViewModelFactory
@@ -44,7 +46,7 @@ class DetailActivity : AppCompatActivity() {
         vegResult = intent.getStringExtra(EXTRA_RESULT)
         vegWeight = intent.getIntExtra(EXTRA_WEIGHT, 0)
 
-        currentUser = Firebase.auth.currentUser?.email
+        fetchUserProfile()
     }
 
     override fun onResume() {
@@ -53,12 +55,12 @@ class DetailActivity : AppCompatActivity() {
         val currentTimestamp = Timestamp.now()
 
         val cleanVegResult = vegResult
-            ?.removePrefix("Hasil Api: ")
+            ?.removePrefix("Hasil API: ")
             ?.removePrefix("Hasil Local: ")
             ?.trim()
 
         binding.apply {
-            tvVegType.text = vegResult ?: getString(R.string.no_data)
+            tvVegType.text = vegResult ?: getString(R.string.no_vegetable)
             tvVegWeight.text = getString(R.string.gram, vegWeight.toString())
             tvDate.text = displayDateFormatter.format(currentTimestamp.toDate())
 
@@ -82,6 +84,31 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun fetchUserProfile() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val uid = user?.uid ?: return
+
+        val db = FirebaseFirestore.getInstance()
+        val userRef = db.collection("users").document(uid)
+
+        userRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    Log.d("Firestore", "User data fetched: ${user?.username}")
+
+                    currentUser = user?.username
+                } else {
+                    Log.d("Firestore", "No such document")
+                    currentUser = user.email
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Firestore", "get failed with ", exception)
+                currentUser = user.email
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

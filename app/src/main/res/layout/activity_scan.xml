@@ -115,7 +115,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="4dp"
                 android:indeterminate="true"
-                android:indeterminateBehavior="cycle" />
+                android:indeterminateBehavior="cycle"
+                app:indicatorColor="@color/theme_green" />
 
         </LinearLayout>
 

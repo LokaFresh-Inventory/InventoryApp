@@ -124,6 +124,7 @@
                 android:layout_margin="16dp"
                 android:indeterminate="true"
                 android:visibility="gone"
+                app:indicatorColor="@color/theme_green"
                 app:trackCornerRadius="4dp" />
 
             <LinearLayout

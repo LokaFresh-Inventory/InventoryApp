@@ -107,6 +107,7 @@
                         android:indeterminateBehavior="repeat"
                         android:padding="100dp"
                         android:visibility="gone"
+                        app:indicatorColor="@color/theme_green"
                         tools:visibility="visible" />
 
                     <TextView

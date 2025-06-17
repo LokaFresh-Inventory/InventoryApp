@@ -15,7 +15,7 @@
     <string name="history">Riwayat</string>
     <string name="analysis">Analisis</string>
     <string name="weight">Berat:</string>
-    <string name="click_to_capture">Tankap Foto</string>
+    <string name="click_to_capture">Tangkap Foto</string>
     <string name="vegetable_type">Tipe Sayur:</string>
     <string name="camera_hint">Tekan tombol kamera jika prediksi sudah benar</string>
     <string name="inference_time">Waktu inferensi</string>
@@ -23,12 +23,11 @@
     <string name="settings">Pengaturan</string>
     <string name="scan_result">HASIL SCAN</string>
     <string name="save">SIMPAN</string>
-    <string name="no_data">Tidak ada Data</string>
+    <string name="no_data">Tidak ada data</string>
     <string name="guest">Tamu</string>
-    <string name="warehouse_placeholder">Gudang 1</string>
     <string name="preferences">Preferensi</string>
     <string name="logout">Keluar</string>
-    <string name="placeholder">Pengganti</string>
+    <string name="placeholder">Placeholder</string>
     <string name="prediction_kale">%1$d KG</string>
     <string name="prediction_bayam_merah">%1$d KG</string>
     <string name="select_prediction_date">Pilih Tanggal Prediksi</string>
@@ -65,18 +64,18 @@
     <string name="monthly_data_entry">Pemasukan Data Bulanan</string>
     <string name="bayam_merah_weight">Berat Bayam Merah</string>
     <string name="kale_weight">Berat Kale</string>
-    <string name="signing_in">Memasukkan Akun Akun</string>
+    <string name="signing_in">Masuk ke Akun</string>
     <string name="registering_account">Membuat Akun</string>
     <string name="export_notification_channel_name">Ekspor File</string>
-    <string name="export_notification_channel_description">Notifikasi untuk export file</string>
-    <string name="export_complete_title">Export Berhasil</string>
+    <string name="export_notification_channel_description">Notifikasi untuk ekspor file</string>
+    <string name="export_complete_title">Ekspor File Berhasil</string>
     <string name="export_complete_text">Tersimpan %1$s</string>
     <string name="csv_export_failed">Ekspor CSV Gagal</string>
     <string name="filter">Filter</string>
     <string name="filter_table">Filter Table</string>
     <string name="user">Pengguna</string>
     <string name="vegetable">Sayuran</string>
-    <string name="weight_range">Range Berat</string>
+    <string name="weight_range">Rentang Berat</string>
     <string name="weight_range_value">%1$dg - %2$dg</string>
     <string name="last_input">Input terakhir</string>
     <string name="no_recent_input">Tidak ada input terakhir</string>
@@ -98,7 +97,7 @@
     <string name="please_fill_your_email">Tolong isi email anda</string>
     <string name="please_fill_all_fields">Tolong isi semua kolom</string>
     <string name="history_data">Riwayat Data</string>
-    <string name="no_data_matches_the_current_filters_to_export">Data tidak cocok dengan filter untuk diekspor</string>
+    <string name="no_data_matches_the_current_filters_to_export">Data tidak cocok dengan hasil filter untuk diekspor</string>
     <string name="no_data_available_to_export">Tidak ada data untuk diekspor</string>
     <string name="no_header_data_to_export">Tidak ada data header untuk diekspor</string>
     <string name="data_has_not_been_loaded_yet">Data belum dimuat</string>
@@ -123,7 +122,6 @@
     <string name="login_successful">Login Berhasil</string>
     <string name="authentication_failed">Autentikasi Gagal</string>
     <string name="register_success">Registrasi Berhasil</string>
-    <string name="ocr_failed">OCR Gagal</string>
     <string name="are_you_sure_to_logout">Anda yakin ingin keluar akun?</string>
     <string name="account_logged_out">Akun Keluar</string>
     <string name="change_language">Ganti Bahasa</string>
@@ -132,5 +130,12 @@
     <string name="welcome_to_analysis">Selamat datang di Analisis</string>
     <string name="this_is_a_data_mining_analysis_to_help_you_predict_a_required_stock_of_vegetables_on_a_spesific_date">Halaman ini merupakan analisis Data Mining untuk membantu anda memprediksi kebutuhan stok pada tanggal tertentu</string>
     <string name="to_use_it_simply_click_on_select_date_and_choose_a_date_to_predict">Untuk menggunakan, klik tombol \'Pilih Tanggal\' untuk memulai prediksi</string>
-    <string name="no_vegetable">No Item</string>
+    <string name="no_vegetable">Tidak ada sayuran</string>
+    <string name="guest_gmail_com">guest@gmail.com</string>
+    <string name="password_must_have_at_least_6_characters">Password harus memiliki minimal 6 karakter</string>
+    <string name="please_fill_your_password">Tolong isi password anda</string>
+    <string name="username_must_have_at_least_3_characters">Nama pengguna harus memiliki minimal 3 karakter</string>
+    <string name="please_make_a_username">Buat nama pengguna</string>
+    <string name="fill_your_email_to_register">Isi dengan email anda untuk mendaftar</string>
+    <string name="make_a_strong_password">Buat password yang kuat</string>
 </resources>

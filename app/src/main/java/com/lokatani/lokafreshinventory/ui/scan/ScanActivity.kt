@@ -421,7 +421,7 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
     }
 
     private fun updateUIInfo(vegetable: String?) {
-        binding.scanInfo.tvJenis.text = vegetable ?: getString(R.string.no_data)
+        binding.scanInfo.tvJenis.text = vegetable ?: getString(R.string.no_vegetable)
     }
 
     companion object {

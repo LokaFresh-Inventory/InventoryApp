@@ -82,7 +82,7 @@
         android:indeterminate="true"
         android:padding="12dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/til_chat"
+        app:layout_constraintBottom_toTopOf="@id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,13 +102,21 @@
         android:textColor="?attr/colorError"
         android:textSize="14sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/til_chat"
+        app:layout_constraintBottom_toTopOf="@id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_chatbot"
         app:layout_constraintVertical_bias="0"
         tools:visibility="visible" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        app:dividerColor="#0D000000"
+        app:layout_constraintBottom_toTopOf="@id/til_chat" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_chat"
@@ -118,18 +126,19 @@
         android:layout_margin="8dp"
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
-        android:hint="@string/ask"
         app:boxStrokeColor="@color/theme_green"
         app:cursorColor="@color/theme_green"
-        app:hintTextColor="@color/theme_green"
+        app:hintEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_send"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ed_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/ask"
             android:inputType="textMultiLine"
             android:maxLines="4"
             android:minLines="1"

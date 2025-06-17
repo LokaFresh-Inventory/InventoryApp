@@ -57,7 +57,7 @@ class ScanViewModel(
                     val vegName = cnnResult.data.classLabel
                     _scanResult.value = Result.Success(
                         ScanUiState(
-                            vegetableName = "Hasil Api: $vegName",
+                            vegetableName = "Hasil API: $vegName",
                             weight = null
                         )
                     )
@@ -98,7 +98,7 @@ class ScanViewModel(
                     val weight = extractWeightFromOcr(ocrResult.data)
                     _scanResult.value = Result.Success(
                         ScanUiState(
-                            vegetableName = "Hasil Api: $vegName",
+                            vegetableName = "Hasil API: $vegName",
                             weight = weight
                         )
                     )

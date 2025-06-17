@@ -42,6 +42,7 @@
         android:indeterminate="true"
         android:indeterminateBehavior="cycle"
         android:visibility="gone"
+        app:indicatorColor="@color/theme_green"
         tools:visibility="visible" />
 
 
