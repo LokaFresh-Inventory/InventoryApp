@@ -2,6 +2,7 @@ package com.lokatani.lokafreshinventory.data.remote.retrofit
 
 import com.lokatani.lokafreshinventory.data.remote.request.PredictRequest
 import com.lokatani.lokafreshinventory.data.remote.response.ChatbotResponse
+import com.lokatani.lokafreshinventory.data.remote.response.CnnResponse
 import com.lokatani.lokafreshinventory.data.remote.response.OcrResponse
 import com.lokatani.lokafreshinventory.data.remote.response.PredictResponse
 import okhttp3.MultipartBody
@@ -31,4 +32,12 @@ interface OcrApiService {
     suspend fun sendImage(
         @Part file: MultipartBody.Part
     ): OcrResponse
+}
+
+interface CnnApiService {
+    @Multipart
+    @POST("cnn")
+    suspend fun sendVegImage(
+        @Part file: MultipartBody.Part
+    ): CnnResponse
 }

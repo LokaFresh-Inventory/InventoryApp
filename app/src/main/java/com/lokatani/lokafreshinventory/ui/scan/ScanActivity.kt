@@ -58,7 +58,7 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
     private var vegWeight: Int? = null
     private var lastProcessedBitmap: Bitmap? = null
     private var scaleBitmap: Bitmap? = null
-    private lateinit var detailIntent: Intent
+    private var highestConfVegBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,13 +101,32 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
             }
 
             btnPhoto.setOnClickListener {
-                if (scaleBitmap != null) {
-                    scanViewModel.recognizeText(scaleBitmap!!)
-                } else {
-                    detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
-                    detailIntent.putExtra(DetailActivity.EXTRA_RESULT, vegResult)
-                    detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0)
-                    startActivity(detailIntent)
+                val hasVeggie = highestConfVegBitmap != null
+                val hasScale = scaleBitmap != null
+
+                when {
+                    // Case 1: Both vegetable and scale are detected
+                    hasVeggie && hasScale -> {
+                        scanViewModel.recognizeBoth(highestConfVegBitmap!!, scaleBitmap!!)
+                    }
+                    // Case 2: Only vegetable is detected
+                    hasVeggie -> {
+                        scanViewModel.recognizeVeggie(highestConfVegBitmap!!)
+                    }
+                    // Case 3: Only scale is detected
+                    hasScale -> {
+                        scanViewModel.recognizeText(scaleBitmap!!)
+                    }
+                    // Case 4: Nothing is detected
+                    else -> {
+                        val detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
+                        detailIntent.putExtra(
+                            DetailActivity.EXTRA_RESULT,
+                            "Hasil Local: $vegResult"
+                        )
+                        detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0)
+                        startActivity(detailIntent)
+                    }
                 }
             }
         }
@@ -226,63 +245,35 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
             binding.progressCard.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        scanViewModel.ocrResult.observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is Result.Loading -> {
-                        Log.d(TAG, "OCR Loading")
+        scanViewModel.scanResult.observe(this) { result ->
+            if (result == null) return@observe
+
+            when (result) {
+                is Result.Loading -> {
+                    Log.d(TAG, "API Call(s) Loading")
+                }
+
+                is Result.Success -> {
+                    Log.d(TAG, "API Call(s) Success")
+                    val uiState = result.data
+                    val intent = Intent(this@ScanActivity, DetailActivity::class.java).apply {
+                        putExtra(
+                            DetailActivity.EXTRA_RESULT,
+                            uiState.vegetableName ?: "Hasil Local: $vegResult"
+                        )
+                        putExtra(DetailActivity.EXTRA_WEIGHT, uiState.weight ?: 0)
                     }
+                    startActivity(intent)
+                }
 
-                    is Result.Success -> {
-                        Log.d(TAG, "OCR Success")
-                        val ocrResult = result.data
-
-                        val rawTexts = ocrResult.texts
-                        var extractedWeight: Int? = null
-
-                        if (!rawTexts.isNullOrEmpty()) {
-                            // 1. Concatenate all texts into a single string
-                            val combinedText = rawTexts.joinToString("") { it!!.trim() }
-                            Log.d(TAG, "Combined OCR text: $combinedText")
-
-                            // 2. Use a regex to find numbers (integers or decimals)
-                            val numberRegex = "-?\\d+(\\.\\d+)?".toRegex()
-                            val foundNumbers = numberRegex.findAll(combinedText)
-                                .map { it.value } // Extract the matched string
-                                .toList()
-
-                            Log.d(TAG, "Found numbers from OCR: $foundNumbers")
-
-                            // 3. Select only numbers
-                            val potentialWeights = foundNumbers.mapNotNull { it.toIntOrNull() }
-
-                            extractedWeight = potentialWeights.firstOrNull()
-
-                            if (extractedWeight == null && foundNumbers.isNotEmpty()) {
-                                Log.w(
-                                    TAG,
-                                    "Could not parse any number. Found: $foundNumbers"
-                                )
-                                extractedWeight = foundNumbers.lastOrNull()?.toIntOrNull()
-                            }
-                        }
-
-                        vegWeight = extractedWeight
-                        Log.d(TAG, "Final vegWeight (String): $vegWeight")
-
-                        detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
-                        detailIntent.putExtra(DetailActivity.EXTRA_RESULT, vegResult)
-                        detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, vegWeight)
-                        startActivity(detailIntent)
+                is Result.Error -> {
+                    Log.e(TAG, "API Call(s) Error: ${result.error}")
+                    showToast("API call failed: Check your connection or Try again")
+                    val intent = Intent(this@ScanActivity, DetailActivity::class.java).apply {
+                        putExtra(DetailActivity.EXTRA_RESULT, "Hasil Local: $vegResult")
+                        putExtra(DetailActivity.EXTRA_WEIGHT, 0)
                     }
-
-                    is Result.Error -> {
-                        showToast(getString(R.string.ocr_failed))
-                        detailIntent = Intent(this@ScanActivity, DetailActivity::class.java)
-                        detailIntent.putExtra(DetailActivity.EXTRA_RESULT, vegResult)
-                        detailIntent.putExtra(DetailActivity.EXTRA_WEIGHT, 0)
-                        startActivity(detailIntent)
-                    }
+                    startActivity(intent)
                 }
             }
         }
@@ -333,9 +324,16 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
 
         // Update vegetable result
         val newVegResult = highestConfVegetable?.clsName
-        vegResult = newVegResult // Ensure vegResult is updated for DetailActivity
+        vegResult = newVegResult
 
-        // Process weight scale OCR if we found a scale and have a bitmap to process
+        // If Vegetable is found, make the bitmap from bounding box
+        if (highestConfVegetable != null && lastProcessedBitmap != null) {
+            makeVegBitmap(highestConfVegetable, lastProcessedBitmap!!)
+        } else {
+            highestConfVegBitmap = null
+        }
+
+        // If Scale is found, make the bitmap from bounding box
         if (scaleBox != null && lastProcessedBitmap != null) {
             makeOCRBitmap(scaleBox, lastProcessedBitmap!!)
         } else {
@@ -379,8 +377,45 @@ class ScanActivity : AppCompatActivity(), Detector.DetectorListener {
                 }
 
             } catch (e: Exception) {
-                Log.e(TAG, "Error processing scale OCR or creating bitmap", e)
+                Log.e(TAG, "Error processing or creating bitmap", e)
                 scaleBitmap = null
+            }
+        }
+    }
+
+    private fun makeVegBitmap(vegBox: BoundingBox, bitmap: Bitmap) {
+        lifecycleScope.launch {
+            try {
+                val width = bitmap.width
+                val height = bitmap.height
+
+                val x1 = (vegBox.x1 * width).toInt().coerceIn(0, width - 1)
+                val y1 = (vegBox.y1 * height).toInt().coerceIn(0, height - 1)
+                val x2 = (vegBox.x2 * width).toInt().coerceIn(x1, width)
+                val y2 = (vegBox.y2 * height).toInt().coerceIn(y1, height)
+
+                Log.d("Bitmap Size", "Bitmap height: $height, width: $width")
+                Log.d("Vegetable Region", "y1: $y1, y2: $y2, x1: $x1, x2: $x2")
+
+                val roiWidth = x2 - x1
+                val roiHeight = y2 - y1
+
+                if (roiWidth > 0 && roiHeight > 0) {
+                    highestConfVegBitmap = Bitmap.createBitmap(
+                        bitmap,
+                        x1,
+                        y1,
+                        roiWidth,
+                        roiHeight
+                    )
+                } else {
+                    Log.w(TAG, "ROI has zero or negative dimensions, cannot create bitmap.")
+                    highestConfVegBitmap = null
+                }
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error processing or creating bitmap", e)
+                highestConfVegBitmap = null
             }
         }
     }

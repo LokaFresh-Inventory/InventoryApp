@@ -51,4 +51,19 @@ object ApiConfig {
             .build()
             .create(OcrApiService::class.java)
     }
+
+    fun getCNNApiService(): CnnApiService {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.CNN_API_ENDPOINT) // CNN
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(CnnApiService::class.java)
+    }
 }

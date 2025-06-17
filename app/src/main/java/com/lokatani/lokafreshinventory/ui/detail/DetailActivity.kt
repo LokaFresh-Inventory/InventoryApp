@@ -52,6 +52,11 @@ class DetailActivity : AppCompatActivity() {
 
         val currentTimestamp = Timestamp.now()
 
+        val cleanVegResult = vegResult
+            ?.removePrefix("Hasil Api: ")
+            ?.removePrefix("Hasil Local: ")
+            ?.trim()
+
         binding.apply {
             tvVegType.text = vegResult ?: getString(R.string.no_data)
             tvVegWeight.text = getString(R.string.gram, vegWeight.toString())
@@ -60,7 +65,7 @@ class DetailActivity : AppCompatActivity() {
             buttonSave.setOnClickListener {
                 detailViewModel.insertResult(
                     user = currentUser ?: getString(R.string.guest),
-                    vegResult = vegResult ?: getString(R.string.no_vegetable),
+                    vegResult = cleanVegResult ?: getString(R.string.no_vegetable),
                     vegWeight = vegWeight,
                     date = currentTimestamp
                 )

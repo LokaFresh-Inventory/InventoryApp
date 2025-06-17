@@ -51,7 +51,7 @@
     <string name="date">Date:</string>
     <string name="cpu">CPU</string>
     <string name="gpu">GPU</string>
-    <string name="proccessing_ocr">Processing OCR</string>
+    <string name="processing_detection">Processing Detection</string>
     <string name="ms">%1$dms</string>
     <string name="sort_data">Sort Data</string>
     <string name="no">No</string>

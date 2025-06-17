@@ -52,7 +52,7 @@
     <string name="date">Tanggal:</string>
     <string name="cpu">CPU</string>
     <string name="gpu">GPU</string>
-    <string name="proccessing_ocr">Memproses OCR</string>
+    <string name="processing_detection">Memproses Deteksi</string>
     <string name="ms">%1$dms</string>
     <string name="sort_data">Urut Data</string>
     <string name="no">No</string>
