@@ -82,6 +82,7 @@
         android:indeterminate="true"
         android:padding="12dp"
         android:visibility="gone"
+        app:indicatorColor="@color/theme_green"
         app:layout_constraintBottom_toTopOf="@id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"

@@ -88,19 +88,6 @@
                 android:orientation="vertical">
 
                 <com.lokatani.lokafreshinventory.customview.custombutton.ButtonWithTralingIcon
-                    android:id="@+id/btn_edit_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:leadingIcon="@drawable/baseline_edit_square_24"
-                    app:text="Edit Profile"
-                    app:trailingIcon="@drawable/baseline_arrow_forward_ios_24" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp" />
-
-                <com.lokatani.lokafreshinventory.customview.custombutton.ButtonWithTralingIcon
                     android:id="@+id/btn_change_language"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
