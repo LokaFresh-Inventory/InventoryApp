@@ -17,10 +17,10 @@ LokaFresh Inventory is an android app solution for streamlining inventory manage
 ## Main Features in LokaFresh Inventory
 
 ### Object Detection
-<p align="center">
-  <img alt="Light" src="assets/object_detection_image.jpg" width="45%">
+<p>
+  <img alt="Light" src="assets/object_detection_image.jpg">
 &nbsp; &nbsp; &nbsp; &nbsp;
-  <img alt="Dark" src="assets/scan_result_image.jpg" width="45%">
+  <img alt="Dark" src="assets/scan_result_image.jpg">
 </p>
 
 The main feature of the app, capable of detecting vegetables type real-time by using Object Detection alongside OCR to read the weight measured on the weight scale.
@@ -44,10 +44,10 @@ The second feature of the app, covering the use of Natural Language Processing i
 ## Additional Feature
 
 ### TableView Data Display
-<p align="center">
-  <img alt="Light" src="assets/tableview_image.jpg" width="45%">
+<p>
+  <img alt="Light" src="assets/tableview_image.jpg">
 &nbsp; &nbsp; &nbsp; &nbsp;
-  <img alt="Dark" src="assets/table_filter_image.jpg" width="45%">
+  <img alt="Dark" src="assets/table_filter_image.jpg">
 </p>
 
 Display the stored data in Tableview manner using [Evrencoskun's TableView Library](https://github.com/evrencoskun/TableView).
